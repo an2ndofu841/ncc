@@ -3,34 +3,34 @@ import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 
 export const metadata: Metadata = {
-  title: "理事長あいさつ",
+  title: "会長あいさつ",
   description:
-    "全日本カイロプラクティック施術協同組合 理事長より、会員の皆様と社会の皆様へのご挨拶です。",
+    "全日本カイロプラクティック施術協同組合 会長より、会員の皆様と社会の皆様へのご挨拶です。",
 };
+
+const PHOTO_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/kitagawafusao.png`;
 
 export default function GreetingPage() {
   return (
     <>
       <PageHeader
-        title="理事長あいさつ"
-        description="理事長より、組合の理念と今後の展望についてご挨拶申し上げます。"
-        breadcrumbs={[{ label: "理事長あいさつ" }]}
+        title="会長あいさつ"
+        description="会長より、組合の理念と今後の展望についてご挨拶申し上げます。"
+        breadcrumbs={[{ label: "会長あいさつ" }]}
       />
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <Card className="overflow-hidden lg:flex lg:gap-0 lg:p-0">
           <div className="flex shrink-0 flex-col items-center justify-center bg-gradient-to-br from-primary-100 to-primary-50 px-8 py-12 lg:w-[280px] lg:border-r lg:border-primary-100">
-            <div className="flex h-44 w-44 items-center justify-center rounded-full border-4 border-white bg-neutral-200 shadow-inner sm:h-52 sm:w-52">
-              <span className="text-center text-sm font-medium text-neutral-500 px-4">
-                写真
-                <br />
-                準備中
-              </span>
+            <div className="h-44 w-44 overflow-hidden rounded-full border-4 border-white shadow-inner sm:h-52 sm:w-52">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={PHOTO_URL}
+                alt="会長 北川房雄"
+                className="h-full w-full object-cover"
+              />
             </div>
             <p className="mt-6 text-center text-sm font-bold text-primary-700">
-              理事長 〇〇 〇〇
-            </p>
-            <p className="mt-1 text-center text-xs text-neutral-500">
-              （※氏名は例示です）
+              会長　北川 房雄
             </p>
           </div>
           <div className="p-6 sm:p-8 lg:flex-1 lg:p-10">
@@ -46,7 +46,7 @@ export default function GreetingPage() {
             <p className="mt-10 text-right text-sm font-medium text-neutral-800">
               全日本カイロプラクティック施術協同組合
               <br />
-              理事長 〇〇 〇〇
+              会長　北川 房雄
             </p>
           </div>
         </Card>

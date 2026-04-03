@@ -44,7 +44,7 @@ export default function Footer() {
                   href="/greeting"
                   className="hover:text-white transition-colors"
                 >
-                  理事長あいさつ
+                  会長あいさつ
                 </Link>
               </li>
               <li>

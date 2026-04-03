@@ -10,7 +10,7 @@ const NAV_ITEMS = [
     label: "組合について",
     children: [
       { label: "組合概要", href: "/about" },
-      { label: "理事長あいさつ", href: "/greeting" },
+      { label: "会長あいさつ", href: "/greeting" },
       { label: "活動内容", href: "/activities" },
     ],
   },
