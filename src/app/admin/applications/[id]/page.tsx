@@ -1,7 +1,7 @@
 import ApplicationDetailClient from "@/app/admin/applications/[id]/ApplicationDetailClient";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import type { Application } from "@/lib/types";
 import { formatDate, MEMBER_TYPE_LABELS } from "@/lib/utils";
 import { notFound } from "next/navigation";
@@ -12,7 +12,7 @@ export default async function AdminApplicationDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
   const { data: appRow, error } = await supabase
     .from("applications")
     .select("*")
@@ -25,9 +25,10 @@ export default async function AdminApplicationDetailPage({
 
   const application = appRow as Application;
 
+  const authClient = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await authClient.auth.getUser();
   let canApprove = false;
   if (user) {
     const { data: m } = await supabase

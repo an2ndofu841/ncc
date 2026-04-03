@@ -2,7 +2,7 @@ import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import type { Seminar } from "@/lib/types";
 import Link from "next/link";
 
@@ -14,7 +14,7 @@ const SEMINAR_STATUS_LABELS: Record<string, string> = {
 };
 
 export default async function AdminSeminarsPage() {
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
   const { data, error } = await supabase
     .from("seminars")
     .select("*")

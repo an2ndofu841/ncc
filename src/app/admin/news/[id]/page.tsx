@@ -1,6 +1,6 @@
 import NewsEditForm from "@/app/admin/news/[id]/NewsEditForm";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import type { News } from "@/lib/types";
 import { notFound } from "next/navigation";
 
@@ -10,7 +10,7 @@ export default async function AdminNewsEditPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
   const { data, error } = await supabase
     .from("news")
     .select("*")

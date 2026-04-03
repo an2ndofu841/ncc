@@ -1,11 +1,11 @@
 import ApplicationsTableClient from "@/app/admin/applications/ApplicationsTableClient";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import type { Application } from "@/lib/types";
 
 export default async function AdminApplicationsPage() {
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
   const { data, error } = await supabase
     .from("applications")
     .select("*")

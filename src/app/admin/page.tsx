@@ -1,6 +1,6 @@
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import {
   APPLICATION_STATUS_LABELS,
   CONTACT_CATEGORY_LABELS,
@@ -9,7 +9,7 @@ import {
 import Link from "next/link";
 
 export default async function AdminDashboardPage() {
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
 
   const [
     membersCount,

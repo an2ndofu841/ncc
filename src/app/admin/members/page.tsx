@@ -1,11 +1,11 @@
 import MembersTableClient from "@/app/admin/members/MembersTableClient";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import type { Member } from "@/lib/types";
 
 export default async function AdminMembersPage() {
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
   const { data, error } = await supabase
     .from("members")
     .select("*")

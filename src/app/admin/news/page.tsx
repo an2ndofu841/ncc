@@ -3,13 +3,13 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import type { News } from "@/lib/types";
 import { formatDate, NEWS_CATEGORY_LABELS, truncate } from "@/lib/utils";
 import Link from "next/link";
 
 export default async function AdminNewsPage() {
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
   const { data: items, error } = await supabase
     .from("news")
     .select("*")

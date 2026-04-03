@@ -2,7 +2,7 @@ import ContactDetailClient from "@/app/admin/contacts/[id]/ContactDetailClient";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import type { Contact } from "@/lib/types";
 import { CONTACT_CATEGORY_LABELS, formatDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
@@ -13,7 +13,7 @@ export default async function AdminContactDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
   const { data, error } = await supabase
     .from("contacts")
     .select("*")

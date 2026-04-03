@@ -1,7 +1,7 @@
 import SeminarEditForm from "@/app/admin/seminars/[id]/SeminarEditForm";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import type { Member, Seminar, SeminarRegistration } from "@/lib/types";
 import { MEMBER_TYPE_LABELS } from "@/lib/utils";
 import { notFound } from "next/navigation";
@@ -12,7 +12,7 @@ export default async function AdminSeminarEditPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
 
   const { data: seminarRow, error: sErr } = await supabase
     .from("seminars")

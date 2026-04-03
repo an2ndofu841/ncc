@@ -72,7 +72,7 @@ async function uploadDocumentAction(formData: FormData) {
 }
 
 export default async function AdminDocumentsPage() {
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
   const { data, error } = await supabase
     .from("documents")
     .select("*")

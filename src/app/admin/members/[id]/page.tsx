@@ -2,7 +2,7 @@ import MemberEditForm from "@/app/admin/members/[id]/MemberEditForm";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import type { Member } from "@/lib/types";
 import { formatDate, MEMBER_STATUS_LABELS, MEMBER_TYPE_LABELS } from "@/lib/utils";
 import { notFound } from "next/navigation";
@@ -20,7 +20,7 @@ export default async function AdminMemberDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
   const { data, error } = await supabase
     .from("members")
     .select("*")

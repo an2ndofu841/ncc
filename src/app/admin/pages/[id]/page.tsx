@@ -1,6 +1,6 @@
 import StaticPageEditForm from "@/app/admin/pages/[id]/StaticPageEditForm";
 import PageHeader from "@/components/ui/PageHeader";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import type { StaticPage } from "@/lib/types";
 import { notFound } from "next/navigation";
 
@@ -10,7 +10,7 @@ export default async function AdminStaticPageEditPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = await createServiceClient();
   const { data, error } = await supabase
     .from("static_pages")
     .select("*")
