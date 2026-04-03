@@ -64,7 +64,10 @@ export default function HomePage() {
           }}
         />
         <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
-          <p className="text-sm font-medium tracking-wide text-white/85 sm:text-base">
+          <p className="text-xs font-medium tracking-wide text-accent-light sm:text-sm">
+            厚生労働大臣認可　厚生省収健政 第93号
+          </p>
+          <p className="mt-1 text-sm font-medium tracking-wide text-white/85 sm:text-base">
             全日本カイロプラクティック施術協同組合
           </p>
           <h1 className="mt-4 max-w-3xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
