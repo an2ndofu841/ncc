@@ -8,6 +8,7 @@ import {
   Calendar,
 } from "lucide-react";
 import Card from "@/components/ui/Card";
+import StatsSection from "@/components/home/StatsSection";
 
 export const metadata: Metadata = {
   title: "トップページ",
@@ -189,39 +190,7 @@ export default function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="bg-primary-dark py-16 text-white sm:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-xl font-bold sm:text-2xl">
-            数字で見る組合
-          </h2>
-          <div className="mt-12 grid gap-8 sm:grid-cols-3">
-            <div className="text-center">
-              <p className="text-4xl font-bold tabular-nums text-accent sm:text-5xl">
-                15
-              </p>
-              <p className="mt-2 text-sm font-medium text-white/90">
-                設立からの年数（年）
-              </p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold tabular-nums text-accent sm:text-5xl">
-                320+
-              </p>
-              <p className="mt-2 text-sm font-medium text-white/90">
-                加盟院数（院）
-              </p>
-            </div>
-            <div className="text-center">
-              <p className="text-4xl font-bold tabular-nums text-accent sm:text-5xl">
-                180+
-              </p>
-              <p className="mt-2 text-sm font-medium text-white/90">
-                研修実施回数（累計）
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <StatsSection />
     </div>
   );
 }
