@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "全日本カイロプラクティック施術協同組合 会長より、会員の皆様と社会の皆様へのご挨拶です。",
 };
 
-const PHOTO_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/kitagawafusao.png`;
+const PHOTO_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/kitagawafusao1.png`;
 
 export default function GreetingPage() {
   return (
