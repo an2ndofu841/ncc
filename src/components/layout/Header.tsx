@@ -22,7 +22,6 @@ const NAV_ITEMS = [
       { label: "入会申込み", href: "/apply" },
     ],
   },
-  { label: "コラム", href: "/columns" },
   { label: "お知らせ", href: "/news" },
   { label: "よくある質問", href: "/faq" },
   { label: "加盟院検索", href: "/search" },
