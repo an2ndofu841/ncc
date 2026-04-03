@@ -50,6 +50,64 @@ export default function GreetingPage() {
             </p>
           </div>
         </Card>
+
+        {/* プロフィール */}
+        <div className="mt-12">
+          <h2 className="text-xl font-bold text-primary-700 sm:text-2xl">
+            会長プロフィール
+          </h2>
+          <div className="mt-1 h-1 w-16 rounded bg-accent" />
+
+          <Card className="mt-6">
+            <h3 className="text-lg font-bold text-neutral-900">
+              北川 房雄
+              <span className="ml-2 text-sm font-normal text-neutral-500">
+                （きたがわ ふさお）
+              </span>
+            </h3>
+
+            <div className="mt-6 space-y-6 text-sm leading-loose text-neutral-700">
+              <div>
+                <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-primary">
+                  経歴
+                </h4>
+                <p>
+                  1960年4月23日　北海道夕張市に産まれ、士別市育ち。
+                </p>
+                <p className="mt-2">
+                  旭川工業高卒業後、（社）北海道治療師会医学院、全国キネシオテーピング協会、フィリピンST・マイケルインターナショナルカレッジ留学、カリタスファミリーカレッジ留学、ラサールダスマカレッジ留学、MRCカイロプラクティック学院講師を歴任。
+                </p>
+              </div>
+
+              <div>
+                <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-primary">
+                  現職
+                </h4>
+                <ul className="list-disc space-y-1 pl-5">
+                  <li>JMA（日本初、旧労働省より短期職業訓練を認可された団体）代表理事会長</li>
+                  <li>日本カイロプラクティック医学会 会長</li>
+                  <li>NCC 全日本カイロプラクティック施術協同組合 代表理事会長</li>
+                  <li>北海道カイロプラクティック協同組合（北海道知事認可）代表理事</li>
+                  <li>北海道政治経済連 代表</li>
+                  <li>全国21世紀の会 代表</li>
+                  <li>日本カイロプラクティックドクター師会 会長</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-primary">
+                  受賞歴
+                </h4>
+                <p>
+                  2010年6月5日、米国ロサンゼルス市にて、人類と社会の発展に貢献した人物に贈られる「コマンドール・クロス勲章」と「ナイト爵位」を授与。
+                </p>
+                <p className="mt-2">
+                  2014年、アメリカ合衆国ホワイトハウスより大統領奉仕賞、イギリス大国政府よりサータイトルを受賞。この2タイトルを受賞したのは、北海道で初めてのことです。
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
     </>
   );
