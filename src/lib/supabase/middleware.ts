@@ -1,5 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
+import { createClient } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
+
+function createServiceRoleClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  );
+}
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -45,7 +54,8 @@ export async function updateSession(request: NextRequest) {
       url.searchParams.set("redirect", path);
       return NextResponse.redirect(url);
     }
-    const { data: profile } = await supabase
+    const service = createServiceRoleClient();
+    const { data: profile } = await service
       .from("members")
       .select("role")
       .eq("auth_id", user.id)

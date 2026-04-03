@@ -1,5 +1,5 @@
 import AdminSidebar from "@/components/layout/AdminSidebar";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
 const ADMIN_ROLES = ["system_admin", "office_staff", "editor"] as const;
@@ -18,7 +18,8 @@ export default async function AdminLayout({
     redirect("/auth/login");
   }
 
-  const { data: member } = await supabase
+  const service = await createServiceClient();
+  const { data: member } = await service
     .from("members")
     .select("role")
     .eq("auth_id", user.id)
