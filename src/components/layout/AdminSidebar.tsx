@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   X,
+  PenTool,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,6 +24,7 @@ import Button from "@/components/ui/Button";
 const NAV = [
   { href: "/admin", label: "ダッシュボード", icon: LayoutDashboard },
   { href: "/admin/news", label: "お知らせ管理", icon: Newspaper },
+  { href: "/admin/columns", label: "コラム管理", icon: PenTool },
   { href: "/admin/members", label: "会員管理", icon: Users },
   { href: "/admin/applications", label: "申込み管理", icon: FileText },
   { href: "/admin/seminars", label: "セミナー管理", icon: GraduationCap },

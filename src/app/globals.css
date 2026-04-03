@@ -36,3 +36,14 @@ body {
     font-feature-settings: "palt";
   }
 }
+
+.column-content h1 { font-size: 1.75rem; font-weight: 700; margin: 1.5rem 0 0.75rem; }
+.column-content h2 { font-size: 1.5rem; font-weight: 700; margin: 1.25rem 0 0.5rem; border-bottom: 2px solid #e5e5e5; padding-bottom: 0.25rem; }
+.column-content h3 { font-size: 1.25rem; font-weight: 600; margin: 1rem 0 0.5rem; }
+.column-content p { margin: 0.75rem 0; line-height: 1.8; }
+.column-content ul, .column-content ol { margin: 0.75rem 0; padding-left: 1.5rem; }
+.column-content li { margin: 0.25rem 0; }
+.column-content blockquote { border-left: 4px solid #1a5632; padding: 0.5rem 1rem; margin: 1rem 0; background: #f0faf4; border-radius: 0.25rem; }
+.column-content img { max-width: 100%; border-radius: 0.5rem; margin: 1rem auto; display: block; }
+.column-content a { color: #1a5632; text-decoration: underline; }
+.column-content hr { margin: 1.5rem 0; border-color: #e5e5e5; }

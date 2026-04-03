@@ -63,3 +63,11 @@ export const PREFECTURES = [
   "徳島県", "香川県", "愛媛県", "高知県",
   "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県",
 ];
+
+export const COLUMN_CATEGORY_LABELS: Record<string, string> = {
+  general: "コラム",
+  technique: "技術・施術",
+  health: "健康情報",
+  interview: "インタビュー",
+  report: "活動レポート",
+};

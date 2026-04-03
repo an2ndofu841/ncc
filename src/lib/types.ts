@@ -156,3 +156,28 @@ export interface StaticPage {
   is_published: boolean;
   updated_at: string;
 }
+
+export type ColumnCategory =
+  | "general"
+  | "technique"
+  | "health"
+  | "interview"
+  | "report";
+
+export interface Column {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string | null;
+  thumbnail_url: string | null;
+  category: ColumnCategory;
+  tags: string[];
+  author_id: string | null;
+  author_name: string | null;
+  is_published: boolean;
+  is_member_only: boolean;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
