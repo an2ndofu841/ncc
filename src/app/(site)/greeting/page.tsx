@@ -108,6 +108,196 @@ export default function GreetingPage() {
             </div>
           </Card>
         </div>
+
+        {/* 受賞・任命の詳細 */}
+        <div className="mt-16 space-y-14">
+          {/* コマンドール・クロス勲章 */}
+          <section>
+            <div className="flex items-center gap-3">
+              <time className="shrink-0 rounded bg-primary px-3 py-1 text-xs font-bold text-white">
+                2010.06.14
+              </time>
+              <h2 className="text-lg font-bold text-neutral-900 sm:text-xl">
+                コマンドール・クロス勲章 授与
+              </h2>
+            </div>
+            <div className="mt-1 h-0.5 w-full bg-neutral-200" />
+
+            <Card className="mt-5">
+              {/* 画像プレースホルダー */}
+              <div className="mb-6 flex h-52 items-center justify-center rounded-lg bg-neutral-100 text-sm text-neutral-400 sm:h-64">
+                画像準備中
+              </div>
+
+              <h3 className="text-base font-bold text-primary-700">
+                コマンドール・クロス勲章について
+              </h3>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                全日本カイロプラクティック施術協同組合の代表理事会長であり、医学博士の北川房雄氏（50歳）は、この度、米国の公益法人である「世界学術研究アカデミー財団」の推薦を受け、医学や科学などの分野で顕著な社会貢献を果たした人物に授与される、主宰者の母国、ポーランドを発祥とするセント・スタニスラス「コマンドール・クロス」勲章を受章されました。
+              </p>
+
+              <h3 className="mt-8 text-base font-bold text-primary-700">
+                北川房雄 会長の受賞について
+              </h3>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                今回の北川氏の受章は、本年3月に決定し、去る6月5日にアメリカ合衆国カリフォルニア州ロサンゼルス市リッツカールトンホテルで開催される授与式に参加し、同財団のスビグナス・カシミア・プリンス・グランド・マスター公爵よりメダルと認定証が贈呈されました。なお受勲と併せて「KNIGHT（ナイト）爵位」が授与されました。
+              </p>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                今回のセント・スタニスラス「コマンドール・クロス勲章」の受章は日本人として北川氏だけであり、コマンドール・クロス勲章の日本人受章としては歴代7人目になり、過去の全世界の受章者の中では最年少（50歳）での受章記録です。
+              </p>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                海外の歴代受章者の中にはジョン・F・ケネディ第35代米大統領等、米大統領経験者が6名、セラヒム・ギリシャ大司教、マザー・テレサ女史、ペータル2世・ユーゴスラビア国王らが受章しています。
+              </p>
+            </Card>
+          </section>
+
+          {/* 大統領奉仕賞 */}
+          <section>
+            <div className="flex items-center gap-3">
+              <time className="shrink-0 rounded bg-primary px-3 py-1 text-xs font-bold text-white">
+                2014.09.30
+              </time>
+              <h2 className="text-lg font-bold text-neutral-900 sm:text-xl">
+                大統領奉仕賞 授与
+              </h2>
+            </div>
+            <div className="mt-1 h-0.5 w-full bg-neutral-200" />
+
+            <Card className="mt-5">
+              <div className="mb-6 flex h-52 items-center justify-center rounded-lg bg-neutral-100 text-sm text-neutral-400 sm:h-64">
+                画像準備中
+              </div>
+
+              <h3 className="text-base font-bold text-primary-700">
+                大統領奉仕賞について
+              </h3>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                大統領奉仕賞（The President&apos;s Volunteer Service Award）の受賞にあたり、World Peace &amp; Culture Foundation 推薦の元、アメリカ合衆国ホワイトハウスより2014年9月30日付で受賞致しました。バラク・オバマ大統領から北川会長へ表彰状が贈られました。当組合にとって大変名誉なことであります。
+              </p>
+
+              <h3 className="mt-8 text-base font-bold text-primary-700">
+                北川房雄 会長の受賞について
+              </h3>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                アメリカ生まれの医療である、カイロプラクティックを30年間に渡り、日本及び東南アジアに広めたとして、アメリカの医療拡大に貢献した功績を認められ、世界平和文化財団山田理事の推薦の元、受賞の運びとなりました。
+              </p>
+            </Card>
+          </section>
+
+          {/* サータイトル */}
+          <section>
+            <div className="flex items-center gap-3">
+              <time className="shrink-0 rounded bg-primary px-3 py-1 text-xs font-bold text-white">
+                2014.10.25
+              </time>
+              <h2 className="text-lg font-bold text-neutral-900 sm:text-xl">
+                サータイトル 授与
+              </h2>
+            </div>
+            <div className="mt-1 h-0.5 w-full bg-neutral-200" />
+
+            <Card className="mt-5">
+              <div className="mb-6 flex h-52 items-center justify-center rounded-lg bg-neutral-100 text-sm text-neutral-400 sm:h-64">
+                画像準備中
+              </div>
+
+              <h3 className="text-base font-bold text-primary-700">
+                サータイトル受賞について
+              </h3>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                World Peace &amp; Culture Foundation 推薦の元、イギリス大国政府よりサータイトル（SIR Fusao Kitagawa Lord Of Westminster）を2014年10月25日付で受賞致しました。
+              </p>
+
+              <h3 className="mt-8 text-base font-bold text-primary-700">
+                北川房雄 会長の受賞について
+              </h3>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                人類の福祉・医療の発展に貢献した団体へ、英国政府より与えられる名誉ある称号。元々、イギリス国民に対し、エリザベス女王より授与されておりましたが、近年は外国人にも、英国憲法・国際法に則り英国政府より授与されております。
+              </p>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                東南アジア圏の学校施設において、学習環境向上の為に自費でのトイレ設置や、生活が困窮し医療行為を受けられない人達へ無償で治療を行う等の活動が評価され、1年半の選考の末、サータイトル受賞となりました。
+              </p>
+            </Card>
+          </section>
+
+          {/* 国連・EU日本事務局長任命 */}
+          <section>
+            <div className="flex items-center gap-3">
+              <time className="shrink-0 rounded bg-primary px-3 py-1 text-xs font-bold text-white">
+                2015.01.18
+              </time>
+              <h2 className="text-lg font-bold text-neutral-900 sm:text-xl">
+                UNITED NATIONS 国連・EU 日本事務局長 任命
+              </h2>
+            </div>
+            <div className="mt-1 h-0.5 w-full bg-neutral-200" />
+
+            <Card className="mt-5">
+              <div className="mb-6 flex h-52 items-center justify-center rounded-lg bg-neutral-100 text-sm text-neutral-400 sm:h-64">
+                画像準備中
+              </div>
+
+              <h3 className="text-base font-bold text-primary-700">
+                UNITED NATIONSについて
+              </h3>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                当組合の会長である北川会長がUNITED NATIONS（WORLD HUMAN FACILITY COMMUNITY）の国連・EUの日本事務局長に任命されました。
+              </p>
+
+              <h3 className="mt-8 text-base font-bold text-primary-700">
+                北川房雄 会長の任命について
+              </h3>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                コマンドール賞、大統領奉仕賞、サータイトルに続きUN-WHFの賞を頂く事は北海道では初めての事です。当組合にとってこの任命に関して大変名誉なことであり、今後の日本のカイロプラクティック業界にとって、さらなる飛躍の一歩を踏み出しました。
+              </p>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                祝賀会には関係者やヤマダアーサー大使などが出席され、大変にぎやかな祝賀会となりました。
+              </p>
+            </Card>
+          </section>
+
+          {/* 国連NOHE 人権大使プレジデント */}
+          <section>
+            <div className="flex items-center gap-3">
+              <time className="shrink-0 rounded bg-primary px-3 py-1 text-xs font-bold text-white">
+                2016.10.21
+              </time>
+              <h2 className="text-lg font-bold text-neutral-900 sm:text-xl">
+                国連NOHE 人権大使プレジデント 任命
+              </h2>
+            </div>
+            <div className="mt-1 h-0.5 w-full bg-neutral-200" />
+
+            <Card className="mt-5">
+              <div className="mb-6 flex h-52 items-center justify-center rounded-lg bg-neutral-100 text-sm text-neutral-400 sm:h-64">
+                画像準備中
+              </div>
+
+              <h3 className="text-base font-bold text-primary-700">
+                国連組織団体 国際外交団 ノーベルオーダー フォー ヒューマン エクセレンスについて
+              </h3>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                国連組織団体 国際外交団 ノーベルオーダー フォー ヒューマン エクセレンス（略称：国連NOHE）の活動目的は世界の子どもたちの為に、健康・教育をはじめ様々な献身活動を行なっていく団体として2016年10月に立ち上がりました。当組合会長の北川房雄が日本とフィリピン、そしてアジアの国連NOHE 人権大使プレジデントとして活動してまいります。
+              </p>
+
+              <h3 className="mt-8 text-base font-bold text-primary-700">
+                北川房雄 会長の功績について
+              </h3>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                北川氏の国内外における医療活動と、カイロプラクティックを始めとした数々の予防医学の研究が認められ受章に繋がりました。北川氏は日本中のカイロプラクティック同業者を全国的な組織としてまとめ、厚生労働大臣認定の当組合を設立した実績があります。
+              </p>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                活動は日本だけにとどまらず、2005年からフィリピンを中心とした東南アジア地域で、カイロプラクティックをはじめとした数々の予防医学活動の普及に尽力してきました。
+              </p>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                2008年には「フィリピン・セントマイケル・インターナショナル・カレッジ」のカイロプラクティック科と同校の予防医学科の教授に就任しています。栄養学の分野にも力を注ぎ、研究と普及を精力的に行い、「病気を寄せ付けない身体を作るために。毎日の適度な運動と定期的なカイロプラクティックの治療が必要」であると啓蒙活動を展開し続けた功績が評価され、2010年6月14日にコマンドール・クロス勲章を授与されました。
+              </p>
+              <p className="mt-3 text-sm leading-loose text-neutral-700">
+                また、World Peace &amp; Culture Foundation 推薦の元、アメリカ合衆国ホワイトハウスより、大統領奉仕賞（The President&apos;s Volunteer Service Award）を2014年9月30日付で受賞、並びにイギリス大国政府よりサータイトル（SIR Fusao Kitagawa Lord Of Westminster）を2014年10月25日に受賞いたしました。
+              </p>
+            </Card>
+          </section>
+        </div>
       </div>
     </>
   );
