@@ -17,7 +17,7 @@ interface EmailPayload {
 const FROM_ADDRESS =
   process.env.EMAIL_FROM || "noreply@chiropractic-coop.jp";
 const ADMIN_EMAIL =
-  process.env.ADMIN_EMAIL || "admin@chiropractic-coop.jp";
+  process.env.ADMIN_EMAIL || "info@ncc-chiro.or.jp";
 
 export async function sendEmail(payload: EmailPayload): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
