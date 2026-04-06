@@ -188,217 +188,221 @@ function MenuBar({ editor }: { editor: Editor }) {
   const s = 16;
 
   return (
-    <div className="flex flex-wrap items-center gap-0.5 border-b border-neutral-200 bg-neutral-50 px-2 py-1.5 rounded-t-lg">
-      <MenuButton
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        active={editor.isActive("bold")}
-        title="太字"
-      >
-        <Bold size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        active={editor.isActive("italic")}
-        title="斜体"
-      >
-        <Italic size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().toggleUnderline().run()}
-        active={editor.isActive("underline")}
-        title="下線"
-      >
-        <UnderlineIcon size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        active={editor.isActive("strike")}
-        title="取り消し線"
-      >
-        <Strikethrough size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().toggleCode().run()}
-        active={editor.isActive("code")}
-        title="インラインコード"
-      >
-        <Code size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().toggleHighlight().run()}
-        active={editor.isActive("highlight")}
-        title="蛍光マーカー"
-      >
-        <Highlighter size={s} />
-      </MenuButton>
-
-      <div className="mx-1 h-5 w-px bg-neutral-300" />
-
-      <MenuButton
-        onClick={() =>
-          editor.chain().focus().toggleHeading({ level: 1 }).run()
-        }
-        active={editor.isActive("heading", { level: 1 })}
-        title="見出し1"
-      >
-        <Heading1 size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() =>
-          editor.chain().focus().toggleHeading({ level: 2 }).run()
-        }
-        active={editor.isActive("heading", { level: 2 })}
-        title="見出し2"
-      >
-        <Heading2 size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() =>
-          editor.chain().focus().toggleHeading({ level: 3 }).run()
-        }
-        active={editor.isActive("heading", { level: 3 })}
-        title="見出し3"
-      >
-        <Heading3 size={s} />
-      </MenuButton>
-
-      <div className="mx-1 h-5 w-px bg-neutral-300" />
-
-      <MenuButton
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        active={editor.isActive("bulletList")}
-        title="箇条書き"
-      >
-        <List size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        active={editor.isActive("orderedList")}
-        title="番号リスト"
-      >
-        <ListOrdered size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        active={editor.isActive("blockquote")}
-        title="引用"
-      >
-        <Quote size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        title="区切り線"
-      >
-        <Minus size={s} />
-      </MenuButton>
-
-      <div className="mx-1 h-5 w-px bg-neutral-300" />
-
-      <MenuButton
-        onClick={() => editor.chain().focus().setTextAlign("left").run()}
-        active={editor.isActive({ textAlign: "left" })}
-        title="左揃え"
-      >
-        <AlignLeft size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().setTextAlign("center").run()}
-        active={editor.isActive({ textAlign: "center" })}
-        title="中央揃え"
-      >
-        <AlignCenter size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().setTextAlign("right").run()}
-        active={editor.isActive({ textAlign: "right" })}
-        title="右揃え"
-      >
-        <AlignRight size={s} />
-      </MenuButton>
-
-      <div className="mx-1 h-5 w-px bg-neutral-300" />
-
-      <MenuButton
-        onClick={setLink}
-        active={editor.isActive("link")}
-        title="リンク"
-      >
-        <LinkIcon size={s} />
-      </MenuButton>
-      {editor.isActive("link") && (
+    <div className="sticky top-0 z-20 rounded-t-lg border-b border-neutral-200 bg-neutral-50">
+      {/* Row 1: テキスト装飾 + 見出し + リスト・引用 */}
+      <div className="flex flex-wrap items-center gap-0.5 px-2 py-1">
         <MenuButton
-          onClick={() => editor.chain().focus().unsetLink().run()}
-          title="リンク解除"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          active={editor.isActive("bold")}
+          title="太字"
         >
-          <Unlink size={s} />
+          <Bold size={s} />
         </MenuButton>
-      )}
-      <MenuButton onClick={addImage} title="画像挿入">
-        <ImageIcon size={s} />
-      </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          active={editor.isActive("italic")}
+          title="斜体"
+        >
+          <Italic size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          active={editor.isActive("underline")}
+          title="下線"
+        >
+          <UnderlineIcon size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          active={editor.isActive("strike")}
+          title="取り消し線"
+        >
+          <Strikethrough size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().toggleCode().run()}
+          active={editor.isActive("code")}
+          title="インラインコード"
+        >
+          <Code size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().toggleHighlight().run()}
+          active={editor.isActive("highlight")}
+          title="蛍光マーカー"
+        >
+          <Highlighter size={s} />
+        </MenuButton>
 
-      <div className="mx-1 h-5 w-px bg-neutral-300" />
+        <div className="mx-1 h-5 w-px bg-neutral-300" />
 
-      <MenuButton
-        onClick={() =>
-          editor
-            .chain()
-            .focus()
-            .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-            .run()
-        }
-        active={editor.isActive("table")}
-        title="表を挿入"
-      >
-        <TableIcon size={s} />
-      </MenuButton>
-      {editor.isActive("table") && (
-        <>
+        <MenuButton
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
+          active={editor.isActive("heading", { level: 1 })}
+          title="見出し1"
+        >
+          <Heading1 size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          active={editor.isActive("heading", { level: 2 })}
+          title="見出し2"
+        >
+          <Heading2 size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
+          active={editor.isActive("heading", { level: 3 })}
+          title="見出し3"
+        >
+          <Heading3 size={s} />
+        </MenuButton>
+
+        <div className="mx-1 h-5 w-px bg-neutral-300" />
+
+        <MenuButton
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          active={editor.isActive("bulletList")}
+          title="箇条書き"
+        >
+          <List size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          active={editor.isActive("orderedList")}
+          title="番号リスト"
+        >
+          <ListOrdered size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          active={editor.isActive("blockquote")}
+          title="引用"
+        >
+          <Quote size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().setHorizontalRule().run()}
+          title="区切り線"
+        >
+          <Minus size={s} />
+        </MenuButton>
+
+        <div className="mx-1 h-5 w-px bg-neutral-300" />
+
+        <MenuButton
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().undo()}
+          title="元に戻す"
+        >
+          <Undo size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().redo()}
+          title="やり直し"
+        >
+          <Redo size={s} />
+        </MenuButton>
+      </div>
+
+      {/* Row 2: 配置 + リンク・画像 + 表・ボックス */}
+      <div className="flex flex-wrap items-center gap-0.5 border-t border-neutral-200/70 px-2 py-1">
+        <MenuButton
+          onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          active={editor.isActive({ textAlign: "left" })}
+          title="左揃え"
+        >
+          <AlignLeft size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          active={editor.isActive({ textAlign: "center" })}
+          title="中央揃え"
+        >
+          <AlignCenter size={s} />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          active={editor.isActive({ textAlign: "right" })}
+          title="右揃え"
+        >
+          <AlignRight size={s} />
+        </MenuButton>
+
+        <div className="mx-1 h-5 w-px bg-neutral-300" />
+
+        <MenuButton
+          onClick={setLink}
+          active={editor.isActive("link")}
+          title="リンク"
+        >
+          <LinkIcon size={s} />
+        </MenuButton>
+        {editor.isActive("link") && (
           <MenuButton
-            onClick={() => editor.chain().focus().addColumnAfter().run()}
-            title="右に列を追加"
+            onClick={() => editor.chain().focus().unsetLink().run()}
+            title="リンク解除"
           >
-            <Plus size={s} />
+            <Unlink size={s} />
           </MenuButton>
-          <MenuButton
-            onClick={() => editor.chain().focus().addRowAfter().run()}
-            title="下に行を追加"
-          >
-            <Plus size={s} className="rotate-90" />
-          </MenuButton>
-          <MenuButton
-            onClick={() => editor.chain().focus().mergeCells().run()}
-            title="セルを結合"
-          >
-            <TableCellsMerge size={s} />
-          </MenuButton>
-          <MenuButton
-            onClick={() => editor.chain().focus().deleteTable().run()}
-            title="表を削除"
-          >
-            <Trash2 size={s} />
-          </MenuButton>
-        </>
-      )}
+        )}
+        <MenuButton onClick={addImage} title="画像挿入">
+          <ImageIcon size={s} />
+        </MenuButton>
 
-      <CalloutDropdown editor={editor} size={s} />
+        <div className="mx-1 h-5 w-px bg-neutral-300" />
 
-      <div className="mx-1 h-5 w-px bg-neutral-300" />
+        <MenuButton
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+              .run()
+          }
+          active={editor.isActive("table")}
+          title="表を挿入"
+        >
+          <TableIcon size={s} />
+        </MenuButton>
+        {editor.isActive("table") && (
+          <>
+            <MenuButton
+              onClick={() => editor.chain().focus().addColumnAfter().run()}
+              title="右に列を追加"
+            >
+              <Plus size={s} />
+            </MenuButton>
+            <MenuButton
+              onClick={() => editor.chain().focus().addRowAfter().run()}
+              title="下に行を追加"
+            >
+              <Plus size={s} className="rotate-90" />
+            </MenuButton>
+            <MenuButton
+              onClick={() => editor.chain().focus().mergeCells().run()}
+              title="セルを結合"
+            >
+              <TableCellsMerge size={s} />
+            </MenuButton>
+            <MenuButton
+              onClick={() => editor.chain().focus().deleteTable().run()}
+              title="表を削除"
+            >
+              <Trash2 size={s} />
+            </MenuButton>
+          </>
+        )}
 
-      <MenuButton
-        onClick={() => editor.chain().focus().undo().run()}
-        disabled={!editor.can().undo()}
-        title="元に戻す"
-      >
-        <Undo size={s} />
-      </MenuButton>
-      <MenuButton
-        onClick={() => editor.chain().focus().redo().run()}
-        disabled={!editor.can().redo()}
-        title="やり直し"
-      >
-        <Redo size={s} />
-      </MenuButton>
+        <CalloutDropdown editor={editor} size={s} />
+      </div>
     </div>
   );
 }
