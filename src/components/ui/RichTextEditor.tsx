@@ -13,6 +13,7 @@ import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import { CalloutBox } from "@/components/ui/tiptap/CalloutBoxExtension";
+import { SupervisorComment } from "@/components/ui/tiptap/SupervisorCommentExtension";
 import { useCallback, useState, useRef, useEffect } from "react";
 import {
   Bold,
@@ -41,6 +42,7 @@ import {
   Plus,
   Highlighter,
   StickyNote,
+  MessageCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -402,6 +404,14 @@ function MenuBar({ editor }: { editor: Editor }) {
         )}
 
         <CalloutDropdown editor={editor} size={s} />
+
+        <MenuButton
+          onClick={() => editor.chain().focus().insertSupervisorComment().run()}
+          active={editor.isActive("supervisorComment")}
+          title="監修者コメント"
+        >
+          <MessageCircle size={s} />
+        </MenuButton>
       </div>
     </div>
   );
@@ -435,6 +445,7 @@ export default function RichTextEditor({
       TableHeader,
       TableCell,
       CalloutBox,
+      SupervisorComment,
     ],
     content,
     editorProps: {
