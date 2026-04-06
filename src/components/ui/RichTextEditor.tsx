@@ -14,7 +14,7 @@ import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import { CalloutBox } from "@/components/ui/tiptap/CalloutBoxExtension";
 import { SupervisorComment } from "@/components/ui/tiptap/SupervisorCommentExtension";
-import { useCallback, useState, useRef, useEffect } from "react";
+import { useCallback, useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import {
   Bold,
   Italic,
@@ -43,6 +43,8 @@ import {
   Highlighter,
   StickyNote,
   MessageCircle,
+  Maximize,
+  Minimize,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -147,7 +149,15 @@ function CalloutDropdown({ editor, size }: { editor: Editor; size: number }) {
   );
 }
 
-function MenuBar({ editor }: { editor: Editor }) {
+function MenuBar({
+  editor,
+  fullscreen,
+  onToggleFullscreen,
+}: {
+  editor: Editor;
+  fullscreen: boolean;
+  onToggleFullscreen: () => void;
+}) {
   const setLink = useCallback(() => {
     const prev = editor.getAttributes("link").href;
     const url = window.prompt("URLを入力", prev || "https://");
@@ -312,6 +322,16 @@ function MenuBar({ editor }: { editor: Editor }) {
         >
           <Redo size={s} />
         </MenuButton>
+
+        <div className="mx-1 h-5 w-px bg-neutral-300" />
+
+        <MenuButton
+          onClick={onToggleFullscreen}
+          active={fullscreen}
+          title={fullscreen ? "全画面を終了" : "全画面で編集"}
+        >
+          {fullscreen ? <Minimize size={s} /> : <Maximize size={s} />}
+        </MenuButton>
       </div>
 
       {/* Row 2: 配置 + リンク・画像 + 表・ボックス */}
@@ -422,6 +442,8 @@ export default function RichTextEditor({
   onChange,
   placeholder = "記事の本文を入力してください…",
 }: RichTextEditorProps) {
+  const [fullscreen, setFullscreen] = useState(false);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -459,11 +481,45 @@ export default function RichTextEditor({
     },
   });
 
+  useEffect(() => {
+    if (!fullscreen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFullscreen(false);
+    };
+    document.addEventListener("keydown", handler);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", handler);
+      document.body.style.overflow = "";
+    };
+  }, [fullscreen]);
+
   if (!editor) return null;
 
+  if (fullscreen) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col bg-white">
+        <MenuBar
+          editor={editor}
+          fullscreen={fullscreen}
+          onToggleFullscreen={() => setFullscreen(false)}
+        />
+        <div className="flex-1 overflow-y-auto">
+          <div className="mx-auto max-w-4xl">
+            <EditorContent editor={editor} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="rounded-lg border border-neutral-300 bg-white overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
-      <MenuBar editor={editor} />
+    <div className="rounded-lg border border-neutral-300 bg-white focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+      <MenuBar
+        editor={editor}
+        fullscreen={fullscreen}
+        onToggleFullscreen={() => setFullscreen(true)}
+      />
       <EditorContent editor={editor} />
     </div>
   );
