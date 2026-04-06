@@ -65,7 +65,7 @@ export default function HomePage() {
           className="absolute inset-0 h-full w-full object-cover"
         />
         {/* 暗めのオーバーレイ（文字を読みやすくする） */}
-        <div className="absolute inset-0 bg-primary-dark/70" />
+        <div className="absolute inset-0 bg-primary-dark/55" />
         <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
           <p className="text-xs font-medium tracking-wide text-accent-light sm:text-sm">
             厚生労働大臣認可　厚生省収健政 第93号
