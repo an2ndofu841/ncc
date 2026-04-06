@@ -17,6 +17,7 @@ export function truncate(str: string, len: number): string {
 export const MEMBER_TYPE_LABELS: Record<string, string> = {
   regular: "正会員",
   associate: "準会員",
+  family: "家族会員",
   student: "学生会員",
   supporting: "賛助会員",
   honorary: "名誉会員",

@@ -9,6 +9,7 @@ export type MemberStatus = "active" | "inactive" | "suspended" | "withdrawn";
 export type MemberType =
   | "regular"
   | "associate"
+  | "family"
   | "student"
   | "supporting"
   | "honorary";
