@@ -3,9 +3,9 @@
 import CountUp from "@/components/ui/CountUp";
 
 const STATS = [
-  { end: 15, suffix: "年", label: "設立からの年数" },
-  { end: 320, suffix: "+", label: "加盟院数（院）" },
-  { end: 180, suffix: "+", label: "研修実施回数（累計）" },
+  { end: 26, suffix: "年", label: "設立からの年数" },
+  { end: 86, suffix: "+", label: "加盟院数（院）" },
+  { end: 104, suffix: "+", label: "研修実施回数（累計）" },
 ];
 
 export default function StatsSection() {
