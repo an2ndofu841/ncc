@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 const TYPES = [
   {
     name: "正会員",
-    badge: "おすすめ",
+    badge: "経営者向け",
     admission: "100,000円",
     certification: "50,000円",
     annual: "30,000円",
@@ -31,7 +31,7 @@ const TYPES = [
   },
   {
     name: "準会員",
-    badge: "施術者向け",
+    badge: "スタッフ向け",
     admission: "50,000円",
     certification: null,
     annual: "20,000円",
