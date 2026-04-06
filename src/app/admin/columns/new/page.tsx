@@ -6,6 +6,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import RichTextEditor from "@/components/ui/RichTextEditor";
 import Select from "@/components/ui/Select";
 import Textarea from "@/components/ui/Textarea";
+import ColumnPreviewModal from "@/components/admin/ColumnPreviewModal";
 import { createClient } from "@/lib/supabase/client";
 import type { ColumnCategory } from "@/lib/types";
 import { COLUMN_CATEGORY_LABELS } from "@/lib/utils";
@@ -53,6 +54,7 @@ export default function AdminColumnsNewPage() {
   const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [isPublished, setIsPublished] = useState(false);
   const [publishedAt, setPublishedAt] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const regenerateSlug = useCallback(() => {
     const title = titleInputRef.current?.value?.trim() ?? "";
@@ -285,6 +287,14 @@ export default function AdminColumnsNewPage() {
             <Button type="submit" loading={loading}>
               保存する
             </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setPreviewOpen(true)}
+              className="border-2 border-accent text-accent-dark hover:bg-accent/10"
+            >
+              プレビュー
+            </Button>
             <Link href="/admin/columns">
               <Button type="button" variant="outline">
                 キャンセル
@@ -292,6 +302,28 @@ export default function AdminColumnsNewPage() {
             </Link>
           </div>
         </form>
+
+        <ColumnPreviewModal
+          open={previewOpen}
+          onClose={() => setPreviewOpen(false)}
+          title={titleInputRef.current?.value ?? ""}
+          content={content}
+          category={
+            (document.querySelector<HTMLSelectElement>(
+              'select[name="category"]'
+            )?.value ?? "general") as ColumnCategory
+          }
+          authorName={
+            document.querySelector<HTMLInputElement>(
+              'input[name="author_name"]'
+            )?.value || undefined
+          }
+          thumbnailUrl={thumbnailUrl || undefined}
+          tags={parseTags(
+            document.querySelector<HTMLInputElement>('input[name="tags"]')
+              ?.value ?? ""
+          )}
+        />
       </div>
     </>
   );

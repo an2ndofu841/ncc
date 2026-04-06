@@ -47,3 +47,16 @@ body {
 .column-content img { max-width: 100%; border-radius: 0.5rem; margin: 1rem auto; display: block; }
 .column-content a { color: #1a5632; text-decoration: underline; }
 .column-content hr { margin: 1.5rem 0; border-color: #e5e5e5; }
+.column-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+.column-content th,
+.column-content td { border: 1px solid #d4d4d4; padding: 0.5rem 0.75rem; text-align: left; vertical-align: top; }
+.column-content th { background: #f0faf4; font-weight: 600; }
+.column-content tr:nth-child(even) td { background: #fafafa; }
+
+/* Tiptap editor table styles */
+.tiptap table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; table-layout: fixed; }
+.tiptap th,
+.tiptap td { border: 1px solid #d4d4d4; padding: 0.4rem 0.6rem; position: relative; vertical-align: top; min-width: 80px; }
+.tiptap th { background: #f0faf4; font-weight: 600; }
+.tiptap .selectedCell::after { content: ""; position: absolute; inset: 0; background: rgba(26,86,50,0.08); pointer-events: none; }
+.tiptap .column-resize-handle { position: absolute; right: -2px; top: 0; bottom: 0; width: 4px; background: #1a5632; cursor: col-resize; }

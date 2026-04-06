@@ -5,6 +5,7 @@ import Input from "@/components/ui/Input";
 import RichTextEditor from "@/components/ui/RichTextEditor";
 import Select from "@/components/ui/Select";
 import Textarea from "@/components/ui/Textarea";
+import ColumnPreviewModal from "@/components/admin/ColumnPreviewModal";
 import { createClient } from "@/lib/supabase/client";
 import type { Column, ColumnCategory } from "@/lib/types";
 import { COLUMN_CATEGORY_LABELS } from "@/lib/utils";
@@ -60,6 +61,7 @@ export default function ColumnEditForm({ column }: { column: Column }) {
   const [publishedAt, setPublishedAt] = useState(
     toDatetimeLocal(column.published_at)
   );
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const regenerateSlug = useCallback(() => {
     const title = titleInputRef.current?.value?.trim() ?? "";
@@ -95,15 +97,6 @@ export default function ColumnEditForm({ column }: { column: Column }) {
     if (checked && !publishedAt.trim()) {
       setPublishedAt(nowDatetimeLocal());
     }
-  }
-
-  function openPreview() {
-    const s = slug.trim();
-    if (!s) {
-      setError("プレビューするにはスラッグを入力してください。");
-      return;
-    }
-    window.open(`/columns/${encodeURIComponent(s)}`, "_blank", "noopener,noreferrer");
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -299,7 +292,7 @@ export default function ColumnEditForm({ column }: { column: Column }) {
         <Button
           type="button"
           variant="outline"
-          onClick={openPreview}
+          onClick={() => setPreviewOpen(true)}
           className="border-2 border-accent text-accent-dark hover:bg-accent/10"
         >
           プレビュー
@@ -310,6 +303,28 @@ export default function ColumnEditForm({ column }: { column: Column }) {
           </Button>
         </Link>
       </div>
+
+      <ColumnPreviewModal
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+        title={titleInputRef.current?.value ?? column.title}
+        content={content}
+        category={
+          (document.querySelector<HTMLSelectElement>(
+            'select[name="category"]'
+          )?.value ?? column.category) as ColumnCategory
+        }
+        authorName={
+          document.querySelector<HTMLInputElement>(
+            'input[name="author_name"]'
+          )?.value || column.author_name || undefined
+        }
+        thumbnailUrl={thumbnailUrl || undefined}
+        tags={parseTags(
+          document.querySelector<HTMLInputElement>('input[name="tags"]')
+            ?.value ?? column.tags?.join(", ") ?? ""
+        )}
+      />
     </form>
   );
 }

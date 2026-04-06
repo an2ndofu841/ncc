@@ -7,6 +7,10 @@ import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
+import { Table } from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
 import { useCallback } from "react";
 import {
   Bold,
@@ -29,6 +33,10 @@ import {
   AlignRight,
   Code,
   Unlink,
+  Table as TableIcon,
+  TableCellsMerge,
+  Trash2,
+  Plus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -241,6 +249,50 @@ function MenuBar({ editor }: { editor: Editor }) {
       <div className="mx-1 h-5 w-px bg-neutral-300" />
 
       <MenuButton
+        onClick={() =>
+          editor
+            .chain()
+            .focus()
+            .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+            .run()
+        }
+        active={editor.isActive("table")}
+        title="表を挿入"
+      >
+        <TableIcon size={s} />
+      </MenuButton>
+      {editor.isActive("table") && (
+        <>
+          <MenuButton
+            onClick={() => editor.chain().focus().addColumnAfter().run()}
+            title="右に列を追加"
+          >
+            <Plus size={s} />
+          </MenuButton>
+          <MenuButton
+            onClick={() => editor.chain().focus().addRowAfter().run()}
+            title="下に行を追加"
+          >
+            <Plus size={s} className="rotate-90" />
+          </MenuButton>
+          <MenuButton
+            onClick={() => editor.chain().focus().mergeCells().run()}
+            title="セルを結合"
+          >
+            <TableCellsMerge size={s} />
+          </MenuButton>
+          <MenuButton
+            onClick={() => editor.chain().focus().deleteTable().run()}
+            title="表を削除"
+          >
+            <Trash2 size={s} />
+          </MenuButton>
+        </>
+      )}
+
+      <div className="mx-1 h-5 w-px bg-neutral-300" />
+
+      <MenuButton
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().undo()}
         title="元に戻す"
@@ -271,6 +323,10 @@ export default function RichTextEditor({
       Link.configure({ openOnClick: false, HTMLAttributes: { class: "text-primary underline" } }),
       Placeholder.configure({ placeholder }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Table.configure({ resizable: true, HTMLAttributes: { class: "tiptap-table" } }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content,
     editorProps: {
