@@ -56,13 +56,16 @@ export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary-dark text-white">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.08]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
+      <section className="relative overflow-hidden text-white">
+        {/* 背景画像 */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/fv01.png`}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
         />
+        {/* 暗めのオーバーレイ（文字を読みやすくする） */}
+        <div className="absolute inset-0 bg-primary-dark/70" />
         <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
           <p className="text-xs font-medium tracking-wide text-accent-light sm:text-sm">
             厚生労働大臣認可　厚生省収健政 第93号
