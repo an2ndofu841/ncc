@@ -3,6 +3,7 @@
 import { COLUMN_CATEGORY_LABELS } from "@/lib/utils";
 import type { ColumnCategory } from "@/lib/types";
 import Badge from "@/components/ui/Badge";
+import ColumnArticleBody from "@/components/column/ColumnArticleBody";
 import { X } from "lucide-react";
 import { useEffect } from "react";
 
@@ -100,10 +101,7 @@ export default function ColumnPreviewModal({
 
           <div className="mt-6 border-t border-neutral-200 pt-6" />
 
-          <div
-            className="column-content text-neutral-800"
-            dangerouslySetInnerHTML={{ __html: content || "<p>（本文未入力）</p>" }}
-          />
+          <ColumnArticleBody html={content || "<p>（本文未入力）</p>"} />
 
           {tags && tags.length > 0 && (
             <footer className="mt-10 border-t border-neutral-200 pt-6">

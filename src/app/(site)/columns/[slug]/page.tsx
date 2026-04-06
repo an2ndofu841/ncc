@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import PageHeader from "@/components/ui/PageHeader";
 import Badge from "@/components/ui/Badge";
+import ColumnArticleBody from "@/components/column/ColumnArticleBody";
 import { COLUMN_CATEGORY_LABELS, formatDate } from "@/lib/utils";
 import type { Column } from "@/lib/types";
 import type { Metadata } from "next";
@@ -97,10 +98,7 @@ export default async function ColumnDetailPage({ params }: Props) {
           ) : null}
         </header>
 
-        <div
-          className="column-content text-neutral-800"
-          dangerouslySetInnerHTML={{ __html: column.content }}
-        />
+        <ColumnArticleBody html={column.content} />
 
         {column.tags && column.tags.length > 0 ? (
           <footer className="mt-10 border-t border-neutral-200 pt-8">
