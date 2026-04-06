@@ -7,11 +7,13 @@ import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
+import Highlight from "@tiptap/extension-highlight";
 import { Table } from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
-import { useCallback } from "react";
+import { CalloutBox } from "@/components/ui/tiptap/CalloutBoxExtension";
+import { useCallback, useState, useRef, useEffect } from "react";
 import {
   Bold,
   Italic,
@@ -37,6 +39,8 @@ import {
   TableCellsMerge,
   Trash2,
   Plus,
+  Highlighter,
+  StickyNote,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -76,6 +80,71 @@ function MenuButton({
   );
 }
 
+function CalloutDropdown({ editor, size }: { editor: Editor; size: number }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  const insert = (boxStyle: string) => {
+    editor.chain().focus().insertCalloutBox({ boxStyle, title: "POINT" }).run();
+    setOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={ref}>
+      <MenuButton
+        onClick={() => setOpen(!open)}
+        active={editor.isActive("calloutBox")}
+        title="ボックス挿入"
+      >
+        <StickyNote size={size} />
+      </MenuButton>
+      {open && (
+        <div className="absolute left-0 top-full z-30 mt-1 w-52 rounded-lg border border-neutral-200 bg-white p-2 shadow-lg">
+          <p className="mb-1.5 px-2 text-[11px] font-semibold text-neutral-400">
+            ボックスを挿入
+          </p>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("style1")}
+          >
+            <span className="flex h-8 w-10 shrink-0 items-start rounded border-2 border-blue-300 p-0.5">
+              <span className="rounded bg-blue-300 px-0.5 text-[7px] leading-none text-white">
+                T
+              </span>
+            </span>
+            <span className="text-neutral-700">ラベル付き枠線</span>
+          </button>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("style2")}
+          >
+            <span className="flex h-8 w-10 shrink-0 flex-col overflow-hidden rounded border-2 border-blue-300">
+              <span className="flex h-3 items-center justify-center bg-blue-300 text-[6px] leading-none text-white">
+                T
+              </span>
+              <span className="flex-1" />
+            </span>
+            <span className="text-neutral-700">ヘッダー付きボックス</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MenuBar({ editor }: { editor: Editor }) {
   const setLink = useCallback(() => {
     const prev = editor.getAttributes("link").href;
@@ -85,7 +154,12 @@ function MenuBar({ editor }: { editor: Editor }) {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
       return;
     }
-    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+    editor
+      .chain()
+      .focus()
+      .extendMarkRange("link")
+      .setLink({ href: url })
+      .run();
   }, [editor]);
 
   const addImage = useCallback(async () => {
@@ -150,25 +224,38 @@ function MenuBar({ editor }: { editor: Editor }) {
       >
         <Code size={s} />
       </MenuButton>
+      <MenuButton
+        onClick={() => editor.chain().focus().toggleHighlight().run()}
+        active={editor.isActive("highlight")}
+        title="蛍光マーカー"
+      >
+        <Highlighter size={s} />
+      </MenuButton>
 
       <div className="mx-1 h-5 w-px bg-neutral-300" />
 
       <MenuButton
-        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        onClick={() =>
+          editor.chain().focus().toggleHeading({ level: 1 }).run()
+        }
         active={editor.isActive("heading", { level: 1 })}
         title="見出し1"
       >
         <Heading1 size={s} />
       </MenuButton>
       <MenuButton
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        onClick={() =>
+          editor.chain().focus().toggleHeading({ level: 2 }).run()
+        }
         active={editor.isActive("heading", { level: 2 })}
         title="見出し2"
       >
         <Heading2 size={s} />
       </MenuButton>
       <MenuButton
-        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        onClick={() =>
+          editor.chain().focus().toggleHeading({ level: 3 }).run()
+        }
         active={editor.isActive("heading", { level: 3 })}
         title="見出し3"
       >
@@ -231,7 +318,11 @@ function MenuBar({ editor }: { editor: Editor }) {
 
       <div className="mx-1 h-5 w-px bg-neutral-300" />
 
-      <MenuButton onClick={setLink} active={editor.isActive("link")} title="リンク">
+      <MenuButton
+        onClick={setLink}
+        active={editor.isActive("link")}
+        title="リンク"
+      >
         <LinkIcon size={s} />
       </MenuButton>
       {editor.isActive("link") && (
@@ -290,6 +381,8 @@ function MenuBar({ editor }: { editor: Editor }) {
         </>
       )}
 
+      <CalloutDropdown editor={editor} size={s} />
+
       <div className="mx-1 h-5 w-px bg-neutral-300" />
 
       <MenuButton
@@ -319,14 +412,25 @@ export default function RichTextEditor({
     extensions: [
       StarterKit,
       Underline,
-      Image.configure({ allowBase64: false, HTMLAttributes: { class: "rounded-lg max-w-full mx-auto" } }),
-      Link.configure({ openOnClick: false, HTMLAttributes: { class: "text-primary underline" } }),
+      Highlight,
+      Image.configure({
+        allowBase64: false,
+        HTMLAttributes: { class: "rounded-lg max-w-full mx-auto" },
+      }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: { class: "text-primary underline" },
+      }),
       Placeholder.configure({ placeholder }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Table.configure({ resizable: true, HTMLAttributes: { class: "tiptap-table" } }),
+      Table.configure({
+        resizable: true,
+        HTMLAttributes: { class: "tiptap-table" },
+      }),
       TableRow,
       TableHeader,
       TableCell,
+      CalloutBox,
     ],
     content,
     editorProps: {
