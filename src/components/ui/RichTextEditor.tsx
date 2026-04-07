@@ -12,7 +12,7 @@ import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import { CalloutBox } from "@/components/ui/tiptap/CalloutBoxExtension";
 import { SupervisorComment } from "@/components/ui/tiptap/SupervisorCommentExtension";
-import { useCallback, useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 import {
   Bold,
   Italic,

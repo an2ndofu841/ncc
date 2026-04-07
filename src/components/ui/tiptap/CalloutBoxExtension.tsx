@@ -1,12 +1,4 @@
-"use client";
-
 import { Node, mergeAttributes } from "@tiptap/core";
-import {
-  NodeViewWrapper,
-  NodeViewContent,
-  ReactNodeViewRenderer,
-} from "@tiptap/react";
-import type { ReactNodeViewProps } from "@tiptap/react";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
@@ -77,41 +69,88 @@ export const CalloutBox = Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(CalloutBoxNodeView);
+    return ({ node, getPos, editor }) => {
+      const boxStyle = node.attrs.boxStyle || "style1";
+
+      const dom = document.createElement("div");
+      dom.classList.add("cb-editor", `cb-editor-${boxStyle}`);
+      dom.setAttribute("data-callout-box", "");
+      dom.setAttribute("data-box-style", boxStyle);
+
+      const header = document.createElement("div");
+      header.classList.add("cb-editor-header");
+      header.contentEditable = "false";
+
+      const titleInput = document.createElement("input");
+      titleInput.type = "text";
+      titleInput.value = node.attrs.title || "POINT";
+      titleInput.placeholder = "タイトル";
+      titleInput.classList.add("cb-editor-title-input");
+      titleInput.addEventListener("input", () => {
+        const pos = getPos();
+        if (typeof pos === "number") {
+          editor.view.dispatch(
+            editor.view.state.tr.setNodeMarkup(pos, undefined, {
+              ...node.attrs,
+              title: titleInput.value,
+            })
+          );
+        }
+      });
+
+      const styleBtn = document.createElement("button");
+      styleBtn.type = "button";
+      styleBtn.classList.add("cb-editor-style-btn");
+      styleBtn.title = "スタイル切替";
+      styleBtn.textContent = boxStyle === "style1" ? "▦" : "▤";
+      styleBtn.addEventListener("click", () => {
+        const pos = getPos();
+        if (typeof pos === "number") {
+          const newStyle =
+            node.attrs.boxStyle === "style1" ? "style2" : "style1";
+          editor.view.dispatch(
+            editor.view.state.tr.setNodeMarkup(pos, undefined, {
+              ...node.attrs,
+              boxStyle: newStyle,
+            })
+          );
+        }
+      });
+
+      header.appendChild(titleInput);
+      header.appendChild(styleBtn);
+
+      const contentDOM = document.createElement("div");
+      contentDOM.classList.add("cb-editor-body");
+
+      dom.appendChild(header);
+      dom.appendChild(contentDOM);
+
+      return {
+        dom,
+        contentDOM,
+        update(updatedNode) {
+          if (updatedNode.type.name !== "calloutBox") return false;
+          const newStyle = updatedNode.attrs.boxStyle || "style1";
+          dom.className = `cb-editor cb-editor-${newStyle}`;
+          dom.setAttribute("data-box-style", newStyle);
+          titleInput.value = updatedNode.attrs.title || "";
+          styleBtn.textContent = newStyle === "style1" ? "▦" : "▤";
+          return true;
+        },
+        stopEvent(event) {
+          const target = event.target as HTMLElement;
+          return (
+            target === titleInput ||
+            target === styleBtn ||
+            titleInput.contains(target) ||
+            styleBtn.contains(target)
+          );
+        },
+        ignoreMutation(mutation) {
+          return !contentDOM.contains(mutation.target);
+        },
+      };
+    };
   },
 });
-
-function CalloutBoxNodeView({ node, updateAttributes, ref }: ReactNodeViewProps) {
-  const { boxStyle, title } = node.attrs;
-  const isStyle1 = boxStyle === "style1";
-
-  return (
-    <NodeViewWrapper
-      ref={ref}
-      className={`cb-editor cb-editor-${boxStyle}`}
-      data-callout-box=""
-      data-box-style={boxStyle}
-    >
-      <div className="cb-editor-header" contentEditable={false}>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => updateAttributes({ title: e.target.value })}
-          placeholder="タイトル"
-          className="cb-editor-title-input"
-        />
-        <button
-          type="button"
-          onClick={() =>
-            updateAttributes({ boxStyle: isStyle1 ? "style2" : "style1" })
-          }
-          className="cb-editor-style-btn"
-          title="スタイル切替"
-        >
-          {isStyle1 ? "▦" : "▤"}
-        </button>
-      </div>
-      <NodeViewContent className="cb-editor-body" />
-    </NodeViewWrapper>
-  );
-}

@@ -1,14 +1,8 @@
-"use client";
-
 import { Node, mergeAttributes } from "@tiptap/core";
-import {
-  NodeViewWrapper,
-  NodeViewContent,
-  ReactNodeViewRenderer,
-} from "@tiptap/react";
-import type { ReactNodeViewProps } from "@tiptap/react";
 
-const PHOTO_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/kitagawafusao1.png`;
+const PHOTO_URL = typeof window !== "undefined"
+  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/kitagawafusao1.png`
+  : "";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
@@ -69,22 +63,52 @@ export const SupervisorComment = Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(SupervisorCommentNodeView);
+    return () => {
+      const dom = document.createElement("div");
+      dom.classList.add("sv-editor-wrap");
+      dom.setAttribute("data-supervisor-comment", "");
+
+      const left = document.createElement("div");
+      left.classList.add("sv-editor-left");
+      left.contentEditable = "false";
+
+      const photo = document.createElement("img");
+      photo.src = PHOTO_URL;
+      photo.alt = "北川房雄";
+      photo.classList.add("sv-editor-photo");
+
+      const name = document.createElement("span");
+      name.classList.add("sv-editor-name");
+      name.textContent = "北川房雄";
+
+      left.appendChild(photo);
+      left.appendChild(name);
+
+      const bubble = document.createElement("div");
+      bubble.classList.add("sv-editor-bubble");
+
+      const arrow = document.createElement("div");
+      arrow.classList.add("sv-editor-bubble-arrow");
+
+      const contentDOM = document.createElement("div");
+      contentDOM.classList.add("sv-editor-bubble-content");
+
+      bubble.appendChild(arrow);
+      bubble.appendChild(contentDOM);
+
+      dom.appendChild(left);
+      dom.appendChild(bubble);
+
+      return {
+        dom,
+        contentDOM,
+        update(updatedNode) {
+          return updatedNode.type.name === "supervisorComment";
+        },
+        ignoreMutation(mutation) {
+          return !contentDOM.contains(mutation.target);
+        },
+      };
+    };
   },
 });
-
-function SupervisorCommentNodeView({ ref }: ReactNodeViewProps) {
-  return (
-    <NodeViewWrapper ref={ref} className="sv-editor-wrap" data-supervisor-comment="">
-      <div className="sv-editor-left" contentEditable={false}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={PHOTO_URL} alt="北川房雄" className="sv-editor-photo" />
-        <span className="sv-editor-name">北川房雄</span>
-      </div>
-      <div className="sv-editor-bubble">
-        <div className="sv-editor-bubble-arrow" />
-        <NodeViewContent as="div" />
-      </div>
-    </NodeViewWrapper>
-  );
-}

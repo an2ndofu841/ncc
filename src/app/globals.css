@@ -367,9 +367,12 @@ body {
   flex: 1;
   min-width: 0;
 }
-.sv-editor-bubble p { margin: 0.25rem 0; line-height: 1.7; }
-.sv-editor-bubble p:first-child { margin-top: 0; }
-.sv-editor-bubble p:last-child { margin-bottom: 0; }
+.sv-editor-bubble p,
+.sv-editor-bubble-content p { margin: 0.25rem 0; line-height: 1.7; }
+.sv-editor-bubble p:first-child,
+.sv-editor-bubble-content p:first-child { margin-top: 0; }
+.sv-editor-bubble p:last-child,
+.sv-editor-bubble-content p:last-child { margin-bottom: 0; }
 .sv-editor-bubble-arrow {
   position: absolute;
   top: 14px;
