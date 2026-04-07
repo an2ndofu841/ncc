@@ -10,6 +10,11 @@ INSERT INTO public.site_settings (key, value)
 VALUES ('maintenance_mode', 'false'::jsonb)
 ON CONFLICT (key) DO NOTHING;
 
+-- プレビューキー（メンテナンス中に関係者がサイトを確認するための秘密鍵）
+INSERT INTO public.site_settings (key, value)
+VALUES ('preview_key', '"ncc-preview-2026"'::jsonb)
+ON CONFLICT (key) DO NOTHING;
+
 -- RLS
 ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
 

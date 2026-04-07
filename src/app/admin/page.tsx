@@ -46,12 +46,15 @@ export default async function AdminDashboardPage() {
       .limit(5),
     supabase
       .from("site_settings")
-      .select("value")
-      .eq("key", "maintenance_mode")
-      .single(),
+      .select("key, value")
+      .in("key", ["maintenance_mode", "preview_key"]),
   ]);
 
-  const isMaintenanceOn = maintenanceSetting.data?.value === true;
+  const settingsMap = Object.fromEntries(
+    (maintenanceSetting.data ?? []).map((r: { key: string; value: unknown }) => [r.key, r.value])
+  );
+  const isMaintenanceOn = settingsMap.maintenance_mode === true;
+  const previewKey = (settingsMap.preview_key as string) ?? null;
 
   const stats = [
     { label: "会員数", value: membersCount.count ?? 0, href: "/admin/members" },
@@ -80,7 +83,7 @@ export default async function AdminDashboardPage() {
         breadcrumbs={[{ label: "管理画面", href: "/admin" }]}
       />
       <div className="mx-auto max-w-6xl space-y-8">
-        <MaintenanceToggle initialValue={isMaintenanceOn} />
+        <MaintenanceToggle initialValue={isMaintenanceOn} initialPreviewKey={previewKey} />
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {stats.map((s) => (
