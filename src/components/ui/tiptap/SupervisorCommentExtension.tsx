@@ -74,14 +74,15 @@ export const SupervisorComment = Node.create({
 
 function SupervisorCommentNodeView() {
   return (
-    <NodeViewWrapper className="sv-comment-editor">
-      <div className="sv-comment-avatar" contentEditable={false}>
+    <NodeViewWrapper className="sv-editor-wrap" data-supervisor-comment="">
+      <div className="sv-editor-left" contentEditable={false}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={PHOTO_URL} alt="北川房雄" />
-        <span className="sv-comment-name">北川房雄</span>
+        <img src={PHOTO_URL} alt="北川房雄" className="sv-editor-photo" />
+        <span className="sv-editor-name">北川房雄</span>
       </div>
-      <div className="sv-comment-bubble">
-        <NodeViewContent className="sv-comment-content" />
+      <div className="sv-editor-bubble">
+        <div className="sv-editor-bubble-arrow" />
+        <NodeViewContent as="div" />
       </div>
     </NodeViewWrapper>
   );

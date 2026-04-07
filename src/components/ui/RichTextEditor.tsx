@@ -149,6 +149,83 @@ function CalloutDropdown({ editor, size }: { editor: Editor; size: number }) {
   );
 }
 
+const HIGHLIGHT_COLORS = [
+  { color: "#fef08a", label: "黄色", ring: "ring-yellow-300" },
+  { color: "#a5f3fc", label: "水色", ring: "ring-cyan-300" },
+  { color: "#bbf7d0", label: "緑", ring: "ring-green-300" },
+  { color: "#fca5a5", label: "赤", ring: "ring-red-300" },
+];
+
+function HighlightDropdown({ editor, size }: { editor: Editor; size: number }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  return (
+    <div className="relative" ref={ref}>
+      <MenuButton
+        onClick={() => setOpen(!open)}
+        active={editor.isActive("highlight")}
+        title="蛍光マーカー"
+      >
+        <Highlighter size={size} />
+      </MenuButton>
+      {open && (
+        <div className="absolute left-0 top-full z-30 mt-1 rounded-lg border border-neutral-200 bg-white p-2 shadow-lg">
+          <p className="mb-1.5 px-1 text-[11px] font-semibold text-neutral-400">
+            マーカー色
+          </p>
+          <div className="flex gap-1.5">
+            {HIGHLIGHT_COLORS.map((h) => (
+              <button
+                key={h.color}
+                type="button"
+                title={h.label}
+                onClick={() => {
+                  editor
+                    .chain()
+                    .focus()
+                    .toggleHighlight({ color: h.color })
+                    .run();
+                  setOpen(false);
+                }}
+                className={cn(
+                  "h-7 w-7 rounded-full border-2 border-white ring-2 ring-transparent transition-all hover:scale-110",
+                  editor.isActive("highlight", { color: h.color }) && h.ring
+                )}
+                style={{ background: h.color }}
+              />
+            ))}
+            {editor.isActive("highlight") && (
+              <button
+                type="button"
+                title="マーカー解除"
+                onClick={() => {
+                  editor.chain().focus().unsetHighlight().run();
+                  setOpen(false);
+                }}
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-neutral-300 text-xs text-neutral-500 hover:bg-neutral-100"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MenuBar({
   editor,
   fullscreen,
@@ -238,13 +315,7 @@ function MenuBar({
         >
           <Code size={s} />
         </MenuButton>
-        <MenuButton
-          onClick={() => editor.chain().focus().toggleHighlight().run()}
-          active={editor.isActive("highlight")}
-          title="蛍光マーカー"
-        >
-          <Highlighter size={s} />
-        </MenuButton>
+        <HighlightDropdown editor={editor} size={s} />
 
         <div className="mx-1 h-5 w-px bg-neutral-300" />
 
@@ -448,7 +519,7 @@ export default function RichTextEditor({
     extensions: [
       StarterKit,
       Underline,
-      Highlight,
+      Highlight.configure({ multicolor: true }),
       Image.configure({
         allowBase64: false,
         HTMLAttributes: { class: "rounded-lg max-w-full mx-auto" },
