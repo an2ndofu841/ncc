@@ -193,12 +193,82 @@ body {
   padding: 1rem 1.25rem;
 }
 
+/* ── リストボックス共通 (公開ページ) ── */
+.column-content [data-box-style="pointer"] [data-callout-title],
+.column-content [data-box-style="paw"] [data-callout-title],
+.column-content [data-box-style="check"] [data-callout-title],
+.column-content [data-box-style="memo"] [data-callout-title] {
+  display: none;
+}
+.column-content [data-box-style="pointer"] [data-callout-content] p,
+.column-content [data-box-style="paw"] [data-callout-content] p,
+.column-content [data-box-style="check"] [data-callout-content] p {
+  position: relative;
+  padding-left: 1.75rem;
+  margin: 0.5rem 0;
+  line-height: 1.8;
+}
+.column-content [data-box-style="pointer"] [data-callout-content] p::before,
+.column-content [data-box-style="paw"] [data-callout-content] p::before,
+.column-content [data-box-style="check"] [data-callout-content] p::before {
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+}
+
+/* pointer: 緑枠 + 👉 */
+.column-content [data-box-style="pointer"] {
+  border: 2.5px solid #34d399;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+}
+.column-content [data-box-style="pointer"] [data-callout-content] p::before { content: "👉"; }
+
+/* paw: 赤/ピンク枠 + ピンク背景 + 🐾 */
+.column-content [data-box-style="paw"] {
+  border: 2px solid #fca5a5;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: #fff5f5;
+}
+.column-content [data-box-style="paw"] [data-callout-content] p::before { content: "🐾"; }
+
+/* check: オレンジ枠 + ✅ */
+.column-content [data-box-style="check"] {
+  border: 2.5px solid #fbbf24;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+}
+.column-content [data-box-style="check"] [data-callout-content] p::before { content: "✅"; }
+
+/* memo: 青点線枠 + 水色背景 + ● リスト */
+.column-content [data-box-style="memo"] {
+  border: 2.5px dashed #93c5fd;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: #eff6ff;
+}
+.column-content [data-box-style="memo"] [data-callout-content] p {
+  position: relative;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+  line-height: 1.8;
+}
+.column-content [data-box-style="memo"] [data-callout-content] p::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #3b82f6;
+}
+
 /* ══════════════════════════════════════
    Callout box — エディタ内 NodeView
    ══════════════════════════════════════ */
 .cb-editor { margin: 0.75rem 0; }
 
-/* Style 1 */
+/* Style 1: ラベル付き枠線 */
 .cb-editor-style1 {
   position: relative;
   border: 2px solid #93c5fd;
@@ -216,7 +286,7 @@ body {
   padding: 0 0.25rem;
 }
 
-/* Style 2 */
+/* Style 2: ヘッダー付きボックス */
 .cb-editor-style2 {
   border: 2px solid #93c5fd;
   border-radius: 0.75rem;
@@ -264,6 +334,70 @@ body {
 .cb-editor-style1 .cb-editor-style-btn:hover { background: #eff6ff; }
 .cb-editor-style2 .cb-editor-style-btn { color: white; }
 .cb-editor-style2 .cb-editor-style-btn:hover { background: rgba(255,255,255,0.2); }
+
+/* ── リストボックス共通 (エディタ) ── */
+.cb-editor-pointer .cb-editor-body p,
+.cb-editor-paw .cb-editor-body p,
+.cb-editor-check .cb-editor-body p {
+  position: relative;
+  padding-left: 1.75rem;
+  margin: 0.5rem 0;
+  line-height: 1.8;
+}
+.cb-editor-pointer .cb-editor-body p::before,
+.cb-editor-paw .cb-editor-body p::before,
+.cb-editor-check .cb-editor-body p::before {
+  position: absolute;
+  left: 0.25rem;
+  top: 0.1em;
+}
+
+/* pointer: 緑枠 + 👉 */
+.cb-editor-pointer {
+  border: 2.5px solid #34d399;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+.cb-editor-pointer .cb-editor-body p::before { content: "👉"; }
+
+/* paw: 赤/ピンク枠 + ピンク背景 + 🐾 */
+.cb-editor-paw {
+  border: 2px solid #fca5a5;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #fff5f5;
+}
+.cb-editor-paw .cb-editor-body p::before { content: "🐾"; }
+
+/* check: オレンジ枠 + ✔ */
+.cb-editor-check {
+  border: 2.5px solid #fbbf24;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+.cb-editor-check .cb-editor-body p::before { content: "✅"; }
+
+/* memo: 青点線枠 + 水色背景 + ● リスト */
+.cb-editor-memo {
+  border: 2.5px dashed #93c5fd;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #eff6ff;
+}
+.cb-editor-memo .cb-editor-body p {
+  position: relative;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+  line-height: 1.8;
+}
+.cb-editor-memo .cb-editor-body p::before {
+  content: "•";
+  position: absolute;
+  left: 0.4rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #3b82f6;
+}
 
 /* ══════════════════════════════════════
    監修者コメント吹き出し — 公開ページ

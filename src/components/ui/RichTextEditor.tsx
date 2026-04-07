@@ -99,8 +99,8 @@ function CalloutDropdown({ editor, size }: { editor: Editor; size: number }) {
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
 
-  const insert = (boxStyle: string) => {
-    editor.chain().focus().insertCalloutBox({ boxStyle, title: "POINT" }).run();
+  const insert = (boxStyle: string, title = "POINT") => {
+    editor.chain().focus().insertCalloutBox({ boxStyle, title }).run();
     setOpen(false);
   };
 
@@ -114,16 +114,16 @@ function CalloutDropdown({ editor, size }: { editor: Editor; size: number }) {
         <StickyNote size={size} />
       </MenuButton>
       {open && (
-        <div className="absolute left-0 top-full z-30 mt-1 w-52 rounded-lg border border-neutral-200 bg-white p-2 shadow-lg">
+        <div className="absolute left-0 top-full z-30 mt-1 w-56 rounded-lg border border-neutral-200 bg-white p-2 shadow-lg">
           <p className="mb-1.5 px-2 text-[11px] font-semibold text-neutral-400">
-            ボックスを挿入
+            タイトル付きボックス
           </p>
           <button
             type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sm hover:bg-primary-50"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
             onClick={() => insert("style1")}
           >
-            <span className="flex h-8 w-10 shrink-0 items-start rounded border-2 border-blue-300 p-0.5">
+            <span className="flex h-7 w-9 shrink-0 items-start rounded border-2 border-blue-300 p-0.5">
               <span className="rounded bg-blue-300 px-0.5 text-[7px] leading-none text-white">
                 T
               </span>
@@ -132,16 +132,66 @@ function CalloutDropdown({ editor, size }: { editor: Editor; size: number }) {
           </button>
           <button
             type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sm hover:bg-primary-50"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
             onClick={() => insert("style2")}
           >
-            <span className="flex h-8 w-10 shrink-0 flex-col overflow-hidden rounded border-2 border-blue-300">
-              <span className="flex h-3 items-center justify-center bg-blue-300 text-[6px] leading-none text-white">
+            <span className="flex h-7 w-9 shrink-0 flex-col overflow-hidden rounded border-2 border-blue-300">
+              <span className="flex h-2.5 items-center justify-center bg-blue-300 text-[5px] leading-none text-white">
                 T
               </span>
               <span className="flex-1" />
             </span>
             <span className="text-neutral-700">ヘッダー付きボックス</span>
+          </button>
+
+          <div className="my-1.5 border-t border-neutral-100" />
+          <p className="mb-1.5 px-2 text-[11px] font-semibold text-neutral-400">
+            リストボックス
+          </p>
+
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("pointer", "")}
+          >
+            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 rounded border-2 border-emerald-400 px-1">
+              <span className="text-[8px] leading-none">👉</span>
+              <span className="text-[8px] leading-none">👉</span>
+            </span>
+            <span className="text-neutral-700">ポインター（緑枠）</span>
+          </button>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("paw", "")}
+          >
+            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 rounded border-2 border-red-300 bg-red-50 px-1">
+              <span className="text-[8px] leading-none">🐾</span>
+              <span className="text-[8px] leading-none">🐾</span>
+            </span>
+            <span className="text-neutral-700">足あと（ピンク枠）</span>
+          </button>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("check", "")}
+          >
+            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 rounded border-2 border-amber-400 px-1">
+              <span className="text-[8px] leading-none">✅</span>
+              <span className="text-[8px] leading-none">✅</span>
+            </span>
+            <span className="text-neutral-700">チェック（オレンジ枠）</span>
+          </button>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("memo", "")}
+          >
+            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 rounded border-2 border-dashed border-blue-300 bg-blue-50 px-1">
+              <span className="text-[8px] leading-none text-blue-500">• —</span>
+              <span className="text-[8px] leading-none text-blue-500">• —</span>
+            </span>
+            <span className="text-neutral-700">メモ（青点線枠）</span>
           </button>
         </div>
       )}
