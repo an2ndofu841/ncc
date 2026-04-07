@@ -44,6 +44,7 @@ import {
   Maximize,
   Minimize,
   Eye,
+  ListTree,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -114,16 +115,16 @@ function CalloutDropdown({ editor, size }: { editor: Editor; size: number }) {
         <StickyNote size={size} />
       </MenuButton>
       {open && (
-        <div className="absolute left-0 top-full z-30 mt-1 w-56 rounded-lg border border-neutral-200 bg-white p-2 shadow-lg">
+        <div className="absolute left-0 top-full z-30 mt-1 w-52 rounded-lg border border-neutral-200 bg-white p-2 shadow-lg">
           <p className="mb-1.5 px-2 text-[11px] font-semibold text-neutral-400">
-            タイトル付きボックス
+            ボックスを挿入
           </p>
           <button
             type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sm hover:bg-primary-50"
             onClick={() => insert("style1")}
           >
-            <span className="flex h-7 w-9 shrink-0 items-start rounded border-2 border-blue-300 p-0.5">
+            <span className="flex h-8 w-10 shrink-0 items-start rounded border-2 border-blue-300 p-0.5">
               <span className="rounded bg-blue-300 px-0.5 text-[7px] leading-none text-white">
                 T
               </span>
@@ -132,116 +133,16 @@ function CalloutDropdown({ editor, size }: { editor: Editor; size: number }) {
           </button>
           <button
             type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sm hover:bg-primary-50"
             onClick={() => insert("style2")}
           >
-            <span className="flex h-7 w-9 shrink-0 flex-col overflow-hidden rounded border-2 border-blue-300">
-              <span className="flex h-2.5 items-center justify-center bg-blue-300 text-[5px] leading-none text-white">
+            <span className="flex h-8 w-10 shrink-0 flex-col overflow-hidden rounded border-2 border-blue-300">
+              <span className="flex h-3 items-center justify-center bg-blue-300 text-[6px] leading-none text-white">
                 T
               </span>
               <span className="flex-1" />
             </span>
             <span className="text-neutral-700">ヘッダー付きボックス</span>
-          </button>
-
-          <div className="my-1.5 border-t border-neutral-100" />
-          <p className="mb-1.5 px-2 text-[11px] font-semibold text-neutral-400">
-            リストボックス
-          </p>
-
-          <button
-            type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
-            onClick={() => insert("pointer", "")}
-          >
-            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 rounded border-2 border-emerald-400 px-1">
-              <span className="text-[8px] leading-none">👉</span>
-              <span className="text-[8px] leading-none">👉</span>
-            </span>
-            <span className="text-neutral-700">ポインター（緑枠）</span>
-          </button>
-          <button
-            type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
-            onClick={() => insert("paw", "")}
-          >
-            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 rounded border-2 border-red-300 bg-red-50 px-1">
-              <span className="text-[8px] leading-none">🐾</span>
-              <span className="text-[8px] leading-none">🐾</span>
-            </span>
-            <span className="text-neutral-700">足あと（ピンク枠）</span>
-          </button>
-          <button
-            type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
-            onClick={() => insert("check", "")}
-          >
-            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 rounded border-2 border-amber-400 px-1">
-              <span className="text-[8px] leading-none">✅</span>
-              <span className="text-[8px] leading-none">✅</span>
-            </span>
-            <span className="text-neutral-700">チェック（オレンジ枠）</span>
-          </button>
-          <button
-            type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
-            onClick={() => insert("memo", "")}
-          >
-            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 rounded border-2 border-dashed border-blue-300 bg-blue-50 px-1">
-              <span className="text-[8px] leading-none text-blue-500">• —</span>
-              <span className="text-[8px] leading-none text-blue-500">• —</span>
-            </span>
-            <span className="text-neutral-700">メモ（青点線枠）</span>
-          </button>
-
-          <div className="my-1.5 border-t border-neutral-100" />
-          <p className="mb-1.5 px-2 text-[11px] font-semibold text-neutral-400">
-            ボックスなしリスト
-          </p>
-
-          <button
-            type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
-            onClick={() => insert("pointer-plain", "")}
-          >
-            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 px-1">
-              <span className="text-[8px] leading-none">👉 —</span>
-              <span className="text-[8px] leading-none">👉 —</span>
-            </span>
-            <span className="text-neutral-700">ポインター</span>
-          </button>
-          <button
-            type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
-            onClick={() => insert("paw-plain", "")}
-          >
-            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 px-1">
-              <span className="text-[8px] leading-none">🐾 —</span>
-              <span className="text-[8px] leading-none">🐾 —</span>
-            </span>
-            <span className="text-neutral-700">足あと</span>
-          </button>
-          <button
-            type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
-            onClick={() => insert("check-plain", "")}
-          >
-            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 px-1">
-              <span className="text-[8px] leading-none">✅ —</span>
-              <span className="text-[8px] leading-none">✅ —</span>
-            </span>
-            <span className="text-neutral-700">チェック</span>
-          </button>
-          <button
-            type="button"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
-            onClick={() => insert("memo-plain", "")}
-          >
-            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 px-1">
-              <span className="text-[8px] leading-none text-blue-500">• —</span>
-              <span className="text-[8px] leading-none text-blue-500">• —</span>
-            </span>
-            <span className="text-neutral-700">メモ</span>
           </button>
         </div>
       )}
@@ -323,6 +224,121 @@ function HighlightDropdown({ editor, size }: { editor: Editor; size: number }) {
         </div>
       )}
     </div>
+  );
+}
+
+const STYLED_LISTS = [
+  {
+    label: "ボックスあり",
+    items: [
+      { style: "pointer", name: "▶ 三角（緑枠）", border: "border-emerald-400", bg: "" },
+      { style: "paw", name: "● 丸印（ピンク枠）", border: "border-red-300", bg: "bg-red-50" },
+      { style: "check", name: "✓ チェック（オレンジ枠）", border: "border-amber-400", bg: "" },
+      { style: "memo", name: "― ダッシュ（青点線枠）", border: "border-blue-300 border-dashed", bg: "bg-blue-50" },
+    ],
+  },
+  {
+    label: "ボックスなし",
+    items: [
+      { style: "pointer-plain", name: "▶ 三角", border: "", bg: "" },
+      { style: "paw-plain", name: "● 丸印", border: "", bg: "" },
+      { style: "check-plain", name: "✓ チェック", border: "", bg: "" },
+      { style: "memo-plain", name: "― ダッシュ", border: "", bg: "" },
+    ],
+  },
+];
+
+function StyledListDropdown({ editor, size }: { editor: Editor; size: number }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  const insert = (boxStyle: string) => {
+    editor.chain().focus().insertCalloutBox({ boxStyle, title: "" }).run();
+    setOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={ref}>
+      <MenuButton
+        onClick={() => setOpen(!open)}
+        active={false}
+        title="装飾リスト"
+      >
+        <ListTree size={size} />
+      </MenuButton>
+      {open && (
+        <div className="absolute left-0 top-full z-30 mt-1 w-56 rounded-lg border border-neutral-200 bg-white p-2 shadow-lg">
+          {STYLED_LISTS.map((group, gi) => (
+            <div key={group.label}>
+              {gi > 0 && <div className="my-1.5 border-t border-neutral-100" />}
+              <p className="mb-1 px-2 text-[11px] font-semibold text-neutral-400">
+                {group.label}
+              </p>
+              {group.items.map((item) => (
+                <button
+                  key={item.style}
+                  type="button"
+                  className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+                  onClick={() => insert(item.style)}
+                >
+                  <span
+                    className={cn(
+                      "flex h-7 w-9 shrink-0 flex-col justify-center gap-1 rounded px-1",
+                      item.border && `border-2 ${item.border}`,
+                      item.bg
+                    )}
+                  >
+                    <ListIcon type={item.style.replace("-plain", "")} />
+                    <ListIcon type={item.style.replace("-plain", "")} />
+                  </span>
+                  <span className="text-neutral-700">{item.name}</span>
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ListIcon({ type }: { type: string }) {
+  const base = "flex items-center gap-1";
+  if (type === "pointer")
+    return (
+      <span className={base}>
+        <span className="inline-block h-0 w-0 border-y-[3px] border-l-[5px] border-y-transparent border-l-emerald-400" />
+        <span className="h-px flex-1 bg-neutral-300" />
+      </span>
+    );
+  if (type === "paw")
+    return (
+      <span className={base}>
+        <span className="inline-block h-[6px] w-[6px] rounded-full bg-red-400" />
+        <span className="h-px flex-1 bg-neutral-300" />
+      </span>
+    );
+  if (type === "check")
+    return (
+      <span className={base}>
+        <span className="inline-block h-[7px] w-[4px] rotate-45 border-b-[1.5px] border-r-[1.5px] border-green-500" />
+        <span className="h-px flex-1 bg-neutral-300" />
+      </span>
+    );
+  return (
+    <span className={base}>
+      <span className="inline-block h-0 w-[6px] border-t-[1.5px] border-blue-400" />
+      <span className="h-px flex-1 bg-neutral-300" />
+    </span>
   );
 }
 
@@ -465,6 +481,7 @@ function MenuBar({
         >
           <ListOrdered size={s} />
         </MenuButton>
+        <StyledListDropdown editor={editor} size={s} />
         <MenuButton
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           active={editor.isActive("blockquote")}

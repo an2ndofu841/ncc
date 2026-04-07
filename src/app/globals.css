@@ -193,120 +193,97 @@ body {
   padding: 1rem 1.25rem;
 }
 
-/* ── リストボックス共通 (公開ページ) ── */
+/* ── CSS リストアイコン共通マクロ ── */
+/* pointer (▶ 三角) / paw (● 丸) / check (✓) / memo (― ダッシュ) の ::before 共通 */
+
+/* --- 公開ページ: リストボックス --- */
 .column-content [data-box-style="pointer"] [data-callout-title],
 .column-content [data-box-style="paw"] [data-callout-title],
 .column-content [data-box-style="check"] [data-callout-title],
-.column-content [data-box-style="memo"] [data-callout-title] {
-  display: none;
-}
-.column-content [data-box-style="pointer"] [data-callout-content] p,
-.column-content [data-box-style="paw"] [data-callout-content] p,
-.column-content [data-box-style="check"] [data-callout-content] p {
-  position: relative;
-  padding-left: 1.75rem;
-  margin: 0.5rem 0;
-  line-height: 1.8;
-}
-.column-content [data-box-style="pointer"] [data-callout-content] p::before,
-.column-content [data-box-style="paw"] [data-callout-content] p::before,
-.column-content [data-box-style="check"] [data-callout-content] p::before {
-  position: absolute;
-  left: 0;
-  top: 0.1em;
-}
-
-/* pointer: 緑枠 + 👉 */
-.column-content [data-box-style="pointer"] {
-  border: 2.5px solid #34d399;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.25rem;
-}
-.column-content [data-box-style="pointer"] [data-callout-content] p::before { content: "👉"; }
-
-/* paw: 赤/ピンク枠 + ピンク背景 + 🐾 */
-.column-content [data-box-style="paw"] {
-  border: 2px solid #fca5a5;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.25rem;
-  background: #fff5f5;
-}
-.column-content [data-box-style="paw"] [data-callout-content] p::before { content: "🐾"; }
-
-/* check: オレンジ枠 + ✅ */
-.column-content [data-box-style="check"] {
-  border: 2.5px solid #fbbf24;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.25rem;
-}
-.column-content [data-box-style="check"] [data-callout-content] p::before { content: "✅"; }
-
-/* memo: 青点線枠 + 水色背景 + ● リスト */
-.column-content [data-box-style="memo"] {
-  border: 2.5px dashed #93c5fd;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.25rem;
-  background: #eff6ff;
-}
-.column-content [data-box-style="memo"] [data-callout-content] p {
-  position: relative;
-  padding-left: 1.5rem;
-  margin: 0.5rem 0;
-  line-height: 1.8;
-}
-.column-content [data-box-style="memo"] [data-callout-content] p::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #3b82f6;
-}
-
-/* ── ボックスなしリスト (公開ページ) ── */
-.column-content [data-box-style="pointer-plain"],
-.column-content [data-box-style="paw-plain"],
-.column-content [data-box-style="check-plain"],
-.column-content [data-box-style="memo-plain"] {
-  padding: 0.25rem 0;
-}
+.column-content [data-box-style="memo"] [data-callout-title],
 .column-content [data-box-style="pointer-plain"] [data-callout-title],
 .column-content [data-box-style="paw-plain"] [data-callout-title],
 .column-content [data-box-style="check-plain"] [data-callout-title],
 .column-content [data-box-style="memo-plain"] [data-callout-title] {
   display: none;
 }
+
+/* 行スタイル共通 */
+.column-content [data-box-style="pointer"] [data-callout-content] p,
+.column-content [data-box-style="paw"] [data-callout-content] p,
+.column-content [data-box-style="check"] [data-callout-content] p,
+.column-content [data-box-style="memo"] [data-callout-content] p,
 .column-content [data-box-style="pointer-plain"] [data-callout-content] p,
 .column-content [data-box-style="paw-plain"] [data-callout-content] p,
-.column-content [data-box-style="check-plain"] [data-callout-content] p {
-  position: relative;
-  padding-left: 1.75rem;
-  margin: 0.5rem 0;
-  line-height: 1.8;
-}
-.column-content [data-box-style="pointer-plain"] [data-callout-content] p::before,
-.column-content [data-box-style="paw-plain"] [data-callout-content] p::before,
-.column-content [data-box-style="check-plain"] [data-callout-content] p::before {
-  position: absolute;
-  left: 0;
-  top: 0.1em;
-}
-.column-content [data-box-style="pointer-plain"] [data-callout-content] p::before { content: "👉"; }
-.column-content [data-box-style="paw-plain"] [data-callout-content] p::before { content: "🐾"; }
-.column-content [data-box-style="check-plain"] [data-callout-content] p::before { content: "✅"; }
+.column-content [data-box-style="check-plain"] [data-callout-content] p,
 .column-content [data-box-style="memo-plain"] [data-callout-content] p {
   position: relative;
-  padding-left: 1.5rem;
-  margin: 0.5rem 0;
+  padding-left: 1.6rem;
+  margin: 0.45rem 0;
   line-height: 1.8;
 }
+.column-content [data-box-style="pointer"] [data-callout-content] p::before,
+.column-content [data-box-style="paw"] [data-callout-content] p::before,
+.column-content [data-box-style="check"] [data-callout-content] p::before,
+.column-content [data-box-style="memo"] [data-callout-content] p::before,
+.column-content [data-box-style="pointer-plain"] [data-callout-content] p::before,
+.column-content [data-box-style="paw-plain"] [data-callout-content] p::before,
+.column-content [data-box-style="check-plain"] [data-callout-content] p::before,
 .column-content [data-box-style="memo-plain"] [data-callout-content] p::before {
-  content: "•";
+  content: "";
   position: absolute;
   left: 0;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #3b82f6;
+}
+
+/* pointer: ▶ 緑三角 */
+.column-content [data-box-style="pointer"] { border: 2.5px solid #34d399; border-radius: 0.75rem; padding: 0.75rem 1.25rem; }
+.column-content [data-box-style="pointer"] [data-callout-content] p::before,
+.column-content [data-box-style="pointer-plain"] [data-callout-content] p::before {
+  top: 0.45em;
+  border-left: 0.5em solid #34d399;
+  border-top: 0.32em solid transparent;
+  border-bottom: 0.32em solid transparent;
+}
+
+/* paw: ● ピンク丸 */
+.column-content [data-box-style="paw"] { border: 2px solid #fca5a5; border-radius: 0.75rem; padding: 0.75rem 1.25rem; background: #fff5f5; }
+.column-content [data-box-style="paw"] [data-callout-content] p::before,
+.column-content [data-box-style="paw-plain"] [data-callout-content] p::before {
+  top: 0.45em;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+  background: #f87171;
+}
+
+/* check: ✓ 緑チェック */
+.column-content [data-box-style="check"] { border: 2.5px solid #fbbf24; border-radius: 0.75rem; padding: 0.75rem 1.25rem; }
+.column-content [data-box-style="check"] [data-callout-content] p::before,
+.column-content [data-box-style="check-plain"] [data-callout-content] p::before {
+  top: 0.35em;
+  width: 0.45em;
+  height: 0.7em;
+  border-right: 2.5px solid #22c55e;
+  border-bottom: 2.5px solid #22c55e;
+  transform: rotate(45deg);
+}
+
+/* memo: ― 青ダッシュ */
+.column-content [data-box-style="memo"] { border: 2.5px dashed #93c5fd; border-radius: 0.75rem; padding: 0.75rem 1.25rem; background: #eff6ff; }
+.column-content [data-box-style="memo"] [data-callout-content] p::before,
+.column-content [data-box-style="memo-plain"] [data-callout-content] p::before {
+  top: 0.75em;
+  width: 0.6em;
+  height: 0;
+  border-top: 2.5px solid #3b82f6;
+}
+
+/* ボックスなし */
+.column-content [data-box-style="pointer-plain"],
+.column-content [data-box-style="paw-plain"],
+.column-content [data-box-style="check-plain"],
+.column-content [data-box-style="memo-plain"] {
+  padding: 0.25rem 0;
 }
 
 /* ══════════════════════════════════════
@@ -381,108 +358,83 @@ body {
 .cb-editor-style2 .cb-editor-style-btn { color: white; }
 .cb-editor-style2 .cb-editor-style-btn:hover { background: rgba(255,255,255,0.2); }
 
-/* ── リストボックス共通 (エディタ) ── */
+/* ── リストボックス (エディタ) ── */
+/* 行スタイル共通 */
 .cb-editor-pointer .cb-editor-body p,
 .cb-editor-paw .cb-editor-body p,
-.cb-editor-check .cb-editor-body p {
+.cb-editor-check .cb-editor-body p,
+.cb-editor-memo .cb-editor-body p,
+.cb-editor-pointer-plain .cb-editor-body p,
+.cb-editor-paw-plain .cb-editor-body p,
+.cb-editor-check-plain .cb-editor-body p,
+.cb-editor-memo-plain .cb-editor-body p {
   position: relative;
-  padding-left: 1.75rem;
-  margin: 0.5rem 0;
+  padding-left: 1.6rem;
+  margin: 0.45rem 0;
   line-height: 1.8;
 }
 .cb-editor-pointer .cb-editor-body p::before,
 .cb-editor-paw .cb-editor-body p::before,
-.cb-editor-check .cb-editor-body p::before {
+.cb-editor-check .cb-editor-body p::before,
+.cb-editor-memo .cb-editor-body p::before,
+.cb-editor-pointer-plain .cb-editor-body p::before,
+.cb-editor-paw-plain .cb-editor-body p::before,
+.cb-editor-check-plain .cb-editor-body p::before,
+.cb-editor-memo-plain .cb-editor-body p::before {
+  content: "";
   position: absolute;
   left: 0.25rem;
-  top: 0.1em;
 }
 
-/* pointer: 緑枠 + 👉 */
-.cb-editor-pointer {
-  border: 2.5px solid #34d399;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-}
-.cb-editor-pointer .cb-editor-body p::before { content: "👉"; }
-
-/* paw: 赤/ピンク枠 + ピンク背景 + 🐾 */
-.cb-editor-paw {
-  border: 2px solid #fca5a5;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: #fff5f5;
-}
-.cb-editor-paw .cb-editor-body p::before { content: "🐾"; }
-
-/* check: オレンジ枠 + ✔ */
-.cb-editor-check {
-  border: 2.5px solid #fbbf24;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-}
-.cb-editor-check .cb-editor-body p::before { content: "✅"; }
-
-/* memo: 青点線枠 + 水色背景 + ● リスト */
-.cb-editor-memo {
-  border: 2.5px dashed #93c5fd;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: #eff6ff;
-}
-.cb-editor-memo .cb-editor-body p {
-  position: relative;
-  padding-left: 1.5rem;
-  margin: 0.5rem 0;
-  line-height: 1.8;
-}
-.cb-editor-memo .cb-editor-body p::before {
-  content: "•";
-  position: absolute;
-  left: 0.4rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #3b82f6;
+/* pointer ▶ 緑三角 */
+.cb-editor-pointer { border: 2.5px solid #34d399; border-radius: 0.75rem; padding: 0.75rem 1rem; }
+.cb-editor-pointer .cb-editor-body p::before,
+.cb-editor-pointer-plain .cb-editor-body p::before {
+  top: 0.45em;
+  border-left: 0.5em solid #34d399;
+  border-top: 0.32em solid transparent;
+  border-bottom: 0.32em solid transparent;
 }
 
-/* ── ボックスなしリスト (エディタ) ── */
+/* paw ● ピンク丸 */
+.cb-editor-paw { border: 2px solid #fca5a5; border-radius: 0.75rem; padding: 0.75rem 1rem; background: #fff5f5; }
+.cb-editor-paw .cb-editor-body p::before,
+.cb-editor-paw-plain .cb-editor-body p::before {
+  top: 0.45em;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+  background: #f87171;
+}
+
+/* check ✓ 緑チェック */
+.cb-editor-check { border: 2.5px solid #fbbf24; border-radius: 0.75rem; padding: 0.75rem 1rem; }
+.cb-editor-check .cb-editor-body p::before,
+.cb-editor-check-plain .cb-editor-body p::before {
+  top: 0.35em;
+  width: 0.45em;
+  height: 0.7em;
+  border-right: 2.5px solid #22c55e;
+  border-bottom: 2.5px solid #22c55e;
+  transform: rotate(45deg);
+}
+
+/* memo ― 青ダッシュ */
+.cb-editor-memo { border: 2.5px dashed #93c5fd; border-radius: 0.75rem; padding: 0.75rem 1rem; background: #eff6ff; }
+.cb-editor-memo .cb-editor-body p::before,
+.cb-editor-memo-plain .cb-editor-body p::before {
+  top: 0.75em;
+  width: 0.6em;
+  height: 0;
+  border-top: 2.5px solid #3b82f6;
+}
+
+/* ボックスなし */
 .cb-editor-pointer-plain,
 .cb-editor-paw-plain,
 .cb-editor-check-plain,
 .cb-editor-memo-plain {
   padding: 0.25rem 0;
-}
-.cb-editor-pointer-plain .cb-editor-body p,
-.cb-editor-paw-plain .cb-editor-body p,
-.cb-editor-check-plain .cb-editor-body p {
-  position: relative;
-  padding-left: 1.75rem;
-  margin: 0.5rem 0;
-  line-height: 1.8;
-}
-.cb-editor-pointer-plain .cb-editor-body p::before,
-.cb-editor-paw-plain .cb-editor-body p::before,
-.cb-editor-check-plain .cb-editor-body p::before {
-  position: absolute;
-  left: 0.25rem;
-  top: 0.1em;
-}
-.cb-editor-pointer-plain .cb-editor-body p::before { content: "👉"; }
-.cb-editor-paw-plain .cb-editor-body p::before { content: "🐾"; }
-.cb-editor-check-plain .cb-editor-body p::before { content: "✅"; }
-.cb-editor-memo-plain .cb-editor-body p {
-  position: relative;
-  padding-left: 1.5rem;
-  margin: 0.5rem 0;
-  line-height: 1.8;
-}
-.cb-editor-memo-plain .cb-editor-body p::before {
-  content: "•";
-  position: absolute;
-  left: 0.4rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #3b82f6;
 }
 
 /* ══════════════════════════════════════
