@@ -6,6 +6,7 @@ import {
   NodeViewContent,
   ReactNodeViewRenderer,
 } from "@tiptap/react";
+import type { ReactNodeViewProps } from "@tiptap/react";
 
 const PHOTO_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/kitagawafusao1.png`;
 
@@ -72,9 +73,9 @@ export const SupervisorComment = Node.create({
   },
 });
 
-function SupervisorCommentNodeView() {
+function SupervisorCommentNodeView({ ref }: ReactNodeViewProps) {
   return (
-    <NodeViewWrapper className="sv-editor-wrap" data-supervisor-comment="">
+    <NodeViewWrapper ref={ref} className="sv-editor-wrap" data-supervisor-comment="">
       <div className="sv-editor-left" contentEditable={false}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={PHOTO_URL} alt="北川房雄" className="sv-editor-photo" />

@@ -3,10 +3,8 @@
 import { useEditor, EditorContent, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
-import Underline from "@tiptap/extension-underline";
 import Highlight from "@tiptap/extension-highlight";
 import { Table } from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
@@ -531,16 +529,17 @@ export default function RichTextEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
-      Underline,
+      StarterKit.configure({
+        link: {
+          openOnClick: false,
+          HTMLAttributes: { class: "text-primary underline" },
+        },
+        underline: {},
+      }),
       Highlight.configure({ multicolor: true }),
       Image.configure({
         allowBase64: false,
         HTMLAttributes: { class: "rounded-lg max-w-full mx-auto" },
-      }),
-      Link.configure({
-        openOnClick: false,
-        HTMLAttributes: { class: "text-primary underline" },
       }),
       Placeholder.configure({ placeholder }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),

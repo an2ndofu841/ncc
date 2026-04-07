@@ -6,7 +6,7 @@ import {
   NodeViewContent,
   ReactNodeViewRenderer,
 } from "@tiptap/react";
-import type { NodeViewProps } from "@tiptap/react";
+import type { ReactNodeViewProps } from "@tiptap/react";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
@@ -81,12 +81,13 @@ export const CalloutBox = Node.create({
   },
 });
 
-function CalloutBoxNodeView({ node, updateAttributes }: NodeViewProps) {
+function CalloutBoxNodeView({ node, updateAttributes, ref }: ReactNodeViewProps) {
   const { boxStyle, title } = node.attrs;
   const isStyle1 = boxStyle === "style1";
 
   return (
     <NodeViewWrapper
+      ref={ref}
       className={`cb-editor cb-editor-${boxStyle}`}
       data-callout-box=""
       data-box-style={boxStyle}
