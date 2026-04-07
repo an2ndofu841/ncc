@@ -193,6 +193,56 @@ function CalloutDropdown({ editor, size }: { editor: Editor; size: number }) {
             </span>
             <span className="text-neutral-700">メモ（青点線枠）</span>
           </button>
+
+          <div className="my-1.5 border-t border-neutral-100" />
+          <p className="mb-1.5 px-2 text-[11px] font-semibold text-neutral-400">
+            ボックスなしリスト
+          </p>
+
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("pointer-plain", "")}
+          >
+            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 px-1">
+              <span className="text-[8px] leading-none">👉 —</span>
+              <span className="text-[8px] leading-none">👉 —</span>
+            </span>
+            <span className="text-neutral-700">ポインター</span>
+          </button>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("paw-plain", "")}
+          >
+            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 px-1">
+              <span className="text-[8px] leading-none">🐾 —</span>
+              <span className="text-[8px] leading-none">🐾 —</span>
+            </span>
+            <span className="text-neutral-700">足あと</span>
+          </button>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("check-plain", "")}
+          >
+            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 px-1">
+              <span className="text-[8px] leading-none">✅ —</span>
+              <span className="text-[8px] leading-none">✅ —</span>
+            </span>
+            <span className="text-neutral-700">チェック</span>
+          </button>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("memo-plain", "")}
+          >
+            <span className="flex h-7 w-9 shrink-0 flex-col justify-center gap-0.5 px-1">
+              <span className="text-[8px] leading-none text-blue-500">• —</span>
+              <span className="text-[8px] leading-none text-blue-500">• —</span>
+            </span>
+            <span className="text-neutral-700">メモ</span>
+          </button>
         </div>
       )}
     </div>

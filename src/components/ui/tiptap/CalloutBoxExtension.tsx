@@ -1,6 +1,9 @@
 import { Node, mergeAttributes } from "@tiptap/core";
 
-const LIST_STYLES = new Set(["pointer", "paw", "check", "memo"]);
+const LIST_STYLES = new Set([
+  "pointer", "paw", "check", "memo",
+  "pointer-plain", "paw-plain", "check-plain", "memo-plain",
+]);
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {

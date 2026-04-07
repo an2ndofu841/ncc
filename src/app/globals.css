@@ -263,6 +263,52 @@ body {
   color: #3b82f6;
 }
 
+/* ── ボックスなしリスト (公開ページ) ── */
+.column-content [data-box-style="pointer-plain"],
+.column-content [data-box-style="paw-plain"],
+.column-content [data-box-style="check-plain"],
+.column-content [data-box-style="memo-plain"] {
+  padding: 0.25rem 0;
+}
+.column-content [data-box-style="pointer-plain"] [data-callout-title],
+.column-content [data-box-style="paw-plain"] [data-callout-title],
+.column-content [data-box-style="check-plain"] [data-callout-title],
+.column-content [data-box-style="memo-plain"] [data-callout-title] {
+  display: none;
+}
+.column-content [data-box-style="pointer-plain"] [data-callout-content] p,
+.column-content [data-box-style="paw-plain"] [data-callout-content] p,
+.column-content [data-box-style="check-plain"] [data-callout-content] p {
+  position: relative;
+  padding-left: 1.75rem;
+  margin: 0.5rem 0;
+  line-height: 1.8;
+}
+.column-content [data-box-style="pointer-plain"] [data-callout-content] p::before,
+.column-content [data-box-style="paw-plain"] [data-callout-content] p::before,
+.column-content [data-box-style="check-plain"] [data-callout-content] p::before {
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+}
+.column-content [data-box-style="pointer-plain"] [data-callout-content] p::before { content: "👉"; }
+.column-content [data-box-style="paw-plain"] [data-callout-content] p::before { content: "🐾"; }
+.column-content [data-box-style="check-plain"] [data-callout-content] p::before { content: "✅"; }
+.column-content [data-box-style="memo-plain"] [data-callout-content] p {
+  position: relative;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+  line-height: 1.8;
+}
+.column-content [data-box-style="memo-plain"] [data-callout-content] p::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #3b82f6;
+}
+
 /* ══════════════════════════════════════
    Callout box — エディタ内 NodeView
    ══════════════════════════════════════ */
@@ -391,6 +437,46 @@ body {
   line-height: 1.8;
 }
 .cb-editor-memo .cb-editor-body p::before {
+  content: "•";
+  position: absolute;
+  left: 0.4rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #3b82f6;
+}
+
+/* ── ボックスなしリスト (エディタ) ── */
+.cb-editor-pointer-plain,
+.cb-editor-paw-plain,
+.cb-editor-check-plain,
+.cb-editor-memo-plain {
+  padding: 0.25rem 0;
+}
+.cb-editor-pointer-plain .cb-editor-body p,
+.cb-editor-paw-plain .cb-editor-body p,
+.cb-editor-check-plain .cb-editor-body p {
+  position: relative;
+  padding-left: 1.75rem;
+  margin: 0.5rem 0;
+  line-height: 1.8;
+}
+.cb-editor-pointer-plain .cb-editor-body p::before,
+.cb-editor-paw-plain .cb-editor-body p::before,
+.cb-editor-check-plain .cb-editor-body p::before {
+  position: absolute;
+  left: 0.25rem;
+  top: 0.1em;
+}
+.cb-editor-pointer-plain .cb-editor-body p::before { content: "👉"; }
+.cb-editor-paw-plain .cb-editor-body p::before { content: "🐾"; }
+.cb-editor-check-plain .cb-editor-body p::before { content: "✅"; }
+.cb-editor-memo-plain .cb-editor-body p {
+  position: relative;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+  line-height: 1.8;
+}
+.cb-editor-memo-plain .cb-editor-body p::before {
   content: "•";
   position: absolute;
   left: 0.4rem;
