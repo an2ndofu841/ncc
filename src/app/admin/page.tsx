@@ -1,5 +1,6 @@
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
+import MaintenanceToggle from "@/components/admin/MaintenanceToggle";
 import { createServiceClient } from "@/lib/supabase/server";
 import {
   APPLICATION_STATUS_LABELS,
@@ -18,6 +19,7 @@ export default async function AdminDashboardPage() {
     publishedNews,
     recentApps,
     recentContacts,
+    maintenanceSetting,
   ] = await Promise.all([
     supabase.from("members").select("id", { count: "exact", head: true }),
     supabase
@@ -42,7 +44,14 @@ export default async function AdminDashboardPage() {
       .select("id, name, email, category, is_read, created_at")
       .order("created_at", { ascending: false })
       .limit(5),
+    supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "maintenance_mode")
+      .single(),
   ]);
+
+  const isMaintenanceOn = maintenanceSetting.data?.value === true;
 
   const stats = [
     { label: "会員数", value: membersCount.count ?? 0, href: "/admin/members" },
@@ -71,6 +80,8 @@ export default async function AdminDashboardPage() {
         breadcrumbs={[{ label: "管理画面", href: "/admin" }]}
       />
       <div className="mx-auto max-w-6xl space-y-8">
+        <MaintenanceToggle initialValue={isMaintenanceOn} />
+
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {stats.map((s) => (
             <Link key={s.label} href={s.href}>
