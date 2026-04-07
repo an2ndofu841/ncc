@@ -137,16 +137,17 @@ body {
   padding: 0 0.1em;
   border-radius: 0;
   color: inherit;
-  background: linear-gradient(transparent 60%, #fef08a 60%);
+  background-color: transparent !important;
+  background: linear-gradient(transparent 60%, #fef08a 60%) !important;
 }
 .column-content mark[data-color="#fef08a"],
-.tiptap mark[data-color="#fef08a"] { background: linear-gradient(transparent 60%, #fef08a 60%); }
+.tiptap mark[data-color="#fef08a"] { background: linear-gradient(transparent 60%, #fef08a 60%) !important; }
 .column-content mark[data-color="#a5f3fc"],
-.tiptap mark[data-color="#a5f3fc"] { background: linear-gradient(transparent 60%, #a5f3fc 60%); }
+.tiptap mark[data-color="#a5f3fc"] { background: linear-gradient(transparent 60%, #a5f3fc 60%) !important; }
 .column-content mark[data-color="#bbf7d0"],
-.tiptap mark[data-color="#bbf7d0"] { background: linear-gradient(transparent 60%, #bbf7d0 60%); }
+.tiptap mark[data-color="#bbf7d0"] { background: linear-gradient(transparent 60%, #bbf7d0 60%) !important; }
 .column-content mark[data-color="#fca5a5"],
-.tiptap mark[data-color="#fca5a5"] { background: linear-gradient(transparent 60%, #fca5a5 60%); }
+.tiptap mark[data-color="#fca5a5"] { background: linear-gradient(transparent 60%, #fca5a5 60%) !important; }
 
 /* ══════════════════════════════════════
    Callout box — 公開ページ

@@ -249,6 +249,7 @@ export default function ColumnEditForm({ column }: { column: Column }) {
           content={content}
           onChange={setContent}
           placeholder="コラム本文を入力…"
+          previewUrl={`/admin/columns/${column.id}/preview`}
         />
       </div>
       <Input

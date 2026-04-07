@@ -45,6 +45,7 @@ import {
   MessageCircle,
   Maximize,
   Minimize,
+  Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -53,6 +54,7 @@ interface RichTextEditorProps {
   content: string;
   onChange: (html: string) => void;
   placeholder?: string;
+  previewUrl?: string;
 }
 
 function MenuButton({
@@ -230,10 +232,12 @@ function MenuBar({
   editor,
   fullscreen,
   onToggleFullscreen,
+  previewUrl,
 }: {
   editor: Editor;
   fullscreen: boolean;
   onToggleFullscreen: () => void;
+  previewUrl?: string;
 }) {
   const setLink = useCallback(() => {
     const prev = editor.getAttributes("link").href;
@@ -403,6 +407,15 @@ function MenuBar({
         >
           {fullscreen ? <Minimize size={s} /> : <Maximize size={s} />}
         </MenuButton>
+
+        {previewUrl && (
+          <MenuButton
+            onClick={() => window.open(previewUrl, "_blank", "noopener,noreferrer")}
+            title="プレビュー（別タブ）"
+          >
+            <Eye size={s} />
+          </MenuButton>
+        )}
       </div>
 
       {/* Row 2: 配置 + リンク・画像 + 表・ボックス */}
@@ -512,6 +525,7 @@ export default function RichTextEditor({
   content,
   onChange,
   placeholder = "記事の本文を入力してください…",
+  previewUrl,
 }: RichTextEditorProps) {
   const [fullscreen, setFullscreen] = useState(false);
 
@@ -574,6 +588,7 @@ export default function RichTextEditor({
           editor={editor}
           fullscreen={fullscreen}
           onToggleFullscreen={() => setFullscreen(false)}
+          previewUrl={previewUrl}
         />
         <div className="flex-1 overflow-y-auto">
           <div className="mx-auto max-w-4xl">
@@ -590,6 +605,7 @@ export default function RichTextEditor({
         editor={editor}
         fullscreen={fullscreen}
         onToggleFullscreen={() => setFullscreen(true)}
+        previewUrl={previewUrl}
       />
       <EditorContent editor={editor} />
     </div>
