@@ -35,11 +35,12 @@ export default function ApplicationDetailClient({
   const statusOptions = Object.entries(APPLICATION_STATUS_LABELS)
     .filter(([value]) => isAdmin || !STAFF_RESTRICTED_STATUSES.has(value))
     .map(([value, label]) => ({ value, label }));
-  const canStaffApprove = (isAdmin || isStaff) &&
-    application.status !== "approved" &&
-    application.status !== "staff_approved" &&
-    application.status !== "rejected";
-  const canFinalApprove = isAdmin && application.status === "staff_approved";
+  const notTerminal =
+    application.status !== "approved" && application.status !== "rejected";
+  const canStaffApprove =
+    isStaff && notTerminal && application.status !== "staff_approved";
+  const canFinalApprove =
+    isAdmin && notTerminal;
 
   async function saveMeta() {
     setSaving(true);

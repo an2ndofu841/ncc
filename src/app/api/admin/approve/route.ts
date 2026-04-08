@@ -69,9 +69,9 @@ export async function POST(request: Request) {
     );
   }
 
-  if (app.status !== "staff_approved") {
+  if (app.status === "rejected") {
     return NextResponse.json(
-      { error: "事務局の承認が完了していません。先に事務局承認を行ってください。" },
+      { error: "否認済みの申込みは承認できません。" },
       { status: 400 }
     );
   }
