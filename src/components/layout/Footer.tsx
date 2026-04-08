@@ -1,6 +1,11 @@
 import Link from "next/link";
 
+const MHLW_URL = "https://www.mhlw.go.jp/index.html";
+
 export default function Footer() {
+  const koseishoSrc = process.env.NEXT_PUBLIC_SUPABASE_URL
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/koseisho.png`
+    : "";
   return (
     <footer className="mt-auto bg-neutral-900 text-neutral-300">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
@@ -139,8 +144,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-neutral-700 pt-8 sm:flex-row">
-          <div className="flex gap-4 text-xs text-neutral-400">
+        <div className="mt-10 space-y-8 border-t border-neutral-700 pt-8">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs text-neutral-400 sm:justify-start">
             <Link
               href="/privacy"
               className="hover:text-white transition-colors"
@@ -160,7 +165,27 @@ export default function Footer() {
               特定商取引法に基づく表記
             </Link>
           </div>
-          <p className="text-xs text-neutral-500">
+
+          {koseishoSrc ? (
+            <div className="flex justify-center sm:justify-start">
+              <a
+                href={MHLW_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg bg-white/95 p-3 shadow-sm outline-none ring-offset-2 ring-offset-neutral-900 transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label="厚生労働省の公式サイトを別タブで開く"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={koseishoSrc}
+                  alt="厚生労働省"
+                  className="h-11 w-auto max-w-[min(100%,220px)] object-contain object-left"
+                />
+              </a>
+            </div>
+          ) : null}
+
+          <p className="text-center text-xs text-neutral-500 sm:text-left">
             &copy; {new Date().getFullYear()} 全日本カイロプラクティック施術協同組合. All rights reserved.
           </p>
         </div>
