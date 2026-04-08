@@ -157,6 +157,20 @@ body {
 .column-content [data-callout-box] [data-callout-content] p:first-child { margin-top: 0; }
 .column-content [data-callout-box] [data-callout-content] p:last-child { margin-bottom: 0; }
 
+/* 入れ子のcallout box: 余白・枠線を除去 */
+.column-content [data-callout-box] [data-callout-content] [data-callout-box] {
+  margin: 0;
+  border: none;
+  padding: 0;
+  background: none;
+}
+.column-content [data-callout-box] [data-callout-content] [data-callout-box] [data-callout-title] {
+  display: none;
+}
+.column-content [data-callout-box] [data-callout-content] [data-callout-box] [data-callout-content] {
+  padding: 0;
+}
+
 /* Style 1: ラベル付き枠線 */
 .column-content [data-box-style="style1"] {
   position: relative;
@@ -291,6 +305,20 @@ body {
    Callout box — エディタ内 NodeView
    ══════════════════════════════════════ */
 .cb-editor { margin: 0.75rem 0; }
+
+/* 入れ子のcallout box (エディタ): 余白・枠線を除去 */
+.cb-editor .cb-editor-body .cb-editor {
+  margin: 0;
+  border: none !important;
+  padding: 0 !important;
+  background: none !important;
+}
+.cb-editor .cb-editor-body .cb-editor > .cb-editor-header {
+  display: none !important;
+}
+.cb-editor .cb-editor-body .cb-editor > .cb-editor-body {
+  padding: 0 !important;
+}
 
 /* Style 1: ラベル付き枠線 */
 .cb-editor-style1 {
