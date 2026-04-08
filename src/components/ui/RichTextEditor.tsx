@@ -144,6 +144,50 @@ function CalloutDropdown({ editor, size }: { editor: Editor; size: number }) {
             </span>
             <span className="text-neutral-700">ヘッダー付きボックス</span>
           </button>
+
+          <p className="mb-1 mt-2 border-t border-neutral-100 px-2 pt-2 text-[11px] font-semibold text-neutral-400">
+            シンプルボックス
+          </p>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("style3", "")}
+          >
+            <span className="flex h-8 w-10 shrink-0 items-center justify-center rounded border-2 border-gray-300">
+              <span className="h-1 w-5 rounded-full bg-gray-300" />
+            </span>
+            <span className="text-neutral-700">枠線のみ</span>
+          </button>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("style4", "")}
+          >
+            <span className="flex h-8 w-10 shrink-0 items-center justify-center rounded bg-gray-100">
+              <span className="h-1 w-5 rounded-full bg-gray-300" />
+            </span>
+            <span className="text-neutral-700">背景グレー</span>
+          </button>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("style5", "")}
+          >
+            <span className="flex h-8 w-10 shrink-0 items-center rounded border-l-[3px] border-blue-300 bg-blue-50 pl-1.5">
+              <span className="h-1 w-4 rounded-full bg-blue-200" />
+            </span>
+            <span className="text-neutral-700">左線アクセント</span>
+          </button>
+          <button
+            type="button"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sm hover:bg-primary-50"
+            onClick={() => insert("style6", "")}
+          >
+            <span className="flex h-8 w-10 shrink-0 items-center justify-center rounded border-2 border-amber-300 bg-amber-50">
+              <span className="h-1 w-5 rounded-full bg-amber-300" />
+            </span>
+            <span className="text-neutral-700">注意・補足</span>
+          </button>
         </div>
       )}
     </div>

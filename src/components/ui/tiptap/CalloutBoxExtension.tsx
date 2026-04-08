@@ -5,6 +5,11 @@ const LIST_STYLES = new Set([
   "pointer-plain", "paw-plain", "check-plain", "memo-plain",
 ]);
 
+const HEADERLESS_STYLES = new Set([
+  ...LIST_STYLES,
+  "style3", "style4", "style5", "style6",
+]);
+
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     calloutBox: {
@@ -76,18 +81,17 @@ export const CalloutBox = Node.create({
   addNodeView() {
     return ({ node, getPos, editor }) => {
       const boxStyle = node.attrs.boxStyle || "style1";
-      const isList = LIST_STYLES.has(boxStyle);
+      const hideHeader = HEADERLESS_STYLES.has(boxStyle);
 
       const dom = document.createElement("div");
       dom.classList.add("cb-editor", `cb-editor-${boxStyle}`);
       dom.setAttribute("data-callout-box", "");
       dom.setAttribute("data-box-style", boxStyle);
 
-      // Title header (only for style1/style2)
       const header = document.createElement("div");
       header.classList.add("cb-editor-header");
       header.contentEditable = "false";
-      if (isList) header.style.display = "none";
+      if (hideHeader) header.style.display = "none";
 
       const titleInput = document.createElement("input");
       titleInput.type = "text";
@@ -140,10 +144,10 @@ export const CalloutBox = Node.create({
         update(updatedNode) {
           if (updatedNode.type.name !== "calloutBox") return false;
           const newStyle = updatedNode.attrs.boxStyle || "style1";
-          const newIsList = LIST_STYLES.has(newStyle);
+          const newHideHeader = HEADERLESS_STYLES.has(newStyle);
           dom.className = `cb-editor cb-editor-${newStyle}`;
           dom.setAttribute("data-box-style", newStyle);
-          header.style.display = newIsList ? "none" : "";
+          header.style.display = newHideHeader ? "none" : "";
           titleInput.value = updatedNode.attrs.title || "";
           styleBtn.textContent = newStyle === "style1" ? "▦" : "▤";
           return true;

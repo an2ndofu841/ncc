@@ -208,6 +208,40 @@ body {
   padding: 0.75rem 1.25rem;
 }
 
+/* Style 3: シンプル枠線ボックス（タイトルなし） */
+.column-content [data-box-style="style3"] {
+  border: 2px solid #d1d5db;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+.column-content [data-box-style="style3"] [data-callout-title] { display: none; }
+
+/* Style 4: 背景付きボックス（タイトルなし） */
+.column-content [data-box-style="style4"] {
+  background: #f3f4f6;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+.column-content [data-box-style="style4"] [data-callout-title] { display: none; }
+
+/* Style 5: 左線ボックス（タイトルなし） */
+.column-content [data-box-style="style5"] {
+  border-left: 4px solid #93c5fd;
+  background: #f0f7ff;
+  padding: 1rem 1.25rem;
+  border-radius: 0.25rem;
+}
+.column-content [data-box-style="style5"] [data-callout-title] { display: none; }
+
+/* Style 6: 注意ボックス（タイトルなし） */
+.column-content [data-box-style="style6"] {
+  border: 2px solid #fbbf24;
+  background: #fffbeb;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+.column-content [data-box-style="style6"] [data-callout-title] { display: none; }
+
 /* ── CSS リストアイコン共通マクロ ── */
 /* pointer (▶ 三角) / paw (● 丸) / check (✓) / memo (― ダッシュ) の ::before 共通 */
 
@@ -354,6 +388,44 @@ body {
 .cb-editor-style2 > .cb-editor-body {
   padding: 0.5rem 1rem;
 }
+
+/* Style 3: シンプル枠線ボックス */
+.cb-editor-style3 {
+  border: 2px solid #d1d5db;
+  border-radius: 0.75rem;
+  padding: 0;
+}
+.cb-editor-style3 > .cb-editor-header { display: none; }
+.cb-editor-style3 > .cb-editor-body { padding: 0.75rem 1rem; }
+
+/* Style 4: 背景付きボックス */
+.cb-editor-style4 {
+  background: #f3f4f6;
+  border-radius: 0.75rem;
+  padding: 0;
+}
+.cb-editor-style4 > .cb-editor-header { display: none; }
+.cb-editor-style4 > .cb-editor-body { padding: 0.75rem 1rem; }
+
+/* Style 5: 左線ボックス */
+.cb-editor-style5 {
+  border-left: 4px solid #93c5fd;
+  background: #f0f7ff;
+  border-radius: 0.25rem;
+  padding: 0;
+}
+.cb-editor-style5 > .cb-editor-header { display: none; }
+.cb-editor-style5 > .cb-editor-body { padding: 0.75rem 1rem; }
+
+/* Style 6: 注意ボックス */
+.cb-editor-style6 {
+  border: 2px solid #fbbf24;
+  background: #fffbeb;
+  border-radius: 0.75rem;
+  padding: 0;
+}
+.cb-editor-style6 > .cb-editor-header { display: none; }
+.cb-editor-style6 > .cb-editor-body { padding: 0.75rem 1rem; }
 
 /* 共通: タイトル入力 */
 .cb-editor-title-input {
