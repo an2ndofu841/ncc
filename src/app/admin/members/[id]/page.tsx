@@ -71,6 +71,17 @@ export default async function AdminMemberDetailPage({
               {ROLE_LABELS[member.role] ?? member.role}
             </strong>
           </span>
+          {member.referrer_name && (
+            <>
+              <span className="hidden sm:inline">|</span>
+              <span>
+                紹介者:{" "}
+                <strong className="text-neutral-900">
+                  {member.referrer_name}
+                </strong>
+              </span>
+            </>
+          )}
         </Card>
         <MemberEditForm member={member} />
       </div>

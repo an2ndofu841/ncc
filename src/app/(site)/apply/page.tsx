@@ -18,9 +18,8 @@ import { z } from "zod";
 const memberTypeEnum = z.enum([
   "regular",
   "associate",
+  "family",
   "student",
-  "supporting",
-  "honorary",
 ] as const satisfies readonly MemberType[]);
 
 const genderEnum = z.enum(["male", "female", "other", "no_answer"]);
@@ -121,14 +120,12 @@ export default function ApplyPage() {
     document.title = "会員申込み | 全日本カイロプラクティック施術協同組合";
   }, []);
 
-  const memberTypeOptions = useMemo(
-    () =>
-      (Object.keys(MEMBER_TYPE_LABELS) as MemberType[]).map((value) => ({
-        value,
-        label: MEMBER_TYPE_LABELS[value] ?? value,
-      })),
-    []
-  );
+  const memberTypeOptions = [
+    { value: "regular", label: "正会員（経営者向け）" },
+    { value: "associate", label: "準会員（スタッフ向け）" },
+    { value: "family", label: "家族会員（ご家族向け）" },
+    { value: "student", label: "学生会員（在学生向け）" },
+  ];
 
   const genderOptions = useMemo(
     () =>

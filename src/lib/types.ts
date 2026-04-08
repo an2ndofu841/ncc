@@ -59,6 +59,7 @@ export interface Member {
   service_area: string | null;
   description: string | null;
   prefecture: string | null;
+  referrer_name: string | null;
   created_at: string;
   updated_at: string;
   notes: string | null;

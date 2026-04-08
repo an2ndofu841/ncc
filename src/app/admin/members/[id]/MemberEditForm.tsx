@@ -64,6 +64,7 @@ export default function MemberEditForm({ member }: { member: Member }) {
       business_hours: String(fd.get("business_hours") ?? "").trim() || null,
       service_area: String(fd.get("service_area") ?? "").trim() || null,
       description: String(fd.get("description") ?? "").trim() || null,
+      referrer_name: String(fd.get("referrer_name") ?? "").trim() || null,
       notes: String(fd.get("notes") ?? "").trim() || null,
       is_public: fd.get("is_public") === "on",
     };
@@ -181,6 +182,12 @@ export default function MemberEditForm({ member }: { member: Member }) {
           name="prefecture"
           label="都道府県"
           defaultValue={member.prefecture ?? ""}
+        />
+        <Input
+          name="referrer_name"
+          label="紹介者"
+          defaultValue={member.referrer_name ?? ""}
+          helperText="入会時に紹介された方のお名前"
         />
       </section>
 

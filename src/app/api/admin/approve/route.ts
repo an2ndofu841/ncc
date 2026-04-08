@@ -119,6 +119,7 @@ export async function POST(request: Request) {
       status: "active",
       qualifications: app.qualifications,
       practice_years: app.practice_years,
+      referrer_name: app.referrer_name ?? null,
       is_public: false,
     })
     .select("id")
