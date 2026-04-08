@@ -134,7 +134,7 @@ export async function POST(request: Request) {
     });
 
     if (insertError) {
-      console.error(insertError);
+      console.error("Application insert error:", insertError.message, insertError.details, insertError.hint);
       return NextResponse.json(
         { ok: false, error: "申込みの保存に失敗しました。しばらくしてから再度お試しください。" },
         { status: 500 }
