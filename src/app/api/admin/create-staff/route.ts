@@ -1,4 +1,5 @@
 import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { generateMemberNumber } from "@/lib/member-number";
 import { randomBytes } from "crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -80,12 +81,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { count } = await service
-    .from("members")
-    .select("id", { count: "exact", head: true });
-
-  const nextNum = (count ?? 0) + 1;
-  const member_number = `S${String(nextNum).padStart(5, "0")}`;
+  const member_number = await generateMemberNumber(service, "S");
 
   const { error: memErr } = await service.from("members").insert({
     auth_id: authData.user.id,

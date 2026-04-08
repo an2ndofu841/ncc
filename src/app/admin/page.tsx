@@ -21,7 +21,7 @@ export default async function AdminDashboardPage() {
     recentContacts,
     maintenanceSetting,
   ] = await Promise.all([
-    supabase.from("members").select("id", { count: "exact", head: true }),
+    supabase.from("members").select("id", { count: "exact", head: true }).eq("role", "member"),
     supabase
       .from("applications")
       .select("id", { count: "exact", head: true })
