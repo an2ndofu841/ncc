@@ -6,12 +6,13 @@ import Input from "@/components/ui/Input";
 import PageHeader from "@/components/ui/PageHeader";
 import Select from "@/components/ui/Select";
 import Textarea from "@/components/ui/Textarea";
+import { usePostalCode } from "@/hooks/usePostalCode";
 import type { MemberType } from "@/lib/types";
 import { MEMBER_TYPE_LABELS } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -115,6 +116,7 @@ export default function ApplyPage() {
   const [attachment, setAttachment] = useState<File | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const { lookup: lookupPostal, loading: postalLoading } = usePostalCode();
 
   useEffect(() => {
     document.title = "会員申込み | 全日本カイロプラクティック施術協同組合";
@@ -145,6 +147,7 @@ export default function ApplyPage() {
     watch,
     formState: { errors },
     getValues,
+    setValue,
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -160,6 +163,15 @@ export default function ApplyPage() {
       clinic_name: "",
     },
   });
+
+  const handlePostalLookup = useCallback(async () => {
+    const code = getValues("postal_code");
+    if (!code) return;
+    const addr = await lookupPostal(code);
+    if (addr) {
+      setValue("address", addr, { shouldValidate: true });
+    }
+  }, [getValues, setValue, lookupPostal]);
 
   const hasReferrer = watch("has_referrer");
   const selectedQualifications = watch("qualifications");
@@ -475,15 +487,27 @@ export default function ApplyPage() {
               連絡先
             </h2>
             <div className="grid gap-5 sm:grid-cols-2">
-              <Input
-                id="postal_code"
-                label="郵便番号"
-                placeholder="123-4567"
-                required
-                {...register("postal_code")}
-                error={errors.postal_code?.message}
-                helperText="ハイフンあり・なしどちらでも可です。"
-              />
+              <div className="flex items-end gap-2">
+                <div className="flex-1">
+                  <Input
+                    id="postal_code"
+                    label="郵便番号"
+                    placeholder="123-4567"
+                    required
+                    {...register("postal_code")}
+                    error={errors.postal_code?.message}
+                    helperText="ハイフンあり・なしどちらでも可です。"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handlePostalLookup}
+                  disabled={postalLoading}
+                  className="mb-[1px] shrink-0 rounded-lg border border-primary bg-primary-50 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary-100 disabled:opacity-50"
+                >
+                  {postalLoading ? "検索中…" : "住所検索"}
+                </button>
+              </div>
               <div className="hidden sm:block" />
               <div className="sm:col-span-2">
                 <Input
@@ -492,6 +516,7 @@ export default function ApplyPage() {
                   required
                   {...register("address")}
                   error={errors.address?.message}
+                  helperText="郵便番号を入力して「住所検索」を押すと自動入力されます。番地・建物名は手動で追記してください。"
                 />
               </div>
               <Input
