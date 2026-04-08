@@ -19,6 +19,7 @@ export type ApplicationStatus =
   | "reviewing"
   | "awaiting_documents"
   | "under_examination"
+  | "staff_approved"
   | "approved"
   | "rejected";
 

@@ -24,13 +24,9 @@ export async function POST(request: Request) {
     .eq("auth_id", user.id)
     .single();
 
-  if (
-    !adminMember ||
-    (adminMember.role !== "system_admin" &&
-      adminMember.role !== "office_staff")
-  ) {
+  if (!adminMember || adminMember.role !== "system_admin") {
     return NextResponse.json(
-      { error: "この操作を行う権限がありません。" },
+      { error: "最終承認はシステム管理者のみ実行できます。" },
       { status: 403 }
     );
   }
@@ -68,6 +64,13 @@ export async function POST(request: Request) {
   if (app.status === "approved") {
     return NextResponse.json(
       { error: "すでに承認済みです。" },
+      { status: 400 }
+    );
+  }
+
+  if (app.status !== "staff_approved") {
+    return NextResponse.json(
+      { error: "事務局の承認が完了していません。先に事務局承認を行ってください。" },
       { status: 400 }
     );
   }

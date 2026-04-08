@@ -29,15 +29,14 @@ export default async function AdminApplicationDetailPage({
   const {
     data: { user },
   } = await authClient.auth.getUser();
-  let canApprove = false;
+  let userRole = "";
   if (user) {
     const { data: m } = await supabase
       .from("members")
       .select("role")
       .eq("auth_id", user.id)
       .single();
-    canApprove =
-      m?.role === "system_admin" || m?.role === "office_staff";
+    userRole = m?.role ?? "";
   }
 
   return (
@@ -143,7 +142,7 @@ export default async function AdminApplicationDetailPage({
 
         <ApplicationDetailClient
           application={application}
-          canApprove={canApprove}
+          userRole={userRole}
         />
       </div>
     </>

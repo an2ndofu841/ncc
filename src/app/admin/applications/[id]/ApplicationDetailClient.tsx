@@ -18,10 +18,10 @@ const STATUS_OPTIONS = Object.entries(APPLICATION_STATUS_LABELS).map(
 
 export default function ApplicationDetailClient({
   application,
-  canApprove,
+  userRole,
 }: {
   application: Application;
-  canApprove: boolean;
+  userRole: string;
 }) {
   const router = useRouter();
   const [status, setStatus] = useState(application.status);
@@ -30,6 +30,14 @@ export default function ApplicationDetailClient({
   const [approving, setApproving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [tempPassword, setTempPassword] = useState<string | null>(null);
+
+  const isAdmin = userRole === "system_admin";
+  const isStaff = userRole === "office_staff";
+  const canStaffApprove = (isAdmin || isStaff) &&
+    application.status !== "approved" &&
+    application.status !== "staff_approved" &&
+    application.status !== "rejected";
+  const canFinalApprove = isAdmin && application.status === "staff_approved";
 
   async function saveMeta() {
     setSaving(true);
@@ -51,7 +59,31 @@ export default function ApplicationDetailClient({
     router.refresh();
   }
 
-  async function approveAndRegister() {
+  async function staffApprove() {
+    setApproving(true);
+    setMessage(null);
+    try {
+      const res = await fetch("/api/admin/staff-approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ applicationId: application.id }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setMessage(json.error ?? "事務局承認に失敗しました。");
+        return;
+      }
+      setMessage("事務局承認が完了しました。システム管理者の最終承認をお待ちください。");
+      setStatus("staff_approved");
+      router.refresh();
+    } catch {
+      setMessage("通信エラーが発生しました。");
+    } finally {
+      setApproving(false);
+    }
+  }
+
+  async function finalApprove() {
     const pwd = prompt(
       "新規会員のログイン用パスワードを入力してください（8文字以上推奨）。キャンセルで自動生成します。",
       ""
@@ -74,13 +106,13 @@ export default function ApplicationDetailClient({
         memberId?: string;
       };
       if (!res.ok) {
-        setMessage(json.error ?? "承認処理に失敗しました。");
+        setMessage(json.error ?? "最終承認に失敗しました。");
         return;
       }
       if (json.tempPassword) {
         setTempPassword(json.tempPassword);
       }
-      setMessage("承認し、会員登録と認証ユーザーを作成しました。");
+      setMessage("最終承認が完了しました。会員登録とログインアカウントを作成しました。");
       setStatus("approved");
       router.refresh();
     } catch {
@@ -92,10 +124,28 @@ export default function ApplicationDetailClient({
 
   return (
     <div className="space-y-6 rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
+      {/* 承認フロー表示 */}
+      <div className="flex items-center gap-2 text-sm">
+        <span className="font-medium text-neutral-500">承認フロー：</span>
+        <FlowStep label="申込受付" done={true} />
+        <FlowArrow />
+        <FlowStep
+          label="事務局承認"
+          done={status === "staff_approved" || status === "approved"}
+          active={canStaffApprove}
+        />
+        <FlowArrow />
+        <FlowStep
+          label="最終承認"
+          done={status === "approved"}
+          active={canFinalApprove}
+        />
+      </div>
+
       {message && (
         <p
           className={
-            message.startsWith("保存") || message.startsWith("承認")
+            message.startsWith("保存") || message.startsWith("事務局承認") || message.startsWith("最終承認")
               ? "rounded-lg bg-green-50 px-4 py-3 text-sm text-green-800"
               : "rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700"
           }
@@ -104,10 +154,17 @@ export default function ApplicationDetailClient({
         </p>
       )}
       {tempPassword && (
-        <p className="rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          初回パスワード（会員へ安全な経路でお伝えください）:{" "}
-          <code className="font-mono font-semibold">{tempPassword}</code>
-        </p>
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <p className="text-sm font-semibold text-amber-800">
+            初回パスワード（この画面を閉じると再表示できません）
+          </p>
+          <p className="mt-1 select-all font-mono text-base font-bold text-amber-900">
+            {tempPassword}
+          </p>
+          <p className="mt-2 text-xs text-amber-700">
+            会員へ安全な経路でお伝えください。
+          </p>
+        </div>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -130,26 +187,41 @@ export default function ApplicationDetailClient({
         <Button type="button" onClick={saveMeta} loading={saving}>
           ステータス・メモを保存
         </Button>
-        {canApprove &&
-          application.status !== "approved" &&
-          application.status !== "rejected" && (
-            <Button
-              type="button"
-              variant="secondary"
-              loading={approving}
-              onClick={() => {
-                if (
-                  !confirm(
-                    "この申込みを承認し、会員レコードとログインアカウントを作成します。よろしいですか？"
-                  )
+
+        {canStaffApprove && (
+          <Button
+            type="button"
+            variant="secondary"
+            loading={approving}
+            onClick={() => {
+              if (!confirm("この申込みを事務局として承認します。よろしいですか？"))
+                return;
+              void staffApprove();
+            }}
+          >
+            事務局承認
+          </Button>
+        )}
+
+        {canFinalApprove && (
+          <Button
+            type="button"
+            variant="secondary"
+            loading={approving}
+            className="bg-emerald-600 text-white hover:bg-emerald-700"
+            onClick={() => {
+              if (
+                !confirm(
+                  "最終承認を行い、会員レコードとログインアカウントを作成します。よろしいですか？"
                 )
-                  return;
-                void approveAndRegister();
-              }}
-            >
-              承認して会員登録
-            </Button>
-          )}
+              )
+                return;
+              void finalApprove();
+            }}
+          >
+            最終承認して会員登録
+          </Button>
+        )}
       </div>
 
       <div className="border-t border-neutral-100 pt-6 text-sm text-neutral-600">
@@ -162,5 +234,42 @@ export default function ApplicationDetailClient({
         </p>
       </div>
     </div>
+  );
+}
+
+function FlowStep({
+  label,
+  done,
+  active,
+}: {
+  label: string;
+  done: boolean;
+  active?: boolean;
+}) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${
+        done
+          ? "bg-emerald-100 text-emerald-800"
+          : active
+            ? "bg-blue-100 text-blue-800 ring-2 ring-blue-300"
+            : "bg-neutral-100 text-neutral-500"
+      }`}
+    >
+      {done && (
+        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      )}
+      {label}
+    </span>
+  );
+}
+
+function FlowArrow() {
+  return (
+    <svg className="h-4 w-4 shrink-0 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
   );
 }

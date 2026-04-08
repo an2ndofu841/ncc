@@ -28,7 +28,8 @@ export const APPLICATION_STATUS_LABELS: Record<string, string> = {
   reviewing: "確認中",
   awaiting_documents: "追加書類待ち",
   under_examination: "審査中",
-  approved: "承認",
+  staff_approved: "事務局承認済み",
+  approved: "最終承認済み",
   rejected: "否認",
 };
 
