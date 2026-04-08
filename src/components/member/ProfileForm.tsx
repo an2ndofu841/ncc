@@ -111,9 +111,9 @@ export default function ProfileForm({ member }: ProfileFormProps) {
   return (
     <div className="space-y-8">
       <Card>
-        <h2 className="text-lg font-bold text-primary-700">会員情報（参照のみ）</h2>
+        <h2 className="text-lg font-bold text-primary-700">会員情報</h2>
         <p className="mt-1 text-sm text-neutral-500">
-          以下の項目は事務局でのみ変更可能です。変更が必要な場合はお問い合わせください。
+          氏名の変更が必要な場合は、事務局までお問い合わせください。
         </p>
         <dl className="mt-6 grid gap-4 sm:grid-cols-2">
           <div>
