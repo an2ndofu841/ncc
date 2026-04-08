@@ -34,6 +34,10 @@ const STATUS_OPTIONS = Object.entries(MEMBER_STATUS_LABELS).map(
   ([value, label]) => ({ value, label })
 );
 
+const PAYMENT_STATUS_OPTIONS = Object.entries(PAYMENT_STATUS_LABELS).map(
+  ([value, label]) => ({ value, label })
+);
+
 export default function MemberEditForm({ member }: { member: Member }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -66,6 +70,7 @@ export default function MemberEditForm({ member }: { member: Member }) {
       service_area: String(fd.get("service_area") ?? "").trim() || null,
       description: String(fd.get("description") ?? "").trim() || null,
       referrer_name: String(fd.get("referrer_name") ?? "").trim() || null,
+      payment_status: String(fd.get("payment_status") ?? "unpaid"),
       notes: String(fd.get("notes") ?? "").trim() || null,
       is_public: fd.get("is_public") === "on",
     };
@@ -121,11 +126,11 @@ export default function MemberEditForm({ member }: { member: Member }) {
             defaultValue={member.member_type}
             required
           />
-          <Input
+          <Select
+            name="payment_status"
             label="決済ステータス"
-            value={PAYMENT_STATUS_LABELS[member.payment_status] ?? member.payment_status ?? "—"}
-            readOnly
-            className="bg-neutral-50"
+            options={PAYMENT_STATUS_OPTIONS}
+            defaultValue={member.payment_status ?? "unpaid"}
           />
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-8">

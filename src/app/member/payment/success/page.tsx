@@ -1,12 +1,53 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import type { Member } from "@/lib/types";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
+import { getStripe } from "@/lib/stripe";
 
-export default async function PaymentSuccessPage() {
+async function verifyAndUpdatePayment(
+  memberId: string,
+  sessionId: string | null
+) {
+  if (!sessionId) return false;
+
+  try {
+    const stripe = getStripe();
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    if (session.payment_status === "paid") {
+      const service = await createServiceClient();
+      const subscriptionId =
+        typeof session.subscription === "string"
+          ? session.subscription
+          : null;
+
+      await service
+        .from("members")
+        .update({
+          payment_status: "paid",
+          ...(subscriptionId
+            ? { stripe_subscription_id: subscriptionId }
+            : {}),
+        })
+        .eq("id", memberId);
+
+      return true;
+    }
+  } catch (err) {
+    console.error("Failed to verify checkout session:", err);
+  }
+  return false;
+}
+
+export default async function PaymentSuccessPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ session_id?: string }>;
+}) {
+  const sp = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -21,7 +62,16 @@ export default async function PaymentSuccessPage() {
     .maybeSingle();
 
   if (!memberRow) redirect("/");
-  const member = memberRow as Pick<Member, "id" | "payment_status">;
+  let paymentStatus = (memberRow as Pick<Member, "id" | "payment_status">)
+    .payment_status;
+
+  if (paymentStatus !== "paid" && sp.session_id) {
+    const verified = await verifyAndUpdatePayment(
+      memberRow.id,
+      sp.session_id
+    );
+    if (verified) paymentStatus = "paid";
+  }
 
   return (
     <>
@@ -42,7 +92,7 @@ export default async function PaymentSuccessPage() {
             お支払いが完了しました
           </h2>
 
-          {member.payment_status === "paid" ? (
+          {paymentStatus === "paid" ? (
             <p className="mt-3 text-sm text-neutral-600">
               決済が正常に処理されました。会員専用サービスをご利用いただけます。
             </p>
