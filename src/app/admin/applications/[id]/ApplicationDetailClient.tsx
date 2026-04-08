@@ -12,9 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const STATUS_OPTIONS = Object.entries(APPLICATION_STATUS_LABELS).map(
-  ([value, label]) => ({ value, label })
-);
+const STAFF_RESTRICTED_STATUSES = new Set(["staff_approved", "approved"]);
 
 export default function ApplicationDetailClient({
   application,
@@ -33,6 +31,10 @@ export default function ApplicationDetailClient({
 
   const isAdmin = userRole === "system_admin";
   const isStaff = userRole === "office_staff";
+
+  const statusOptions = Object.entries(APPLICATION_STATUS_LABELS)
+    .filter(([value]) => isAdmin || !STAFF_RESTRICTED_STATUSES.has(value))
+    .map(([value, label]) => ({ value, label }));
   const canStaffApprove = (isAdmin || isStaff) &&
     application.status !== "approved" &&
     application.status !== "staff_approved" &&
@@ -170,7 +172,7 @@ export default function ApplicationDetailClient({
       <div className="grid gap-4 sm:grid-cols-2">
         <Select
           label="ステータス"
-          options={STATUS_OPTIONS}
+          options={statusOptions}
           value={status}
           onChange={(e) =>
             setStatus(e.target.value as ApplicationStatus)
