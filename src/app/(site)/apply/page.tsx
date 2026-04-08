@@ -25,16 +25,33 @@ const memberTypeEnum = z.enum([
 
 const genderEnum = z.enum(["male", "female", "other", "no_answer"]);
 
-const QUALIFICATION_OPTIONS = [
-  "カイロプラクティック",
-  "柔道整復師",
-  "あん摩マッサージ指圧師",
-  "鍼灸師",
-  "理学療法士",
-  "整体師",
-  "その他",
-  "未経験（資格なし）",
+const QUALIFICATION_GROUPS = [
+  {
+    label: "国家資格",
+    options: [
+      "柔道整復師",
+      "あん摩マッサージ指圧師",
+      "鍼灸師（はり師・きゅう師）",
+      "理学療法士",
+    ],
+  },
+  {
+    label: "民間資格・認定",
+    options: [
+      "カイロプラクティック（民間認定資格）",
+      "整体師（民間認定資格）",
+    ],
+  },
+  {
+    label: "その他",
+    options: [
+      "その他",
+      "未経験（資格なし）",
+    ],
+  },
 ] as const;
+
+const QUALIFICATION_OPTIONS = QUALIFICATION_GROUPS.flatMap((g) => g.options);
 
 const formSchema = z.object({
   name: z.string().min(1, "氏名を入力してください。"),
@@ -519,23 +536,32 @@ export default function ApplyPage() {
                   <legend className="mb-1.5 text-sm font-medium text-neutral-700">
                     保有資格 <span className="text-red-500">*</span>
                   </legend>
-                  <p className="mb-2 text-xs text-neutral-500">
+                  <p className="mb-3 text-xs text-neutral-500">
                     該当するものをすべて選択してください。
                   </p>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {QUALIFICATION_OPTIONS.map((q) => (
-                      <label
-                        key={q}
-                        className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-neutral-200 px-3 py-2.5 text-sm transition-colors hover:bg-neutral-50"
-                      >
-                        <input
-                          type="checkbox"
-                          value={q}
-                          {...register("qualifications")}
-                          className="h-4 w-4 rounded border-neutral-300 text-primary focus:ring-primary"
-                        />
-                        <span className="text-neutral-700">{q}</span>
-                      </label>
+                  <div className="space-y-4">
+                    {QUALIFICATION_GROUPS.map((group) => (
+                      <div key={group.label}>
+                        <p className="mb-1.5 text-xs font-semibold text-neutral-500">
+                          {group.label}
+                        </p>
+                        <div className="grid gap-2 sm:grid-cols-2">
+                          {group.options.map((q) => (
+                            <label
+                              key={q}
+                              className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-neutral-200 px-3 py-2.5 text-sm transition-colors hover:bg-neutral-50"
+                            >
+                              <input
+                                type="checkbox"
+                                value={q}
+                                {...register("qualifications")}
+                                className="h-4 w-4 rounded border-neutral-300 text-primary focus:ring-primary"
+                              />
+                              <span className="text-neutral-700">{q}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
                     ))}
                   </div>
                   {selectedQualifications?.includes("その他") && (
