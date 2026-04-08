@@ -26,6 +26,7 @@ export default function ApplicationDetailClient({
   const [adminNotes, setAdminNotes] = useState(application.admin_notes ?? "");
   const [saving, setSaving] = useState(false);
   const [approving, setApproving] = useState(false);
+  const [resending, setResending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [tempPassword, setTempPassword] = useState<string | null>(null);
 
@@ -125,6 +126,28 @@ export default function ApplicationDetailClient({
     }
   }
 
+  async function resendEmail() {
+    setResending(true);
+    setMessage(null);
+    try {
+      const res = await fetch("/api/admin/resend-approval", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ applicationId: application.id }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setMessage(json.error ?? "メールの再送に失敗しました。");
+        return;
+      }
+      setMessage("承認メールを再送しました。");
+    } catch {
+      setMessage("通信エラーが発生しました。");
+    } finally {
+      setResending(false);
+    }
+  }
+
   return (
     <div className="space-y-6 rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
       {/* 承認フロー表示 */}
@@ -166,13 +189,28 @@ export default function ApplicationDetailClient({
             ログイン後、Stripe決済画面で入会金・年会費を支払います。
             決済状況は<strong>会員管理</strong>で確認できます。
           </p>
+          <div className="mt-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              loading={resending}
+              onClick={() => {
+                if (!confirm("承認メール（ログイン情報・決済案内）を再送しますか？"))
+                  return;
+                void resendEmail();
+              }}
+            >
+              承認メールを再送する
+            </Button>
+          </div>
         </div>
       )}
 
       {message && (
         <p
           className={
-            message.startsWith("保存") || message.startsWith("事務局承認") || message.startsWith("最終承認")
+            message.startsWith("保存") || message.startsWith("事務局承認") || message.startsWith("最終承認") || message.startsWith("承認メール")
               ? "rounded-lg bg-green-50 px-4 py-3 text-sm text-green-800"
               : "rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700"
           }
