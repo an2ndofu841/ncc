@@ -28,7 +28,6 @@ export default function ApplicationDetailClient({
   const [approving, setApproving] = useState(false);
   const [resending, setResending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [tempPassword, setTempPassword] = useState<string | null>(null);
 
   const isAdmin = userRole === "system_admin";
   const isStaff = userRole === "office_staff";
@@ -88,35 +87,23 @@ export default function ApplicationDetailClient({
   }
 
   async function finalApprove() {
-    const pwd = prompt(
-      "新規会員のログイン用パスワードを入力してください（8文字以上推奨）。キャンセルで自動生成します。",
-      ""
-    );
     setApproving(true);
     setMessage(null);
-    setTempPassword(null);
     try {
       const res = await fetch("/api/admin/approve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          applicationId: application.id,
-          password: pwd && pwd.length > 0 ? pwd : undefined,
-        }),
+        body: JSON.stringify({ applicationId: application.id }),
       });
       const json = (await res.json()) as {
         error?: string;
-        tempPassword?: string;
         memberId?: string;
       };
       if (!res.ok) {
         setMessage(json.error ?? "最終承認に失敗しました。");
         return;
       }
-      if (json.tempPassword) {
-        setTempPassword(json.tempPassword);
-      }
-      setMessage("最終承認が完了しました。会員登録・ログインアカウントを作成し、承認メールを送信しました。会員がログイン後、入会金・年会費の決済に進みます。");
+      setMessage("最終承認が完了しました。会員にパスワード設定リンク付きのメールを送信しました。");
       setStatus("approved");
       router.refresh();
     } catch {
@@ -218,20 +205,6 @@ export default function ApplicationDetailClient({
           {message}
         </p>
       )}
-      {tempPassword && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
-          <p className="text-sm font-semibold text-amber-800">
-            初回パスワード（この画面を閉じると再表示できません）
-          </p>
-          <p className="mt-1 select-all font-mono text-base font-bold text-amber-900">
-            {tempPassword}
-          </p>
-          <p className="mt-2 text-xs text-amber-700">
-            会員へ安全な経路でお伝えください。
-          </p>
-        </div>
-      )}
-
       <div className="grid gap-4 sm:grid-cols-2">
         <Select
           label="ステータス"

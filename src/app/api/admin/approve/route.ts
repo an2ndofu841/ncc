@@ -1,5 +1,6 @@
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { generateMemberNumber } from "@/lib/member-number";
+import { generatePasswordSetupUrl } from "@/lib/auth-links";
 import { sendMemberApprovalNotification } from "@/lib/email";
 import { randomBytes } from "crypto";
 import { NextResponse } from "next/server";
@@ -32,7 +33,7 @@ export async function POST(request: Request) {
     );
   }
 
-  let body: { applicationId?: string; password?: string };
+  let body: { applicationId?: string };
   try {
     body = await request.json();
   } catch {
@@ -76,10 +77,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const password =
-    typeof body.password === "string" && body.password.length >= 8
-      ? body.password
-      : generatePassword();
+  const password = generatePassword();
 
   const { data: authData, error: authError } =
     await service.auth.admin.createUser({
@@ -149,20 +147,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const returnPassword =
-    typeof body.password === "string" && body.password.length >= 8
-      ? undefined
-      : password;
+  const setupUrl = await generatePasswordSetupUrl(service, app.email);
 
-  await sendMemberApprovalNotification(
-    app.name,
-    app.email,
-    returnPassword ?? null
-  );
+  await sendMemberApprovalNotification(app.name, app.email, setupUrl);
 
   return NextResponse.json({
     ok: true,
     memberId: newMember.id,
-    ...(returnPassword ? { tempPassword: returnPassword } : {}),
   });
 }

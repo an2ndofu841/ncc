@@ -158,10 +158,25 @@ export async function sendPasswordResetNotification(email: string) {
 export async function sendMemberApprovalNotification(
   name: string,
   email: string,
-  tempPassword: string | null
+  passwordSetupUrl: string | null
 ) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ncc-chiro.or.jp";
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.ncc-chiro.or.jp").replace(/\/+$/, "");
   const loginUrl = `${siteUrl}/auth/login`;
+
+  const passwordSection = passwordSetupUrl
+    ? `
+      <h3>■ STEP 1: パスワードの設定</h3>
+      <p>まず、下記リンクからパスワードを設定してください。</p>
+      <p><a href="${passwordSetupUrl}" style="display:inline-block;padding:12px 24px;background-color:#1a6d47;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:bold;">パスワードを設定する</a></p>
+      <p style="font-size:12px;color:#666;">※ リンクの有効期限は24時間です。期限切れの場合はログイン画面の「パスワードを忘れた方」から再設定できます。</p>
+
+      <h3>■ STEP 2: 入会金・年会費のお支払い</h3>
+    `
+    : `
+      <h3>■ 入会金・年会費のお支払い</h3>
+      <p>下記URLからログインしてください。</p>
+      <p><a href="${loginUrl}">${loginUrl}</a></p>
+    `;
 
   await sendEmail({
     to: email,
@@ -169,24 +184,19 @@ export async function sendMemberApprovalNotification(
     html: `
       <p>${name} 様</p>
       <p>入会審査の結果、入会が承認されましたことをお知らせいたします。</p>
+      <p><strong>ログイン用メールアドレス:</strong> ${email}</p>
 
-      <h3>■ ログイン情報</h3>
-      <p>
-        <strong>ログインURL:</strong> <a href="${loginUrl}">${loginUrl}</a><br/>
-        <strong>メールアドレス:</strong> ${email}<br/>
-        ${tempPassword ? `<strong>仮パスワード:</strong> ${tempPassword}` : ""}
-      </p>
-      ${tempPassword ? "<p>※ 初回ログイン後、パスワードの変更をお願いいたします。</p>" : ""}
+      ${passwordSection}
 
-      <h3>■ 入会金・年会費のお支払い</h3>
-      <p>ログイン後、入会金・年会費の決済画面が表示されます。<br/>
+      <p>パスワード設定（またはログイン）後、入会金・年会費の決済画面が表示されます。<br/>
       クレジットカードにて決済手続きをお願いいたします。</p>
       <p>決済完了後、会員専用サービス（セミナー申込み・書類ダウンロード等）を<br/>
       ご利用いただけるようになります。</p>
 
       <br/>
       <p>ご不明な点がございましたら、お気軽にお問い合わせください。</p>
-      <p>全日本カイロプラクティック施術協同組合<br/>事務局</p>
+      <p>全日本カイロプラクティック施術協同組合<br/>事務局<br/>
+      メール: info@ncc-chiro.or.jp</p>
     `,
   });
 }

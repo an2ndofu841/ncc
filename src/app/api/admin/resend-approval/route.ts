@@ -1,4 +1,5 @@
 import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { generatePasswordSetupUrl } from "@/lib/auth-links";
 import { sendMemberApprovalNotification } from "@/lib/email";
 import { NextResponse } from "next/server";
 
@@ -68,7 +69,9 @@ export async function POST(request: Request) {
     );
   }
 
-  await sendMemberApprovalNotification(app.name, app.email, null);
+  const setupUrl = await generatePasswordSetupUrl(service, app.email);
+
+  await sendMemberApprovalNotification(app.name, app.email, setupUrl);
 
   return NextResponse.json({ ok: true });
 }
