@@ -27,7 +27,7 @@ export const PAYMENT_STATUS_LABELS: Record<string, string> = {
   unpaid: "未決済",
   paid: "決済済み",
   overdue: "未払い",
-  cancelled: "キャンセル",
+  cancelled: "解約予定",
 };
 
 export const APPLICATION_STATUS_LABELS: Record<string, string> = {

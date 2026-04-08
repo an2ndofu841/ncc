@@ -1,4 +1,5 @@
 import MemberEditForm from "@/app/admin/members/[id]/MemberEditForm";
+import AdminCancelSubscriptionButton from "./AdminCancelSubscriptionButton";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
@@ -119,6 +120,20 @@ export default async function AdminMemberDetailPage({
             </dl>
           </Card>
         )}
+        {member.stripe_subscription_id &&
+          member.payment_status === "paid" && (
+            <Card className="border-red-100">
+              <h3 className="text-sm font-semibold text-neutral-900">
+                サブスクリプション管理
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                自動更新を停止すると、現在の有効期間満了後に会員サービスが停止されます。
+              </p>
+              <div className="mt-3">
+                <AdminCancelSubscriptionButton memberId={member.id} />
+              </div>
+            </Card>
+          )}
         <MemberEditForm member={member} />
       </div>
     </>

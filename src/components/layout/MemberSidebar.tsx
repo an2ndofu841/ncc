@@ -12,6 +12,7 @@ import {
   Home,
   LogOut,
   Newspaper,
+  Receipt,
   UserCircle,
 } from "lucide-react";
 import Link from "next/link";
@@ -24,6 +25,7 @@ const NAV_ITEMS = [
   { href: "/member/news", label: "お知らせ", icon: Newspaper },
   { href: "/member/documents", label: "書類ダウンロード", icon: FileText },
   { href: "/member/seminars", label: "研修・セミナー", icon: GraduationCap },
+  { href: "/member/subscription", label: "年会費・契約", icon: Receipt },
 ] as const;
 
 const STAFF_ROLES = new Set(["system_admin", "office_staff", "editor"]);
