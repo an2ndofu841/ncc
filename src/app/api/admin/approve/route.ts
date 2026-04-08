@@ -121,6 +121,7 @@ export async function POST(request: Request) {
       practice_years: app.practice_years,
       referrer_name: app.referrer_name ?? null,
       is_public: false,
+      payment_status: "unpaid",
     })
     .select("id")
     .single();

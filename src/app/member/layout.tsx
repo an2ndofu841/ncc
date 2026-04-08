@@ -19,7 +19,7 @@ export default async function MemberLayout({
 
   const { data: memberRow, error } = await supabase
     .from("members")
-    .select("id, name, member_number")
+    .select("id, name, member_number, payment_status, role")
     .eq("auth_id", user.id)
     .maybeSingle();
 
@@ -27,7 +27,10 @@ export default async function MemberLayout({
     redirect("/");
   }
 
-  const member = memberRow as Pick<Member, "id" | "name" | "member_number">;
+  const member = memberRow as Pick<
+    Member,
+    "id" | "name" | "member_number" | "payment_status" | "role"
+  >;
 
   return (
     <div className="flex min-h-screen flex-col bg-neutral-50 md:flex-row">

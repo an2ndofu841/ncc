@@ -23,6 +23,13 @@ export const MEMBER_TYPE_LABELS: Record<string, string> = {
   honorary: "名誉会員",
 };
 
+export const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  unpaid: "未決済",
+  paid: "決済済み",
+  overdue: "未払い",
+  cancelled: "キャンセル",
+};
+
 export const APPLICATION_STATUS_LABELS: Record<string, string> = {
   unreviewed: "未確認",
   reviewing: "確認中",

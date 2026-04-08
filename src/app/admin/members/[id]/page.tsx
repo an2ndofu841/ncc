@@ -4,7 +4,7 @@ import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
 import { createServiceClient } from "@/lib/supabase/server";
 import type { Member } from "@/lib/types";
-import { formatDate, MEMBER_STATUS_LABELS, MEMBER_TYPE_LABELS } from "@/lib/utils";
+import { formatDate, MEMBER_STATUS_LABELS, MEMBER_TYPE_LABELS, PAYMENT_STATUS_LABELS } from "@/lib/utils";
 import { notFound } from "next/navigation";
 
 const ROLE_LABELS: Record<string, string> = {
@@ -71,6 +71,21 @@ export default async function AdminMemberDetailPage({
               {ROLE_LABELS[member.role] ?? member.role}
             </strong>
           </span>
+          <span className="hidden sm:inline">|</span>
+          <span>
+            決済:{" "}
+            <Badge
+              variant={
+                member.payment_status === "paid"
+                  ? "success"
+                  : member.payment_status === "overdue"
+                    ? "warning"
+                    : "default"
+              }
+            >
+              {PAYMENT_STATUS_LABELS[member.payment_status] ?? member.payment_status ?? "—"}
+            </Badge>
+          </span>
           {member.referrer_name && (
             <>
               <span className="hidden sm:inline">|</span>
@@ -83,6 +98,27 @@ export default async function AdminMemberDetailPage({
             </>
           )}
         </Card>
+        {member.stripe_customer_id && (
+          <Card className="text-sm text-neutral-600">
+            <h3 className="font-semibold text-neutral-900">Stripe情報</h3>
+            <dl className="mt-2 grid gap-2 sm:grid-cols-2">
+              <div>
+                <dt className="text-xs text-neutral-500">顧客ID</dt>
+                <dd className="font-mono text-xs text-neutral-700">
+                  {member.stripe_customer_id}
+                </dd>
+              </div>
+              {member.stripe_subscription_id && (
+                <div>
+                  <dt className="text-xs text-neutral-500">サブスクリプションID</dt>
+                  <dd className="font-mono text-xs text-neutral-700">
+                    {member.stripe_subscription_id}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </Card>
+        )}
         <MemberEditForm member={member} />
       </div>
     </>

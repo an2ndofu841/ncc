@@ -37,6 +37,14 @@ export default async function MemberDashboardPage() {
   if (!memberRow) redirect("/");
   const member = memberRow as Member;
 
+  const isStaff =
+    member.role === "system_admin" ||
+    member.role === "office_staff" ||
+    member.role === "editor";
+  if (!isStaff && member.payment_status !== "paid") {
+    redirect("/member/payment");
+  }
+
   const { data: newsRows } = await supabase
     .from("news")
     .select("id, title, category, published_at, is_member_only")

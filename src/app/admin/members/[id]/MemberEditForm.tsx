@@ -9,6 +9,7 @@ import type { Member, MemberRole, MemberStatus, MemberType } from "@/lib/types";
 import {
   MEMBER_STATUS_LABELS,
   MEMBER_TYPE_LABELS,
+  PAYMENT_STATUS_LABELS,
 } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -119,6 +120,12 @@ export default function MemberEditForm({ member }: { member: Member }) {
             options={TYPE_OPTIONS}
             defaultValue={member.member_type}
             required
+          />
+          <Input
+            label="決済ステータス"
+            value={PAYMENT_STATUS_LABELS[member.payment_status] ?? member.payment_status ?? "—"}
+            readOnly
+            className="bg-neutral-50"
           />
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-8">

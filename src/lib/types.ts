@@ -6,6 +6,8 @@ export type MemberRole =
 
 export type MemberStatus = "active" | "inactive" | "suspended" | "withdrawn";
 
+export type PaymentStatus = "unpaid" | "paid" | "overdue" | "cancelled";
+
 export type MemberType =
   | "regular"
   | "associate"
@@ -60,6 +62,9 @@ export interface Member {
   description: string | null;
   prefecture: string | null;
   referrer_name: string | null;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  payment_status: PaymentStatus;
   created_at: string;
   updated_at: string;
   notes: string | null;

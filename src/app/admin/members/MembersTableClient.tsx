@@ -7,6 +7,7 @@ import type { Member } from "@/lib/types";
 import {
   MEMBER_STATUS_LABELS,
   MEMBER_TYPE_LABELS,
+  PAYMENT_STATUS_LABELS,
 } from "@/lib/utils";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -93,7 +94,7 @@ export default function MembersTableClient({ members }: { members: Member[] }) {
       )}
 
       <div className="overflow-x-auto rounded-xl border border-neutral-200 bg-white shadow-sm">
-        <table className="w-full min-w-[1000px] text-left text-sm">
+        <table className="w-full min-w-[1100px] text-left text-sm">
           <thead className="border-b border-neutral-200 bg-neutral-50">
             <tr className="text-neutral-600">
               <th className="px-4 py-3 font-medium">会員番号</th>
@@ -102,6 +103,7 @@ export default function MembersTableClient({ members }: { members: Member[] }) {
               <th className="px-4 py-3 font-medium">会員種別</th>
               <th className="px-4 py-3 font-medium">ステータス</th>
               <th className="px-4 py-3 font-medium">権限</th>
+              <th className="px-4 py-3 font-medium">決済</th>
               <th className="px-4 py-3 font-medium">紹介者</th>
             </tr>
           </thead>
@@ -109,7 +111,7 @@ export default function MembersTableClient({ members }: { members: Member[] }) {
             {filtered.length === 0 ? (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={8}
                   className="px-4 py-10 text-center text-neutral-500"
                 >
                   該当する会員がいません。
@@ -148,6 +150,19 @@ export default function MembersTableClient({ members }: { members: Member[] }) {
                   </td>
                   <td className="px-4 py-3 text-neutral-700">
                     {ROLE_LABELS[m.role] ?? m.role}
+                  </td>
+                  <td className="px-4 py-3">
+                    <Badge
+                      variant={
+                        m.payment_status === "paid"
+                          ? "success"
+                          : m.payment_status === "overdue"
+                            ? "warning"
+                            : "default"
+                      }
+                    >
+                      {PAYMENT_STATUS_LABELS[m.payment_status] ?? m.payment_status ?? "—"}
+                    </Badge>
                   </td>
                   <td className="px-4 py-3 text-neutral-600">
                     {m.referrer_name ? (

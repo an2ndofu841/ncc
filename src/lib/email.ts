@@ -171,6 +171,8 @@ export async function sendMemberApprovalNotification(
       ${tempPassword ? `<strong>仮パスワード:</strong> ${tempPassword}<br/>` : ""}
       </p>
       ${tempPassword ? "<p>初回ログイン後、パスワードの変更をお願いいたします。</p>" : ""}
+      <p>ログイン後、入会金・年会費の決済手続きをお願いいたします。<br/>
+      決済完了後、会員専用サービスをご利用いただけます。</p>
       <br/>
       <p>全日本カイロプラクティック施術協同組合<br/>事務局</p>
     `,
