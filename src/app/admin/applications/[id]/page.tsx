@@ -109,6 +109,10 @@ export default async function AdminApplicationDetailPage({
                   application.desired_member_type}
               </dd>
             </div>
+            <div>
+              <dt className="text-neutral-500">紹介者</dt>
+              <dd>{application.referrer_name ?? "—"}</dd>
+            </div>
             <div className="sm:col-span-2">
               <dt className="text-neutral-500">備考・志望動機</dt>
               <dd className="whitespace-pre-wrap">

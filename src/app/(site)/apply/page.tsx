@@ -25,6 +25,17 @@ const memberTypeEnum = z.enum([
 
 const genderEnum = z.enum(["male", "female", "other", "no_answer"]);
 
+const QUALIFICATION_OPTIONS = [
+  "カイロプラクティック",
+  "柔道整復師",
+  "あん摩マッサージ指圧師",
+  "鍼灸師",
+  "理学療法士",
+  "整体師",
+  "その他",
+  "未経験（資格なし）",
+] as const;
+
 const formSchema = z.object({
   name: z.string().min(1, "氏名を入力してください。"),
   name_kana: z.string().min(1, "ふりがなを入力してください。"),
@@ -37,8 +48,11 @@ const formSchema = z.object({
   address: z.string().min(1, "住所を入力してください。"),
   phone: z.string().min(1, "電話番号を入力してください。"),
   email: z.string().email("有効なメールアドレスを入力してください。"),
-  clinic_name: z.string().min(1, "所属院名／屋号を入力してください。"),
-  qualifications: z.string().min(1, "保有資格を入力してください。"),
+  clinic_name: z.string().optional(),
+  qualifications: z
+    .array(z.string())
+    .min(1, "保有資格を1つ以上選択してください。"),
+  qualifications_other: z.string().optional(),
   practice_years: z
     .string()
     .optional()
@@ -51,6 +65,8 @@ const formSchema = z.object({
       { message: "施術歴は0〜80の範囲で入力してください。" }
     ),
   desired_member_type: memberTypeEnum,
+  has_referrer: z.boolean(),
+  referrer_name: z.string().optional(),
   remarks: z.string().optional(),
   agreed_to_terms: z.boolean().refine((v) => v === true, {
     message: "利用規約に同意してください。",
@@ -112,6 +128,7 @@ export default function ApplyPage() {
     register,
     control,
     handleSubmit,
+    watch,
     formState: { errors },
     getValues,
   } = useForm<FormValues>({
@@ -122,8 +139,16 @@ export default function ApplyPage() {
       remarks: "",
       gender: undefined,
       desired_member_type: undefined,
+      qualifications: [],
+      qualifications_other: "",
+      has_referrer: false,
+      referrer_name: "",
+      clinic_name: "",
     },
   });
+
+  const hasReferrer = watch("has_referrer");
+  const selectedQualifications = watch("qualifications");
 
   const onConfirm = handleSubmit(() => {
     setSubmitError(null);
@@ -141,6 +166,13 @@ export default function ApplyPage() {
     setSubmitting(true);
     setSubmitError(null);
     try {
+      const quals = [...v.qualifications];
+      if (quals.includes("その他") && v.qualifications_other?.trim()) {
+        const idx = quals.indexOf("その他");
+        quals[idx] = `その他（${v.qualifications_other.trim()}）`;
+      }
+      const qualificationsStr = quals.join("、");
+
       const payload = {
         name: v.name,
         name_kana: v.name_kana,
@@ -150,10 +182,11 @@ export default function ApplyPage() {
         address: v.address,
         phone: v.phone,
         email: v.email,
-        clinic_name: v.clinic_name,
-        qualifications: v.qualifications,
+        clinic_name: v.clinic_name?.trim() || null,
+        qualifications: qualificationsStr,
         practice_years: py,
         desired_member_type: v.desired_member_type,
+        referrer_name: v.has_referrer && v.referrer_name?.trim() ? v.referrer_name.trim() : null,
         remarks: v.remarks?.trim() ? v.remarks : null,
         agreed_to_terms: true as const,
       };
@@ -281,12 +314,21 @@ export default function ApplyPage() {
               </div>
               <div className="sm:col-span-2">
                 <dt className="font-medium text-neutral-500">所属院名／屋号</dt>
-                <dd className="mt-0.5 text-neutral-900">{v.clinic_name}</dd>
+                <dd className="mt-0.5 text-neutral-900">
+                  {v.clinic_name?.trim() || "（なし）"}
+                </dd>
               </div>
               <div className="sm:col-span-2">
                 <dt className="font-medium text-neutral-500">保有資格</dt>
-                <dd className="mt-0.5 whitespace-pre-wrap text-neutral-900">
-                  {v.qualifications}
+                <dd className="mt-0.5 text-neutral-900">
+                  {(() => {
+                    const quals = [...v.qualifications];
+                    if (quals.includes("その他") && v.qualifications_other?.trim()) {
+                      const idx = quals.indexOf("その他");
+                      quals[idx] = `その他（${v.qualifications_other.trim()}）`;
+                    }
+                    return quals.join("、");
+                  })()}
                 </dd>
               </div>
               <div>
@@ -299,6 +341,14 @@ export default function ApplyPage() {
                 <dt className="font-medium text-neutral-500">希望会員種別</dt>
                 <dd className="mt-0.5 text-neutral-900">
                   {MEMBER_TYPE_LABELS[v.desired_member_type]}
+                </dd>
+              </div>
+              <div className="sm:col-span-2">
+                <dt className="font-medium text-neutral-500">紹介者</dt>
+                <dd className="mt-0.5 text-neutral-900">
+                  {v.has_referrer && v.referrer_name?.trim()
+                    ? v.referrer_name.trim()
+                    : "（なし）"}
                 </dd>
               </div>
               <div className="sm:col-span-2">
@@ -459,20 +509,50 @@ export default function ApplyPage() {
                 <Input
                   id="clinic_name"
                   label="所属院名／屋号"
-                  required
                   {...register("clinic_name")}
                   error={errors.clinic_name?.message}
+                  helperText="所属がない場合は空欄で構いません。"
                 />
               </div>
               <div className="sm:col-span-2">
-                <Textarea
-                  id="qualifications"
-                  label="保有資格"
-                  required
-                  rows={4}
-                  {...register("qualifications")}
-                  error={errors.qualifications?.message}
-                />
+                <fieldset>
+                  <legend className="mb-1.5 text-sm font-medium text-neutral-700">
+                    保有資格 <span className="text-red-500">*</span>
+                  </legend>
+                  <p className="mb-2 text-xs text-neutral-500">
+                    該当するものをすべて選択してください。
+                  </p>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {QUALIFICATION_OPTIONS.map((q) => (
+                      <label
+                        key={q}
+                        className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-neutral-200 px-3 py-2.5 text-sm transition-colors hover:bg-neutral-50"
+                      >
+                        <input
+                          type="checkbox"
+                          value={q}
+                          {...register("qualifications")}
+                          className="h-4 w-4 rounded border-neutral-300 text-primary focus:ring-primary"
+                        />
+                        <span className="text-neutral-700">{q}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {selectedQualifications?.includes("その他") && (
+                    <div className="mt-2">
+                      <Input
+                        id="qualifications_other"
+                        placeholder="資格名を入力"
+                        {...register("qualifications_other")}
+                      />
+                    </div>
+                  )}
+                  {errors.qualifications?.message && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.qualifications.message}
+                    </p>
+                  )}
+                </fieldset>
               </div>
               <Input
                 id="practice_years"
@@ -483,7 +563,7 @@ export default function ApplyPage() {
                 label="施術歴（年）"
                 {...register("practice_years")}
                 error={errors.practice_years?.message}
-                helperText="該当がない場合は空欄で構いません（0〜80）。"
+                helperText="未経験の場合は空欄で構いません（0〜80）。"
               />
               <Controller
                 name="desired_member_type"
@@ -504,6 +584,57 @@ export default function ApplyPage() {
                   />
                 )}
               />
+            </div>
+          </Card>
+
+          <Card>
+            <h2 className="mb-6 border-b border-neutral-100 pb-3 text-lg font-semibold text-primary-700">
+              紹介者
+            </h2>
+            <div className="space-y-4">
+              <fieldset>
+                <legend className="mb-2 text-sm font-medium text-neutral-700">
+                  紹介者の有無
+                </legend>
+                <div className="flex gap-4">
+                  <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2.5 text-sm transition-colors hover:bg-neutral-50">
+                    <input
+                      type="radio"
+                      value="false"
+                      checked={!hasReferrer}
+                      onChange={() => {
+                        const { onChange } = register("has_referrer");
+                        onChange({ target: { name: "has_referrer", value: false } });
+                      }}
+                      className="h-4 w-4 border-neutral-300 text-primary focus:ring-primary"
+                    />
+                    <span className="text-neutral-700">なし</span>
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2.5 text-sm transition-colors hover:bg-neutral-50">
+                    <input
+                      type="radio"
+                      value="true"
+                      checked={hasReferrer}
+                      onChange={() => {
+                        const { onChange } = register("has_referrer");
+                        onChange({ target: { name: "has_referrer", value: true } });
+                      }}
+                      className="h-4 w-4 border-neutral-300 text-primary focus:ring-primary"
+                    />
+                    <span className="text-neutral-700">あり</span>
+                  </label>
+                </div>
+              </fieldset>
+              {hasReferrer && (
+                <Input
+                  id="referrer_name"
+                  label="紹介者氏名"
+                  required
+                  placeholder="紹介者のお名前を入力してください"
+                  {...register("referrer_name")}
+                  error={errors.referrer_name?.message}
+                />
+              )}
             </div>
           </Card>
 

@@ -79,6 +79,7 @@ export interface Application {
   desired_member_type: MemberType;
   remarks: string | null;
   attachment_url: string | null;
+  referrer_name: string | null;
   status: ApplicationStatus;
   admin_notes: string | null;
   created_at: string;
