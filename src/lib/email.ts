@@ -168,7 +168,7 @@ export async function sendMemberApprovalNotification(
       <h3>■ STEP 1: パスワードの設定</h3>
       <p>まず、下記リンクからパスワードを設定してください。</p>
       <p><a href="${passwordSetupUrl}" style="display:inline-block;padding:12px 24px;background-color:#1a6d47;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:bold;">パスワードを設定する</a></p>
-      <p style="font-size:12px;color:#666;">※ リンクの有効期限は24時間です。期限切れの場合はログイン画面の「パスワードを忘れた方」から再設定できます。</p>
+      <p style="font-size:12px;color:#666;">※ リンクの有効期限は72時間です。期限切れの場合はログイン画面の「パスワードを忘れた方」から再設定できます。</p>
 
       <h3>■ STEP 2: 入会金・年会費のお支払い</h3>
     `
