@@ -160,20 +160,32 @@ export async function sendMemberApprovalNotification(
   email: string,
   tempPassword: string | null
 ) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ncc-chiro.or.jp";
+  const loginUrl = `${siteUrl}/auth/login`;
+
   await sendEmail({
     to: email,
     subject: "【全日本カイロプラクティック施術協同組合】入会承認のお知らせ",
     html: `
       <p>${name} 様</p>
       <p>入会審査の結果、入会が承認されましたことをお知らせいたします。</p>
-      <p>以下の情報で会員専用ページにログインできます。</p>
-      <p><strong>メールアドレス:</strong> ${email}<br/>
-      ${tempPassword ? `<strong>仮パスワード:</strong> ${tempPassword}<br/>` : ""}
+
+      <h3>■ ログイン情報</h3>
+      <p>
+        <strong>ログインURL:</strong> <a href="${loginUrl}">${loginUrl}</a><br/>
+        <strong>メールアドレス:</strong> ${email}<br/>
+        ${tempPassword ? `<strong>仮パスワード:</strong> ${tempPassword}` : ""}
       </p>
-      ${tempPassword ? "<p>初回ログイン後、パスワードの変更をお願いいたします。</p>" : ""}
-      <p>ログイン後、入会金・年会費の決済手続きをお願いいたします。<br/>
-      決済完了後、会員専用サービスをご利用いただけます。</p>
+      ${tempPassword ? "<p>※ 初回ログイン後、パスワードの変更をお願いいたします。</p>" : ""}
+
+      <h3>■ 入会金・年会費のお支払い</h3>
+      <p>ログイン後、入会金・年会費の決済画面が表示されます。<br/>
+      クレジットカードにて決済手続きをお願いいたします。</p>
+      <p>決済完了後、会員専用サービス（セミナー申込み・書類ダウンロード等）を<br/>
+      ご利用いただけるようになります。</p>
+
       <br/>
+      <p>ご不明な点がございましたら、お気軽にお問い合わせください。</p>
       <p>全日本カイロプラクティック施術協同組合<br/>事務局</p>
     `,
   });

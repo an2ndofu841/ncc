@@ -115,7 +115,7 @@ export default function ApplicationDetailClient({
       if (json.tempPassword) {
         setTempPassword(json.tempPassword);
       }
-      setMessage("最終承認が完了しました。会員登録とログインアカウントを作成しました。");
+      setMessage("最終承認が完了しました。会員登録・ログインアカウントを作成し、承認メールを送信しました。会員がログイン後、入会金・年会費の決済に進みます。");
       setStatus("approved");
       router.refresh();
     } catch {
@@ -128,22 +128,46 @@ export default function ApplicationDetailClient({
   return (
     <div className="space-y-6 rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
       {/* 承認フロー表示 */}
-      <div className="flex items-center gap-2 text-sm">
-        <span className="font-medium text-neutral-500">承認フロー：</span>
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <span className="font-medium text-neutral-500">フロー：</span>
         <FlowStep label="申込受付" done={true} />
         <FlowArrow />
-        <FlowStep
-          label="事務局承認"
-          done={status === "staff_approved" || status === "approved"}
-          active={canStaffApprove}
-        />
-        <FlowArrow />
+        {!isAdmin && (
+          <>
+            <FlowStep
+              label="事務局承認"
+              done={status === "staff_approved" || status === "approved"}
+              active={canStaffApprove}
+            />
+            <FlowArrow />
+          </>
+        )}
         <FlowStep
           label="最終承認"
           done={status === "approved"}
           active={canFinalApprove}
         />
+        <FlowArrow />
+        <FlowStep
+          label="決済"
+          done={false}
+          disabled={status !== "approved"}
+          note={status === "approved" ? "会員側で手続き中" : undefined}
+        />
+        <FlowArrow />
+        <FlowStep label="完了" done={false} disabled={status !== "approved"} />
       </div>
+
+      {status === "approved" && (
+        <div className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+          <p className="font-semibold">承認済み — 決済待ち</p>
+          <p className="mt-1 text-blue-700">
+            会員にはログイン情報と決済案内のメールを送信済みです。
+            ログイン後、Stripe決済画面で入会金・年会費を支払います。
+            決済状況は<strong>会員管理</strong>で確認できます。
+          </p>
+        </div>
+      )}
 
       {message && (
         <p
@@ -244,10 +268,14 @@ function FlowStep({
   label,
   done,
   active,
+  disabled,
+  note,
 }: {
   label: string;
   done: boolean;
   active?: boolean;
+  disabled?: boolean;
+  note?: string;
 }) {
   return (
     <span
@@ -256,8 +284,11 @@ function FlowStep({
           ? "bg-emerald-100 text-emerald-800"
           : active
             ? "bg-blue-100 text-blue-800 ring-2 ring-blue-300"
-            : "bg-neutral-100 text-neutral-500"
+            : disabled
+              ? "bg-neutral-50 text-neutral-300"
+              : "bg-neutral-100 text-neutral-500"
       }`}
+      title={note}
     >
       {done && (
         <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

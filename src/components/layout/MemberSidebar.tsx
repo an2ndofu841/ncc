@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import type { Member } from "@/lib/types";
 import {
+  AlertCircle,
+  CreditCard,
   FileText,
   GraduationCap,
   Home,
@@ -24,9 +26,10 @@ const NAV_ITEMS = [
   { href: "/member/seminars", label: "研修・セミナー", icon: GraduationCap },
 ] as const;
 
+const STAFF_ROLES = new Set(["system_admin", "office_staff", "editor"]);
+
 interface MemberSidebarProps {
-  member: Pick<Member, "name" | "member_number">;
-  /** 省略時は `usePathname()` を使用します */
+  member: Pick<Member, "name" | "member_number" | "payment_status" | "role">;
   currentPath?: string;
 }
 
@@ -38,6 +41,8 @@ export default function MemberSidebar({
   const router = useRouter();
   const activePath = currentPath ?? pathname;
   const [loggingOut, setLoggingOut] = useState(false);
+  const showPaymentBanner =
+    !STAFF_ROLES.has(member.role) && member.payment_status !== "paid";
 
   async function handleLogout() {
     setLoggingOut(true);
@@ -68,6 +73,15 @@ export default function MemberSidebar({
             会員番号 {member.member_number}
           </p>
         </div>
+        {showPaymentBanner && (
+          <Link
+            href="/member/payment"
+            className="mx-3 mt-2 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800 transition-colors hover:bg-amber-100"
+          >
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            入会金・年会費の決済が未完了です
+          </Link>
+        )}
         <nav
           className="flex gap-1 overflow-x-auto px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           aria-label="会員エリア"
@@ -112,6 +126,21 @@ export default function MemberSidebar({
             会員番号 {member.member_number}
           </p>
         </div>
+        {showPaymentBanner && (
+          <Link
+            href="/member/payment"
+            className="mx-3 mt-3 flex items-center gap-2.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs font-medium text-amber-800 transition-colors hover:bg-amber-100"
+          >
+            <CreditCard className="h-4 w-4 shrink-0" />
+            <span>
+              決済が未完了です
+              <br />
+              <span className="text-[10px] font-normal text-amber-600">
+                タップして決済に進む
+              </span>
+            </span>
+          </Link>
+        )}
         <nav className="flex flex-1 flex-col gap-0.5 p-3" aria-label="会員エリア">
           {NAV_ITEMS.map(({ href, label, icon: Icon }) => (
             <Link key={href} href={href} className={linkClass(href)}>
