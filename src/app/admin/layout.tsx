@@ -21,7 +21,7 @@ export default async function AdminLayout({
   const service = await createServiceClient();
   const { data: member } = await service
     .from("members")
-    .select("role")
+    .select("name, role")
     .eq("auth_id", user.id)
     .single();
 
@@ -34,9 +34,25 @@ export default async function AdminLayout({
     redirect("/");
   }
 
+  const { count: pendingApplications } = await service
+    .from("applications")
+    .select("id", { count: "exact", head: true })
+    .in("status", ["unreviewed", "staff_approved"]);
+
+  const { count: unreadContacts } = await service
+    .from("contacts")
+    .select("id", { count: "exact", head: true })
+    .eq("is_read", false);
+
   return (
     <div className="flex min-h-[calc(100vh-8rem)] flex-col bg-neutral-50 lg:flex-row">
-      <AdminSidebar />
+      <AdminSidebar
+        adminUser={{ name: member.name, role: member.role }}
+        badgeCounts={{
+          "/admin/applications": pendingApplications ?? 0,
+          "/admin/contacts": unreadContacts ?? 0,
+        }}
+      />
       <main className="min-w-0 flex-1 overflow-x-auto px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         {children}
       </main>
