@@ -34,10 +34,15 @@ export default async function AdminLayout({
     redirect("/");
   }
 
+  const pendingStatuses =
+    member.role === "system_admin"
+      ? ["unreviewed", "staff_approved"]
+      : ["unreviewed"];
+
   const { count: pendingApplications } = await service
     .from("applications")
     .select("id", { count: "exact", head: true })
-    .in("status", ["unreviewed", "staff_approved"]);
+    .in("status", pendingStatuses);
 
   const { count: unreadContacts } = await service
     .from("contacts")
