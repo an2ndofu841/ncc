@@ -172,7 +172,7 @@ export default function Footer() {
                 href={MHLW_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg bg-white/95 p-3 shadow-sm outline-none ring-offset-2 ring-offset-neutral-900 transition-opacity hover:opacity-95 focus-visible:ring-2 focus-visible:ring-primary"
+                className="inline-block rounded-lg outline-none ring-offset-2 ring-offset-neutral-900 transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary"
                 aria-label="厚生労働省の公式サイトを別タブで開く"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
