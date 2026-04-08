@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageHeader from "@/components/ui/PageHeader";
 import FaqAccordion from "./FaqAccordion";
+import { FAQ_ITEMS } from "./faq-data";
 
 export const metadata: Metadata = {
   title: "よくある質問",
@@ -9,9 +10,26 @@ export const metadata: Metadata = {
     "入会、会費、認定、研修、個人情報など、全日本カイロプラクティック施術協同組合に関するよくあるご質問です。",
 };
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.a,
+    },
+  })),
+};
+
 export default function FaqPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <PageHeader
         title="よくある質問"
         description="会員の皆様・ご検討中の方からよくお寄せいただく質問をまとめました。"

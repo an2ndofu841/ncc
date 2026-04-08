@@ -1,13 +1,45 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ncc-chiro.or.jp";
+const SITE_NAME = "全日本カイロプラクティック施術協同組合";
+const DEFAULT_DESCRIPTION =
+  "全日本カイロプラクティック施術協同組合の公式サイトです。カイロプラクティック施術者の地位向上と業界の健全な発展を目指しています。";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "全日本カイロプラクティック施術協同組合",
-    template: "%s | 全日本カイロプラクティック施術協同組合",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "全日本カイロプラクティック施術協同組合の公式サイトです。カイロプラクティック施術者の地位向上と業界の健全な発展を目指しています。",
+  description: DEFAULT_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    locale: "ja_JP",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: DEFAULT_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary",
+    title: SITE_NAME,
+    description: DEFAULT_DESCRIPTION,
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({

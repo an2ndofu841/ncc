@@ -16,12 +16,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("news")
-    .select("title")
+    .select("title, excerpt")
     .eq("id", id)
     .eq("is_published", true)
     .eq("is_member_only", false)
     .single();
-  return { title: data?.title ?? "お知らせ" };
+  return {
+    title: data?.title ?? "お知らせ",
+    description: data?.excerpt || undefined,
+  };
 }
 
 export default async function NewsDetailPage({ params }: Props) {

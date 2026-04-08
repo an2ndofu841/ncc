@@ -14,6 +14,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "コラム",
+  description: "カイロプラクティックに関するコラム記事一覧。施術技術や健康情報など、専門家が執筆した記事をお届けします。",
 };
 
 export default async function ColumnsPage() {

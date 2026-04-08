@@ -129,6 +129,12 @@ export default function AdminColumnsNewPage() {
       return;
     }
 
+    const meta_title = String(fd.get("meta_title") ?? "").trim() || null;
+    const meta_description = String(fd.get("meta_description") ?? "").trim() || null;
+    const og_image_url = String(fd.get("og_image_url") ?? "").trim() || null;
+    const canonical_url = String(fd.get("canonical_url") ?? "").trim() || null;
+    const no_index = fd.get("no_index") === "on";
+
     const supabase = createClient();
     const { error: insertError } = await supabase.from("columns").insert({
       title,
@@ -143,6 +149,11 @@ export default function AdminColumnsNewPage() {
       is_published: isPublished,
       is_member_only: fd.get("is_member_only") === "on",
       published_at: isPublished ? published_at : null,
+      meta_title,
+      meta_description,
+      og_image_url,
+      canonical_url,
+      no_index,
     });
 
     setLoading(false);
@@ -283,6 +294,24 @@ export default function AdminColumnsNewPage() {
             onChange={(ev) => setPublishedAt(ev.target.value)}
             helperText="公開にチェックを入れたとき、空なら現在時刻を入れます。"
           />
+
+          {/* SEO設定 */}
+          <details className="rounded-lg border border-neutral-200 bg-neutral-50/50">
+            <summary className="cursor-pointer px-4 py-3 text-sm font-semibold text-neutral-700 select-none">
+              SEO設定
+            </summary>
+            <div className="space-y-4 border-t border-neutral-200 px-4 py-4">
+              <Input name="meta_title" label="メタタイトル" placeholder="未入力の場合は記事タイトルが使用されます" helperText="検索結果やブラウザタブに表示されるタイトル（60文字以内推奨）" />
+              <Textarea name="meta_description" label="メタディスクリプション" rows={3} placeholder="未入力の場合は抜粋が使用されます" helperText="検索結果に表示される説明文（120〜160文字推奨）" />
+              <Input name="og_image_url" label="OGP画像URL" placeholder="未入力の場合はサムネイルが使用されます" helperText="SNSでシェアされた際に表示される画像（1200×630px推奨）" />
+              <Input name="canonical_url" label="canonical URL" placeholder="未入力の場合は自動設定されます" helperText="正規URLを指定したい場合のみ入力してください" />
+              <label className="flex cursor-pointer items-center gap-2 text-sm">
+                <input type="checkbox" name="no_index" className="h-4 w-4 rounded border-neutral-300 text-primary focus:ring-primary" />
+                検索エンジンにインデックスさせない（noindex）
+              </label>
+            </div>
+          </details>
+
           <div className="flex flex-wrap gap-3 border-t border-neutral-100 pt-4">
             <Button type="submit" loading={loading}>
               保存する

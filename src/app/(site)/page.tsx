@@ -52,9 +52,27 @@ const FEATURES = [
   },
 ];
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "全日本カイロプラクティック施術協同組合",
+  url: "https://ncc-chiro.or.jp",
+  description:
+    "厚生労働大臣認可のカイロプラクティック施術者の全国組織。施術者の地位向上と業界の健全な発展を目指しています。",
+  foundingDate: "2000",
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "JP",
+  },
+};
+
 export default function HomePage() {
   return (
     <div className="flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
       {/* Hero */}
       <section className="relative overflow-hidden text-white">
         {/* 背景画像 */}

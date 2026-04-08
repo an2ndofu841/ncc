@@ -1,0 +1,6 @@
+-- コラムテーブルにSEOフィールドを追加
+ALTER TABLE columns ADD COLUMN IF NOT EXISTS meta_title TEXT;
+ALTER TABLE columns ADD COLUMN IF NOT EXISTS meta_description TEXT;
+ALTER TABLE columns ADD COLUMN IF NOT EXISTS og_image_url TEXT;
+ALTER TABLE columns ADD COLUMN IF NOT EXISTS canonical_url TEXT;
+ALTER TABLE columns ADD COLUMN IF NOT EXISTS no_index BOOLEAN DEFAULT false;

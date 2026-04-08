@@ -6,10 +6,11 @@ import { forwardRef, type TextareaHTMLAttributes } from "react";
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
+  helperText?: string;
 }
 
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, label, error, id, ...props }, ref) => {
+  ({ className, label, error, helperText, id, ...props }, ref) => {
     return (
       <div className="w-full">
         {label && (
@@ -34,6 +35,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           {...props}
         />
         {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+        {helperText && !error && (
+          <p className="mt-1 text-xs text-neutral-500">{helperText}</p>
+        )}
       </div>
     );
   }

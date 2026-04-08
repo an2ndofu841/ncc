@@ -12,26 +12,45 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ncc-chiro.or.jp";
+const SITE_NAME = "全日本カイロプラクティック施術協同組合";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const supabase = await createClient();
   const { data } = await supabase
     .from("columns")
-    .select("title, excerpt")
+    .select("title, excerpt, meta_title, meta_description, og_image_url, thumbnail_url, canonical_url, no_index")
     .eq("slug", slug)
     .eq("is_published", true)
     .eq("is_member_only", false)
     .single();
 
-  const title = data?.title ?? "コラム";
-  const description =
-    typeof data?.excerpt === "string" && data.excerpt.trim()
-      ? data.excerpt
-      : undefined;
+  const title = data?.meta_title || data?.title || "コラム";
+  const description = data?.meta_description || data?.excerpt || undefined;
+  const ogImage = data?.og_image_url || data?.thumbnail_url || undefined;
+  const canonicalUrl = data?.canonical_url || `${SITE_URL}/columns/${slug}`;
 
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: SITE_NAME,
+      type: "article",
+      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630 }] } : {}),
+    },
+    twitter: {
+      card: ogImage ? "summary_large_image" : "summary",
+      title,
+      description,
+    },
+    ...(data?.no_index ? { robots: { index: false, follow: false } } : {}),
   };
 }
 
@@ -52,8 +71,36 @@ export default async function ColumnDetailPage({ params }: Props) {
   const displayDate = column.published_at ?? column.created_at;
   const dateTimeAttr = displayDate;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: column.meta_title || column.title,
+    description: column.meta_description || column.excerpt || "",
+    ...(column.og_image_url || column.thumbnail_url
+      ? { image: column.og_image_url || column.thumbnail_url }
+      : {}),
+    datePublished: column.published_at || column.created_at,
+    dateModified: column.updated_at,
+    ...(column.author_name
+      ? { author: { "@type": "Person", name: column.author_name } }
+      : { author: { "@type": "Organization", name: SITE_NAME } }),
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": column.canonical_url || `${SITE_URL}/columns/${slug}`,
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <PageHeader
         title={column.title}
         breadcrumbs={[

@@ -181,4 +181,9 @@ export interface Column {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  meta_title: string | null;
+  meta_description: string | null;
+  og_image_url: string | null;
+  canonical_url: string | null;
+  no_index: boolean;
 }

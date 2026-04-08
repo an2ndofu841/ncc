@@ -8,6 +8,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "お知らせ",
+  description: "全日本カイロプラクティック施術協同組合からのお知らせ・新着情報をご覧いただけます。",
 };
 
 export default async function NewsPage() {
