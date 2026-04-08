@@ -153,6 +153,12 @@ export default function Footer() {
             >
               利用規約
             </Link>
+            <Link
+              href="/tokushoho"
+              className="hover:text-white transition-colors"
+            >
+              特定商取引法に基づく表記
+            </Link>
           </div>
           <p className="text-xs text-neutral-500">
             &copy; {new Date().getFullYear()} 全日本カイロプラクティック施術協同組合. All rights reserved.
