@@ -7,9 +7,8 @@ import { z } from "zod";
 const memberTypes = [
   "regular",
   "associate",
+  "family",
   "student",
-  "supporting",
-  "honorary",
 ] as const satisfies readonly MemberType[];
 
 const applicationPayloadSchema = z.object({
