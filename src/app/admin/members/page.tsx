@@ -3,6 +3,7 @@ import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
 import { createServiceClient } from "@/lib/supabase/server";
 import type { Member } from "@/lib/types";
+import Link from "next/link";
 
 export default async function AdminMembersPage() {
   const supabase = await createServiceClient();
@@ -34,6 +35,14 @@ export default async function AdminMembersPage() {
         ]}
       />
       <div className="mx-auto max-w-6xl">
+        <div className="mb-4 flex justify-end">
+          <Link
+            href="/admin/members/new"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-dark"
+          >
+            + 事務局・編集者を追加
+          </Link>
+        </div>
         <MembersTableClient members={members} />
       </div>
     </>
