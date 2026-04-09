@@ -95,6 +95,11 @@ export async function POST(req: NextRequest) {
       payment_method_types: ["card"],
     });
 
+    await service
+      .from("members")
+      .update({ last_checkout_session_id: session.id })
+      .eq("id", member.id);
+
     return NextResponse.json({ url: session.url });
   }
 
@@ -136,6 +141,12 @@ export async function POST(req: NextRequest) {
     const session = await stripe.checkout.sessions.create(
       sessionParams as Parameters<typeof stripe.checkout.sessions.create>[0]
     );
+
+    await service
+      .from("members")
+      .update({ last_checkout_session_id: session.id })
+      .eq("id", member.id);
+
     return NextResponse.json({ url: session.url });
   } catch (err) {
     console.error("Stripe checkout session error:", err);

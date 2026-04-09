@@ -64,6 +64,7 @@ export interface Member {
   referrer_name: string | null;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
+  last_checkout_session_id: string | null;
   payment_status: PaymentStatus;
   renewal_date: string | null;
   setup_token: string | null;

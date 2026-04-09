@@ -1,11 +1,40 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import type { Member } from "@/lib/types";
 import { MEMBER_TYPE_LABELS } from "@/lib/utils";
 import { FEE_TABLE } from "@/lib/stripe-prices";
+import { getStripe } from "@/lib/stripe";
 import PaymentButton from "./PaymentButton";
+import CheckPaymentButton from "./success/CheckPaymentButton";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
+import { Clock } from "lucide-react";
+
+async function autoVerifySession(memberId: string, sessionId: string) {
+  try {
+    const stripe = getStripe();
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    if (session.payment_status === "paid") {
+      const service = await createServiceClient();
+      const subscriptionId =
+        typeof session.subscription === "string" ? session.subscription : null;
+      const renewalDate = new Date();
+      renewalDate.setFullYear(renewalDate.getFullYear() + 1);
+      await service
+        .from("members")
+        .update({
+          payment_status: "paid",
+          renewal_date: renewalDate.toISOString().slice(0, 10),
+          ...(subscriptionId ? { stripe_subscription_id: subscriptionId } : {}),
+        })
+        .eq("id", memberId);
+      return true;
+    }
+  } catch {
+    /* ignore */
+  }
+  return false;
+}
 
 export default async function PaymentPage({
   searchParams,
@@ -33,6 +62,18 @@ export default async function PaymentPage({
     redirect("/member");
   }
 
+  if (member.last_checkout_session_id) {
+    const verified = await autoVerifySession(
+      member.id,
+      member.last_checkout_session_id
+    );
+    if (verified) {
+      redirect("/member");
+    }
+  }
+
+  const hasPendingSession = Boolean(member.last_checkout_session_id);
+
   const fees = FEE_TABLE[member.member_type] ?? FEE_TABLE.regular;
   const typeName =
     MEMBER_TYPE_LABELS[member.member_type] ?? member.member_type;
@@ -54,6 +95,24 @@ export default async function PaymentPage({
           <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
             決済がキャンセルされました。再度お手続きをお願いいたします。
           </div>
+        )}
+
+        {hasPendingSession && !sp.cancelled && (
+          <Card className="mb-6 border-amber-200 bg-amber-50">
+            <div className="flex items-start gap-3">
+              <Clock className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+              <div className="flex-1 space-y-2">
+                <p className="text-sm font-semibold text-amber-800">
+                  前回のお支払い手続きの入金確認待ちです
+                </p>
+                <p className="text-xs text-amber-700">
+                  コンビニ・銀行振込でお支払い済みの場合は、下のボタンで入金状況を確認できます。
+                  反映まで最大1〜2営業日かかる場合があります。
+                </p>
+                <CheckPaymentButton sessionId={member.last_checkout_session_id!} />
+              </div>
+            </div>
+          </Card>
         )}
 
         <Card>
