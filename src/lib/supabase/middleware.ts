@@ -47,6 +47,29 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  if (
+    path.startsWith("/member") &&
+    user &&
+    !path.startsWith("/member/payment")
+  ) {
+    const service = createServiceRoleClient();
+    const { data: memberProfile } = await service
+      .from("members")
+      .select("payment_status, role")
+      .eq("auth_id", user.id)
+      .single();
+
+    if (
+      memberProfile &&
+      memberProfile.payment_status !== "paid" &&
+      !["system_admin", "office_staff", "editor"].includes(memberProfile.role)
+    ) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/member/payment";
+      return NextResponse.redirect(url);
+    }
+  }
+
   if (path.startsWith("/admin")) {
     if (!user) {
       const url = request.nextUrl.clone();

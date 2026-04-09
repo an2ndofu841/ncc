@@ -54,13 +54,23 @@ export default function MemberSidebar({
     router.refresh();
   }
 
-  const linkClass = (href: string) =>
-    cn(
+  const isUnpaid = showPaymentBanner;
+  const paymentHref = "/member/payment" as string;
+
+  const linkClass = (href: string) => {
+    const isActive =
+      activePath === href || (href !== "/member" && activePath.startsWith(href));
+    const isLocked = isUnpaid && href !== paymentHref;
+
+    return cn(
       "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-      activePath === href || (href !== "/member" && activePath.startsWith(href))
-        ? "bg-primary text-white shadow-sm"
-        : "text-neutral-700 hover:bg-primary-50 hover:text-primary-700"
+      isLocked
+        ? "pointer-events-none text-neutral-300 cursor-not-allowed"
+        : isActive
+          ? "bg-primary text-white shadow-sm"
+          : "text-neutral-700 hover:bg-primary-50 hover:text-primary-700"
     );
+  };
 
   return (
     <>
@@ -88,21 +98,31 @@ export default function MemberSidebar({
           className="flex gap-1 overflow-x-auto px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           aria-label="会員エリア"
         >
-          {NAV_ITEMS.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "shrink-0 rounded-lg px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors",
-                activePath === href ||
-                  (href !== "/member" && activePath.startsWith(href))
-                  ? "bg-primary text-white"
-                  : "bg-neutral-100 text-neutral-700 hover:bg-primary-100"
-              )}
-            >
-              {label}
-            </Link>
-          ))}
+          {NAV_ITEMS.map(({ href, label }) => {
+            const isActive =
+              activePath === href ||
+              (href !== "/member" && activePath.startsWith(href));
+            const isLocked = isUnpaid && href !== paymentHref;
+
+            return (
+              <Link
+                key={href}
+                href={isLocked ? paymentHref : href}
+                className={cn(
+                  "shrink-0 rounded-lg px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors",
+                  isLocked
+                    ? "bg-neutral-50 text-neutral-300 pointer-events-none"
+                    : isActive
+                      ? "bg-primary text-white"
+                      : "bg-neutral-100 text-neutral-700 hover:bg-primary-100"
+                )}
+                aria-disabled={isLocked}
+                tabIndex={isLocked ? -1 : undefined}
+              >
+                {label}
+              </Link>
+            );
+          })}
         </nav>
         <div className="px-3 pb-3">
           <Button
