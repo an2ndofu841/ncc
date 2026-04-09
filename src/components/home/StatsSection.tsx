@@ -2,8 +2,20 @@
 
 import CountUp from "@/components/ui/CountUp";
 
+const ESTABLISHED = new Date(1999, 2, 10); // 1999年3月10日
+
+function getYearsSinceEstablished(): number {
+  const now = new Date();
+  let years = now.getFullYear() - ESTABLISHED.getFullYear();
+  const monthDay =
+    now.getMonth() * 100 + now.getDate() <
+    ESTABLISHED.getMonth() * 100 + ESTABLISHED.getDate();
+  if (monthDay) years--;
+  return years;
+}
+
 const STATS = [
-  { end: 26, suffix: "年", label: "設立からの年数" },
+  { end: getYearsSinceEstablished(), suffix: "年", label: "設立からの年数" },
   { end: 86, suffix: "+", label: "加盟院数（院）" },
   { end: 104, suffix: "+", label: "研修実施回数（累計）" },
 ];
