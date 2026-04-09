@@ -200,3 +200,57 @@ export async function sendMemberApprovalNotification(
     `,
   });
 }
+
+/**
+ * 年会費更新案内メールを送信
+ */
+export async function sendRenewalReminderEmail(
+  name: string,
+  email: string,
+  renewalDate: string,
+  daysLeft: number
+) {
+  const siteUrl = (
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.ncc-chiro.or.jp"
+  ).replace(/\/+$/, "");
+  const renewalUrl = `${siteUrl}/member/payment/renewal`;
+
+  const urgency =
+    daysLeft <= 0
+      ? `<p style="color:#dc2626;font-weight:bold;">更新期限を過ぎています。速やかにお手続きをお願いいたします。</p>`
+      : daysLeft <= 7
+        ? `<p style="color:#d97706;font-weight:bold;">更新期限まであと${daysLeft}日です。お早めにお手続きください。</p>`
+        : `<p>更新期限まであと<strong>${daysLeft}日</strong>です。</p>`;
+
+  await sendEmail({
+    to: email,
+    subject: "【全日本カイロプラクティック施術協同組合】年会費更新のご案内",
+    html: `
+      <p>${name} 様</p>
+      <p>日頃より当組合の活動にご理解ご協力を賜り、誠にありがとうございます。</p>
+      <p>年会費の更新時期が近づいておりますので、ご案内申し上げます。</p>
+
+      <h3>■ 更新日</h3>
+      <p><strong>${renewalDate}</strong></p>
+      ${urgency}
+
+      <h3>■ お手続き方法</h3>
+      <p>下記リンクからログインの上、年会費のお支払いをお願いいたします。<br/>
+      クレジットカード、コンビニ払い、銀行振込、PayPayに対応しております。</p>
+      <p>
+        <a href="${renewalUrl}" style="display:inline-block;padding:12px 24px;background-color:#1a6d47;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:bold;">
+          年会費を支払う
+        </a>
+      </p>
+
+      <p style="font-size:12px;color:#666;">
+        ※ クレジットカードで自動更新をご利用の方は、自動的に決済されますので本メールは無視していただいて結構です。
+      </p>
+
+      <br/>
+      <p>ご不明な点がございましたら、お気軽にお問い合わせください。</p>
+      <p>全日本カイロプラクティック施術協同組合<br/>事務局<br/>
+      メール: info@ncc-chiro.or.jp</p>
+    `,
+  });
+}

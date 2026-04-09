@@ -1,5 +1,6 @@
 import MemberEditForm from "@/app/admin/members/[id]/MemberEditForm";
 import AdminCancelSubscriptionButton from "./AdminCancelSubscriptionButton";
+import RenewalReminderSection from "./RenewalReminderSection";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
@@ -33,6 +34,13 @@ export default async function AdminMemberDetailPage({
   }
 
   const member = data as Member;
+
+  const { data: reminders } = await supabase
+    .from("renewal_reminders")
+    .select("id, sent_at, reminder_type, email_to")
+    .eq("member_id", id)
+    .order("sent_at", { ascending: false })
+    .limit(10);
 
   return (
     <>
@@ -134,6 +142,12 @@ export default async function AdminMemberDetailPage({
               </div>
             </Card>
           )}
+        <RenewalReminderSection
+          memberId={member.id}
+          renewalDate={member.renewal_date}
+          hasSubscription={Boolean(member.stripe_subscription_id)}
+          reminders={reminders ?? []}
+        />
         <MemberEditForm member={member} />
       </div>
     </>

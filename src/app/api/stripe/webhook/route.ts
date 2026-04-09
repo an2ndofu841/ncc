@@ -3,6 +3,12 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 
+function renewalDateOneYearFromNow(): string {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() + 1);
+  return d.toISOString().slice(0, 10); // YYYY-MM-DD
+}
+
 export async function POST(request: Request) {
   const stripe = getStripe();
   const body = await request.text();
@@ -44,6 +50,7 @@ export async function POST(request: Request) {
           .update({
             payment_status: "paid",
             stripe_subscription_id: subscriptionId ?? null,
+            renewal_date: renewalDateOneYearFromNow(),
           })
           .eq("id", memberId);
       }
@@ -58,7 +65,10 @@ export async function POST(request: Request) {
 
       await service
         .from("members")
-        .update({ payment_status: "paid" })
+        .update({
+          payment_status: "paid",
+          renewal_date: renewalDateOneYearFromNow(),
+        })
         .eq("id", memberId);
 
       break;
@@ -86,7 +96,10 @@ export async function POST(request: Request) {
       if (subId) {
         await service
           .from("members")
-          .update({ payment_status: "paid" })
+          .update({
+            payment_status: "paid",
+            renewal_date: renewalDateOneYearFromNow(),
+          })
           .eq("stripe_subscription_id", subId);
       }
       break;

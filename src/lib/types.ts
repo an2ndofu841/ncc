@@ -65,6 +65,9 @@ export interface Member {
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
   payment_status: PaymentStatus;
+  renewal_date: string | null;
+  setup_token: string | null;
+  setup_token_expires: string | null;
   created_at: string;
   updated_at: string;
   notes: string | null;

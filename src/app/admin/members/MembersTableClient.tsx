@@ -104,6 +104,7 @@ export default function MembersTableClient({ members }: { members: Member[] }) {
               <th className="px-4 py-3 font-medium">ステータス</th>
               <th className="px-4 py-3 font-medium">権限</th>
               <th className="px-4 py-3 font-medium">決済</th>
+              <th className="px-4 py-3 font-medium">更新日</th>
               <th className="px-4 py-3 font-medium">紹介者</th>
             </tr>
           </thead>
@@ -111,7 +112,7 @@ export default function MembersTableClient({ members }: { members: Member[] }) {
             {filtered.length === 0 ? (
               <tr>
                 <td
-                  colSpan={8}
+                  colSpan={9}
                   className="px-4 py-10 text-center text-neutral-500"
                 >
                   該当する会員がいません。
@@ -163,6 +164,37 @@ export default function MembersTableClient({ members }: { members: Member[] }) {
                     >
                       {PAYMENT_STATUS_LABELS[m.payment_status] ?? m.payment_status ?? "—"}
                     </Badge>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-xs text-neutral-600">
+                    {m.renewal_date ? (
+                      (() => {
+                        const rd = new Date(m.renewal_date);
+                        const now = new Date();
+                        const daysLeft = Math.ceil(
+                          (rd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+                        );
+                        const dateStr = rd.toLocaleDateString("ja-JP", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        });
+                        return (
+                          <span
+                            className={
+                              daysLeft <= 0
+                                ? "font-semibold text-red-600"
+                                : daysLeft <= 30
+                                  ? "font-semibold text-amber-600"
+                                  : ""
+                            }
+                          >
+                            {dateStr}
+                          </span>
+                        );
+                      })()
+                    ) : (
+                      <span className="text-neutral-400">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-neutral-600">
                     {m.referrer_name ? (
