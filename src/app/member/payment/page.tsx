@@ -110,11 +110,14 @@ export default async function PaymentPage({
             </table>
           </div>
 
-          <div className="mt-4 rounded-lg bg-neutral-50 px-4 py-3 text-sm text-neutral-600">
+          <div className="mt-4 rounded-lg bg-neutral-50 px-4 py-3 text-sm text-neutral-600 space-y-1">
             <p>
-              翌年以降は年会費（
+              <strong>クレジットカード</strong>の場合、翌年以降は年会費（
               <strong>{fees.annual.toLocaleString()}円/年</strong>
               ）が自動更新されます。
+            </p>
+            <p>
+              <strong>コンビニ・銀行振込</strong>の場合は初回一括払いとなり、翌年以降は別途ご案内いたします。
             </p>
           </div>
 

@@ -1,12 +1,18 @@
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { getStripe } from "@/lib/stripe";
-import { buildLineItems } from "@/lib/stripe-prices";
-import { NextResponse } from "next/server";
+import { buildLineItems, buildOneTimeLineItems } from "@/lib/stripe-prices";
+import { NextRequest, NextResponse } from "next/server";
 import type { MemberType } from "@/lib/types";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ncc-chiro.or.jp";
+const SITE_URL = () =>
+  (process.env.NEXT_PUBLIC_SITE_URL || "https://ncc-chiro.or.jp").replace(
+    /\/+$/,
+    ""
+  );
 
-export async function POST() {
+type PaymentMethodParam = "card" | "konbini" | "bank_transfer";
+
+export async function POST(req: NextRequest) {
   const stripe = getStripe();
   const supabase = await createClient();
   const {
@@ -15,6 +21,19 @@ export async function POST() {
 
   if (!user) {
     return NextResponse.json({ error: "認証が必要です。" }, { status: 401 });
+  }
+
+  let paymentMethod: PaymentMethodParam = "card";
+  try {
+    const body = await req.json();
+    if (
+      body.paymentMethod &&
+      ["card", "konbini", "bank_transfer"].includes(body.paymentMethod)
+    ) {
+      paymentMethod = body.paymentMethod;
+    }
+  } catch {
+    /* default to card */
   }
 
   const service = await createServiceClient();
@@ -55,21 +74,52 @@ export async function POST() {
       .eq("id", member.id);
   }
 
-  const lineItems = buildLineItems(member.member_type as MemberType);
+  const siteUrl = SITE_URL();
+  const successUrl = `${siteUrl}/member/payment/success?session_id={CHECKOUT_SESSION_ID}`;
+  const cancelUrl = `${siteUrl}/member/payment?cancelled=1`;
 
-  const session = await stripe.checkout.sessions.create({
+  if (paymentMethod === "card") {
+    const lineItems = buildLineItems(member.member_type as MemberType);
+
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      mode: "subscription",
+      line_items: lineItems,
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      metadata: { member_id: member.id, payment_method: "card" },
+      subscription_data: {
+        metadata: { member_id: member.id },
+      },
+      locale: "ja",
+      payment_method_types: ["card"],
+    });
+
+    return NextResponse.json({ url: session.url });
+  }
+
+  const oneTimeItems = buildOneTimeLineItems(member.member_type as MemberType);
+  const pmTypes: ("konbini" | "customer_balance" | "card")[] =
+    paymentMethod === "konbini" ? ["konbini"] : ["customer_balance"];
+
+  const sessionParams: Parameters<typeof stripe.checkout.sessions.create>[0] = {
     customer: customerId,
-    mode: "subscription",
-    line_items: lineItems,
-    success_url: `${SITE_URL}/member/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${SITE_URL}/member/payment?cancelled=1`,
-    metadata: { member_id: member.id },
-    subscription_data: {
-      metadata: { member_id: member.id },
-    },
+    mode: "payment",
+    line_items: oneTimeItems,
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+    metadata: { member_id: member.id, payment_method: paymentMethod },
     locale: "ja",
-    payment_method_types: ["card"],
-  });
+    payment_method_types: pmTypes,
+  };
+
+  if (paymentMethod === "bank_transfer") {
+    sessionParams.payment_intent_data = {
+      metadata: { member_id: member.id },
+    };
+  }
+
+  const session = await stripe.checkout.sessions.create(sessionParams);
 
   return NextResponse.json({ url: session.url });
 }

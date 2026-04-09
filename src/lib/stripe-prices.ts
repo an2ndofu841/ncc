@@ -65,3 +65,56 @@ export function buildLineItems(memberType: MemberType): LineItem[] {
 
   return items;
 }
+
+interface OneTimeLineItem {
+  price_data: {
+    currency: string;
+    product_data: { name: string };
+    unit_amount: number;
+  };
+  quantity: number;
+}
+
+export function buildOneTimeLineItems(memberType: MemberType): OneTimeLineItem[] {
+  const fees = FEE_TABLE[memberType] ?? FEE_TABLE.regular;
+  const items: OneTimeLineItem[] = [];
+
+  if (fees.admission > 0) {
+    items.push({
+      price_data: {
+        currency: "jpy",
+        product_data: { name: "入会金" },
+        unit_amount: fees.admission,
+      },
+      quantity: 1,
+    });
+  }
+
+  if (fees.certification > 0) {
+    items.push({
+      price_data: {
+        currency: "jpy",
+        product_data: { name: "認定料（初回のみ）" },
+        unit_amount: fees.certification,
+      },
+      quantity: 1,
+    });
+  }
+
+  if (fees.annual > 0) {
+    items.push({
+      price_data: {
+        currency: "jpy",
+        product_data: { name: "年会費（初年度）" },
+        unit_amount: fees.annual,
+      },
+      quantity: 1,
+    });
+  }
+
+  if (items.length === 0) {
+    throw new Error(`No fees configured for member type: ${memberType}`);
+  }
+
+  return items;
+}

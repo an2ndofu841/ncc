@@ -38,12 +38,40 @@ export async function POST(request: Request) {
           ? session.subscription
           : session.subscription?.id;
 
+      if (session.payment_status === "paid") {
+        await service
+          .from("members")
+          .update({
+            payment_status: "paid",
+            stripe_subscription_id: subscriptionId ?? null,
+          })
+          .eq("id", memberId);
+      }
+
+      break;
+    }
+
+    case "checkout.session.async_payment_succeeded": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const memberId = session.metadata?.member_id;
+      if (!memberId) break;
+
       await service
         .from("members")
-        .update({
-          payment_status: "paid",
-          stripe_subscription_id: subscriptionId ?? null,
-        })
+        .update({ payment_status: "paid" })
+        .eq("id", memberId);
+
+      break;
+    }
+
+    case "checkout.session.async_payment_failed": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const memberId = session.metadata?.member_id;
+      if (!memberId) break;
+
+      await service
+        .from("members")
+        .update({ payment_status: "overdue" })
         .eq("id", memberId);
 
       break;
