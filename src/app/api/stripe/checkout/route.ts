@@ -119,14 +119,28 @@ export async function POST(req: NextRequest) {
   };
 
   if (paymentMethod === "bank_transfer") {
+    sessionParams.payment_method_options = {
+      customer_balance: {
+        funding_type: "bank_transfer",
+        bank_transfer: {
+          type: "jp_bank_transfer",
+        },
+      },
+    };
     sessionParams.payment_intent_data = {
       metadata: { member_id: member.id },
     };
   }
 
-  const session = await stripe.checkout.sessions.create(
-    sessionParams as Parameters<typeof stripe.checkout.sessions.create>[0]
-  );
-
-  return NextResponse.json({ url: session.url });
+  try {
+    const session = await stripe.checkout.sessions.create(
+      sessionParams as Parameters<typeof stripe.checkout.sessions.create>[0]
+    );
+    return NextResponse.json({ url: session.url });
+  } catch (err) {
+    console.error("Stripe checkout session error:", err);
+    const message =
+      err instanceof Error ? err.message : "決済セッションの作成に失敗しました。";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
