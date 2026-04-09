@@ -1,10 +1,10 @@
 "use client";
 
 import Button from "@/components/ui/Button";
-import { CreditCard, Building2, Store } from "lucide-react";
+import { CreditCard, Building2, Store, Smartphone, Wallet } from "lucide-react";
 import { useState } from "react";
 
-type PaymentMethod = "card" | "konbini" | "bank_transfer";
+type PaymentMethod = "card" | "konbini" | "bank_transfer" | "paypay";
 
 const METHODS: {
   id: PaymentMethod;
@@ -14,9 +14,15 @@ const METHODS: {
 }[] = [
   {
     id: "card",
-    label: "クレジットカード",
+    label: "カード / Apple Pay / Google Pay",
     description: "年会費は自動更新されます",
-    icon: CreditCard,
+    icon: Wallet,
+  },
+  {
+    id: "paypay",
+    label: "PayPay",
+    description: "初回一括払い・翌年以降は別途ご案内",
+    icon: Smartphone,
   },
   {
     id: "konbini",
@@ -68,7 +74,7 @@ export default function PaymentButton() {
         <p className="mb-3 text-sm font-semibold text-neutral-700">
           お支払い方法を選択
         </p>
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2">
           {METHODS.map((m) => {
             const Icon = m.icon;
             const isActive = selected === m.id;

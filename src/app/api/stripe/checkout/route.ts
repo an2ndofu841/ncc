@@ -10,7 +10,7 @@ const SITE_URL = () =>
     ""
   );
 
-type PaymentMethodParam = "card" | "konbini" | "bank_transfer";
+type PaymentMethodParam = "card" | "konbini" | "bank_transfer" | "paypay";
 
 export async function POST(req: NextRequest) {
   const stripe = getStripe();
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     if (
       body.paymentMethod &&
-      ["card", "konbini", "bank_transfer"].includes(body.paymentMethod)
+      ["card", "konbini", "bank_transfer", "paypay"].includes(body.paymentMethod)
     ) {
       paymentMethod = body.paymentMethod;
     }
@@ -99,10 +99,15 @@ export async function POST(req: NextRequest) {
   }
 
   const oneTimeItems = buildOneTimeLineItems(member.member_type as MemberType);
-  const pmTypes: ("konbini" | "customer_balance" | "card")[] =
-    paymentMethod === "konbini" ? ["konbini"] : ["customer_balance"];
 
-  const sessionParams: Parameters<typeof stripe.checkout.sessions.create>[0] = {
+  const pmTypesMap: Record<string, string[]> = {
+    konbini: ["konbini"],
+    bank_transfer: ["customer_balance"],
+    paypay: ["paypay"],
+  };
+  const pmTypes = pmTypesMap[paymentMethod] ?? ["konbini"];
+
+  const sessionParams: Record<string, unknown> = {
     customer: customerId,
     mode: "payment",
     line_items: oneTimeItems,
@@ -119,7 +124,9 @@ export async function POST(req: NextRequest) {
     };
   }
 
-  const session = await stripe.checkout.sessions.create(sessionParams);
+  const session = await stripe.checkout.sessions.create(
+    sessionParams as Parameters<typeof stripe.checkout.sessions.create>[0]
+  );
 
   return NextResponse.json({ url: session.url });
 }
