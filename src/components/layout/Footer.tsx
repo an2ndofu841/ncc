@@ -2,6 +2,10 @@ import Link from "next/link";
 
 const MHLW_URL = "https://www.mhlw.go.jp/index.html";
 
+const LOGO_SRC = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/tracelogo_img.png`
+  : "";
+
 export default function Footer() {
   const koseishoSrc = process.env.NEXT_PUBLIC_SUPABASE_URL
     ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/koseisho.png`
@@ -12,9 +16,18 @@ export default function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white font-bold text-sm">
-                全
-              </div>
+              {LOGO_SRC ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={LOGO_SRC}
+                  alt="全日本カイロプラクティック施術協同組合"
+                  className="h-9 w-auto object-contain brightness-0 invert"
+                />
+              ) : (
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white font-bold text-sm">
+                  全
+                </div>
+              )}
               <div>
                 <p className="text-sm font-bold text-white leading-tight">
                   全日本カイロプラクティック

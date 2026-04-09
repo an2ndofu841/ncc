@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 
+const LOGO_SRC = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/tracelogo_img.png`
+  : "";
+
 const NAV_ITEMS = [
   { label: "ホーム", href: "/" },
   {
@@ -37,9 +41,18 @@ export default function Header() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-3 shrink-0">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white font-bold text-lg">
-              全
-            </div>
+            {LOGO_SRC ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={LOGO_SRC}
+                alt="全日本カイロプラクティック施術協同組合"
+                className="h-10 w-auto object-contain"
+              />
+            ) : (
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white font-bold text-lg">
+                全
+              </div>
+            )}
             <div className="hidden sm:block">
               <p className="text-sm font-bold text-primary leading-tight">
                 全日本カイロプラクティック
