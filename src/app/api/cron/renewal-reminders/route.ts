@@ -81,9 +81,30 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  const todayStr = today.toISOString().slice(0, 10);
+
+  const { data: expiredMembers } = await service
+    .from("members")
+    .select("id")
+    .eq("payment_status", "paid")
+    .is("stripe_subscription_id", null)
+    .lt("renewal_date", todayStr)
+    .not("role", "in", '("system_admin","office_staff","editor")');
+
+  let expiredCount = 0;
+  if (expiredMembers && expiredMembers.length > 0) {
+    const ids = expiredMembers.map((m) => m.id);
+    await service
+      .from("members")
+      .update({ payment_status: "overdue" })
+      .in("id", ids);
+    expiredCount = ids.length;
+  }
+
   return NextResponse.json({
     ok: true,
     sent: totalSent,
+    expired: expiredCount ?? 0,
     timestamp: new Date().toISOString(),
   });
 }
