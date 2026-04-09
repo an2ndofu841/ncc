@@ -6,6 +6,7 @@ import Card from "@/components/ui/Card";
 import Link from "next/link";
 import { CheckCircle, Clock } from "lucide-react";
 import { getStripe } from "@/lib/stripe";
+import CheckPaymentButton from "./CheckPaymentButton";
 
 async function verifyAndUpdatePayment(
   memberId: string,
@@ -118,6 +119,9 @@ export default async function PaymentSuccessPage({
                   反映まで最大1〜2営業日かかる場合があります。
                 </p>
               </div>
+              {sp.session_id && (
+                <CheckPaymentButton sessionId={sp.session_id} />
+              )}
             </>
           ) : (
             <>
