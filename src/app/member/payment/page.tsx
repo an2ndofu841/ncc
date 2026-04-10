@@ -60,93 +60,100 @@ export default async function PaymentPage({
           </div>
         )}
 
-        {hasPendingSession && !sp.cancelled && (
-          <Card className="mb-6 border-amber-200 bg-amber-50">
-            <div className="flex items-start gap-3">
-              <Clock className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
-              <div className="flex-1 space-y-2">
-                <p className="text-sm font-semibold text-amber-800">
-                  前回のお支払い手続きの入金確認待ちです
+        {hasPendingSession && !sp.cancelled ? (
+          <Card>
+            <div className="flex items-start gap-4">
+              <Clock className="mt-1 h-6 w-6 shrink-0 text-amber-600" />
+              <div className="flex-1 space-y-3">
+                <h2 className="text-lg font-bold text-amber-800">
+                  入金確認待ち
+                </h2>
+                <p className="text-sm text-neutral-700">
+                  コンビニ・銀行振込でのお支払い手続きを受け付けました。
+                  入金が確認でき次第、会員サービスをご利用いただけます。
                 </p>
-                <p className="text-xs text-amber-700">
-                  コンビニ・銀行振込でお支払い済みの場合は、下のボタンで入金状況を確認できます。
-                  反映まで最大1〜2営業日かかる場合があります。
+                <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700 space-y-1">
+                  <p>・コンビニ払い：お支払い完了後すぐ〜数分で反映されます</p>
+                  <p>・銀行振込：入金後1〜2営業日で反映されます</p>
+                </div>
+                <p className="text-sm text-neutral-600">
+                  お支払い済みの場合は、下のボタンで入金状況をご確認ください。
                 </p>
                 <CheckPaymentButton sessionId={member.last_checkout_session_id!} autoCheck />
               </div>
             </div>
           </Card>
-        )}
+        ) : (
+          <Card>
+            <h2 className="text-lg font-bold text-primary-700">
+              お支払い内容（{typeName}）
+            </h2>
 
-        <Card>
-          <h2 className="text-lg font-bold text-primary-700">
-            お支払い内容（{typeName}）
-          </h2>
-
-          <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-neutral-200 bg-neutral-50">
-                  <th className="px-4 py-3 text-left font-semibold text-neutral-700">
-                    項目
-                  </th>
-                  <th className="px-4 py-3 text-right font-semibold text-neutral-700">
-                    金額（税込）
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b border-neutral-100">
-                  <td className="px-4 py-3 text-neutral-700">入会金</td>
-                  <td className="px-4 py-3 text-right tabular-nums text-neutral-900">
-                    {fees.admission.toLocaleString()}円
-                  </td>
-                </tr>
-                {fees.certification > 0 && (
+            <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-neutral-200 bg-neutral-50">
+                    <th className="px-4 py-3 text-left font-semibold text-neutral-700">
+                      項目
+                    </th>
+                    <th className="px-4 py-3 text-right font-semibold text-neutral-700">
+                      金額（税込）
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
                   <tr className="border-b border-neutral-100">
-                    <td className="px-4 py-3 text-neutral-700">
-                      認定料（初回のみ）
-                    </td>
+                    <td className="px-4 py-3 text-neutral-700">入会金</td>
                     <td className="px-4 py-3 text-right tabular-nums text-neutral-900">
-                      {fees.certification.toLocaleString()}円
+                      {fees.admission.toLocaleString()}円
                     </td>
                   </tr>
-                )}
-                <tr className="border-b border-neutral-100">
-                  <td className="px-4 py-3 text-neutral-700">
-                    年会費（初年度）
-                  </td>
-                  <td className="px-4 py-3 text-right tabular-nums text-neutral-900">
-                    {fees.annual.toLocaleString()}円
-                  </td>
-                </tr>
-                <tr className="bg-primary-50">
-                  <td className="px-4 py-3 font-bold text-primary-700">
-                    初回お支払い合計
-                  </td>
-                  <td className="px-4 py-3 text-right tabular-nums text-lg font-bold text-primary">
-                    {initialTotal.toLocaleString()}円
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                  {fees.certification > 0 && (
+                    <tr className="border-b border-neutral-100">
+                      <td className="px-4 py-3 text-neutral-700">
+                        認定料（初回のみ）
+                      </td>
+                      <td className="px-4 py-3 text-right tabular-nums text-neutral-900">
+                        {fees.certification.toLocaleString()}円
+                      </td>
+                    </tr>
+                  )}
+                  <tr className="border-b border-neutral-100">
+                    <td className="px-4 py-3 text-neutral-700">
+                      年会費（初年度）
+                    </td>
+                    <td className="px-4 py-3 text-right tabular-nums text-neutral-900">
+                      {fees.annual.toLocaleString()}円
+                    </td>
+                  </tr>
+                  <tr className="bg-primary-50">
+                    <td className="px-4 py-3 font-bold text-primary-700">
+                      初回お支払い合計
+                    </td>
+                    <td className="px-4 py-3 text-right tabular-nums text-lg font-bold text-primary">
+                      {initialTotal.toLocaleString()}円
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-          <div className="mt-4 rounded-lg bg-neutral-50 px-4 py-3 text-sm text-neutral-600 space-y-1">
-            <p>
-              <strong>クレジットカード</strong>の場合、翌年以降は年会費（
-              <strong>{fees.annual.toLocaleString()}円/年</strong>
-              ）が自動更新されます。
-            </p>
-            <p>
-              <strong>コンビニ・銀行振込</strong>の場合は初回一括払いとなり、翌年以降は別途ご案内いたします。
-            </p>
-          </div>
+            <div className="mt-4 rounded-lg bg-neutral-50 px-4 py-3 text-sm text-neutral-600 space-y-1">
+              <p>
+                <strong>クレジットカード</strong>の場合、翌年以降は年会費（
+                <strong>{fees.annual.toLocaleString()}円/年</strong>
+                ）が自動更新されます。
+              </p>
+              <p>
+                <strong>コンビニ・銀行振込</strong>の場合は初回一括払いとなり、翌年以降は別途ご案内いたします。
+              </p>
+            </div>
 
-          <div className="mt-8">
-            <PaymentButton />
-          </div>
-        </Card>
+            <div className="mt-8">
+              <PaymentButton />
+            </div>
+          </Card>
+        )}
       </div>
     </>
   );
