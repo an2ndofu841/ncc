@@ -1,8 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/Button";
-import { RefreshCw } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { CheckCircle, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 export default function CheckPaymentButton({
@@ -12,8 +11,8 @@ export default function CheckPaymentButton({
   sessionId: string;
   autoCheck?: boolean;
 }) {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   const handleCheck = useCallback(async () => {
@@ -29,8 +28,11 @@ export default function CheckPaymentButton({
       const json = await res.json();
 
       if (json.status === "paid") {
-        setMessage("決済が確認されました。ページを更新します…");
-        setTimeout(() => router.push("/member"), 1500);
+        setConfirmed(true);
+        setMessage("決済が確認されました。会員ページへ移動します…");
+        setTimeout(() => {
+          window.location.href = "/member";
+        }, 1200);
       } else {
         setMessage("まだ入金が確認されていません。しばらくしてから再度お試しください。");
       }
@@ -39,13 +41,24 @@ export default function CheckPaymentButton({
     } finally {
       setLoading(false);
     }
-  }, [sessionId, router]);
+  }, [sessionId]);
 
   useEffect(() => {
     if (autoCheck) {
       handleCheck();
     }
   }, [autoCheck, handleCheck]);
+
+  if (confirmed) {
+    return (
+      <div className="mt-4 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+        <CheckCircle className="h-5 w-5 text-green-600 animate-pulse" />
+        <p className="text-sm font-semibold text-green-800">
+          決済が確認されました。会員ページへ移動します…
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-4 space-y-2">
