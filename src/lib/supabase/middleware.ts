@@ -40,11 +40,23 @@ export async function updateSession(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
 
-  if (path.startsWith("/member") && !user) {
+  function redirectWithCookies(pathname: string, searchParams?: Record<string, string>) {
     const url = request.nextUrl.clone();
-    url.pathname = "/auth/login";
-    url.searchParams.set("redirect", path);
-    return NextResponse.redirect(url);
+    url.pathname = pathname;
+    if (searchParams) {
+      Object.entries(searchParams).forEach(([k, v]) =>
+        url.searchParams.set(k, v)
+      );
+    }
+    const redirectResponse = NextResponse.redirect(url);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
+  }
+
+  if (path.startsWith("/member") && !user) {
+    return redirectWithCookies("/auth/login", { redirect: path });
   }
 
   if (
@@ -64,18 +76,13 @@ export async function updateSession(request: NextRequest) {
       memberProfile.payment_status !== "paid" &&
       !["system_admin", "office_staff", "editor"].includes(memberProfile.role)
     ) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/member/payment";
-      return NextResponse.redirect(url);
+      return redirectWithCookies("/member/payment");
     }
   }
 
   if (path.startsWith("/admin")) {
     if (!user) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/auth/login";
-      url.searchParams.set("redirect", path);
-      return NextResponse.redirect(url);
+      return redirectWithCookies("/auth/login", { redirect: path });
     }
     const service = createServiceRoleClient();
     const { data: profile } = await service
@@ -88,16 +95,12 @@ export async function updateSession(request: NextRequest) {
       !profile ||
       !["system_admin", "office_staff", "editor"].includes(profile.role)
     ) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/";
-      return NextResponse.redirect(url);
+      return redirectWithCookies("/");
     }
   }
 
   if (path === "/auth/login" && user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/member";
-    return NextResponse.redirect(url);
+    return redirectWithCookies("/member");
   }
 
   return supabaseResponse;
