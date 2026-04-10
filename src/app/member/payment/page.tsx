@@ -1,40 +1,13 @@
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import type { Member } from "@/lib/types";
 import { MEMBER_TYPE_LABELS } from "@/lib/utils";
 import { FEE_TABLE } from "@/lib/stripe-prices";
-import { getStripe } from "@/lib/stripe";
 import PaymentButton from "./PaymentButton";
 import CheckPaymentButton from "./success/CheckPaymentButton";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import { Clock } from "lucide-react";
-
-async function autoVerifySession(memberId: string, sessionId: string) {
-  try {
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
-    if (session.payment_status === "paid") {
-      const service = await createServiceClient();
-      const subscriptionId =
-        typeof session.subscription === "string" ? session.subscription : null;
-      const renewalDate = new Date();
-      renewalDate.setFullYear(renewalDate.getFullYear() + 1);
-      await service
-        .from("members")
-        .update({
-          payment_status: "paid",
-          renewal_date: renewalDate.toISOString().slice(0, 10),
-          ...(subscriptionId ? { stripe_subscription_id: subscriptionId } : {}),
-        })
-        .eq("id", memberId);
-      return true;
-    }
-  } catch {
-    /* ignore */
-  }
-  return false;
-}
 
 export default async function PaymentPage({
   searchParams,
@@ -60,16 +33,6 @@ export default async function PaymentPage({
 
   if (member.payment_status === "paid") {
     redirect("/member");
-  }
-
-  if (member.last_checkout_session_id) {
-    const verified = await autoVerifySession(
-      member.id,
-      member.last_checkout_session_id
-    );
-    if (verified) {
-      redirect("/member");
-    }
   }
 
   const hasPendingSession = Boolean(member.last_checkout_session_id);
@@ -109,7 +72,7 @@ export default async function PaymentPage({
                   コンビニ・銀行振込でお支払い済みの場合は、下のボタンで入金状況を確認できます。
                   反映まで最大1〜2営業日かかる場合があります。
                 </p>
-                <CheckPaymentButton sessionId={member.last_checkout_session_id!} />
+                <CheckPaymentButton sessionId={member.last_checkout_session_id!} autoCheck />
               </div>
             </div>
           </Card>

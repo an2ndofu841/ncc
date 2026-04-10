@@ -3,18 +3,20 @@
 import Button from "@/components/ui/Button";
 import { RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function CheckPaymentButton({
   sessionId,
+  autoCheck = false,
 }: {
   sessionId: string;
+  autoCheck?: boolean;
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  async function handleCheck() {
+  const handleCheck = useCallback(async () => {
     setLoading(true);
     setMessage(null);
 
@@ -37,7 +39,13 @@ export default function CheckPaymentButton({
     } finally {
       setLoading(false);
     }
-  }
+  }, [sessionId, router]);
+
+  useEffect(() => {
+    if (autoCheck) {
+      handleCheck();
+    }
+  }, [autoCheck, handleCheck]);
 
   return (
     <div className="mt-4 space-y-2">
