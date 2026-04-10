@@ -6,7 +6,39 @@ import type Stripe from "stripe";
 function renewalDateOneYearFromNow(): string {
   const d = new Date();
   d.setFullYear(d.getFullYear() + 1);
-  return d.toISOString().slice(0, 10); // YYYY-MM-DD
+  return d.toISOString().slice(0, 10);
+}
+
+type ServiceClient = Awaited<ReturnType<typeof createServiceClient>>;
+
+async function safeUpdateMember(
+  service: ServiceClient,
+  filter: { field: string; value: string },
+  payload: Record<string, unknown>
+) {
+  const { error } = await service
+    .from("members")
+    .update(payload)
+    .eq(filter.field, filter.value);
+
+  if (error) {
+    console.warn(`Member update failed (${filter.field}=${filter.value}):`, error.message);
+    const { renewal_date, last_checkout_session_id, ...essential } = payload as Record<string, unknown> & {
+      renewal_date?: unknown;
+      last_checkout_session_id?: unknown;
+    };
+    void renewal_date;
+    void last_checkout_session_id;
+    if (Object.keys(essential).length > 0) {
+      const { error: retryErr } = await service
+        .from("members")
+        .update(essential)
+        .eq(filter.field, filter.value);
+      if (retryErr) {
+        console.error("Fallback update also failed:", retryErr.message);
+      }
+    }
+  }
 }
 
 export async function POST(request: Request) {
@@ -45,14 +77,15 @@ export async function POST(request: Request) {
           : session.subscription?.id;
 
       if (session.payment_status === "paid") {
-        await service
-          .from("members")
-          .update({
+        await safeUpdateMember(
+          service,
+          { field: "id", value: memberId },
+          {
             payment_status: "paid",
             stripe_subscription_id: subscriptionId ?? null,
             renewal_date: renewalDateOneYearFromNow(),
-          })
-          .eq("id", memberId);
+          }
+        );
       }
 
       break;
@@ -63,13 +96,14 @@ export async function POST(request: Request) {
       const memberId = session.metadata?.member_id;
       if (!memberId) break;
 
-      await service
-        .from("members")
-        .update({
+      await safeUpdateMember(
+        service,
+        { field: "id", value: memberId },
+        {
           payment_status: "paid",
           renewal_date: renewalDateOneYearFromNow(),
-        })
-        .eq("id", memberId);
+        }
+      );
 
       break;
     }
@@ -94,13 +128,14 @@ export async function POST(request: Request) {
         : null;
 
       if (subId) {
-        await service
-          .from("members")
-          .update({
+        await safeUpdateMember(
+          service,
+          { field: "stripe_subscription_id", value: subId },
+          {
             payment_status: "paid",
             renewal_date: renewalDateOneYearFromNow(),
-          })
-          .eq("stripe_subscription_id", subId);
+          }
+        );
       }
       break;
     }

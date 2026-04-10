@@ -2,6 +2,25 @@ import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { getStripe } from "@/lib/stripe";
 import { NextRequest, NextResponse } from "next/server";
 
+async function updateMemberPaid(
+  service: Awaited<ReturnType<typeof createServiceClient>>,
+  memberId: string,
+  extra: Record<string, unknown> = {}
+) {
+  const { error } = await service
+    .from("members")
+    .update({ payment_status: "paid", ...extra })
+    .eq("id", memberId);
+
+  if (error && Object.keys(extra).length > 0) {
+    console.warn("Full update failed, falling back to payment_status only:", error.message);
+    await service
+      .from("members")
+      .update({ payment_status: "paid" })
+      .eq("id", memberId);
+  }
+}
+
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const {
@@ -51,16 +70,12 @@ export async function POST(req: NextRequest) {
       const renewalDate = new Date();
       renewalDate.setFullYear(renewalDate.getFullYear() + 1);
 
-      await service
-        .from("members")
-        .update({
-          payment_status: "paid",
-          renewal_date: renewalDate.toISOString().slice(0, 10),
-          ...(subscriptionId
-            ? { stripe_subscription_id: subscriptionId }
-            : {}),
-        })
-        .eq("id", member.id);
+      await updateMemberPaid(service, member.id, {
+        renewal_date: renewalDate.toISOString().slice(0, 10),
+        ...(subscriptionId
+          ? { stripe_subscription_id: subscriptionId }
+          : {}),
+      });
 
       return NextResponse.json({ status: "paid" });
     }

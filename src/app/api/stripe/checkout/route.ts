@@ -98,7 +98,10 @@ export async function POST(req: NextRequest) {
     await service
       .from("members")
       .update({ last_checkout_session_id: session.id })
-      .eq("id", member.id);
+      .eq("id", member.id)
+      .then(({ error }) => {
+        if (error) console.warn("Could not save checkout session id:", error.message);
+      });
 
     return NextResponse.json({ url: session.url });
   }
@@ -145,7 +148,10 @@ export async function POST(req: NextRequest) {
     await service
       .from("members")
       .update({ last_checkout_session_id: session.id })
-      .eq("id", member.id);
+      .eq("id", member.id)
+      .then(({ error }) => {
+        if (error) console.warn("Could not save checkout session id:", error.message);
+      });
 
     return NextResponse.json({ url: session.url });
   } catch (err) {
