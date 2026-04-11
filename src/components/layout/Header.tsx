@@ -53,11 +53,11 @@ export default function Header() {
                 全
               </div>
             )}
-            <div className="hidden sm:block">
-              <p className="text-sm font-bold text-primary leading-tight">
+            <div>
+              <p className="text-xs sm:text-sm font-bold text-primary leading-tight">
                 全日本カイロプラクティック
               </p>
-              <p className="text-xs text-neutral-500 leading-tight">
+              <p className="text-[10px] sm:text-xs text-neutral-500 leading-tight">
                 施術協同組合
               </p>
             </div>
