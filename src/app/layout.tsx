@@ -29,6 +29,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
   },
+  icons: {
+    icon: "https://hhehvcdwzorzfxsulxqm.supabase.co/storage/v1/object/public/uploads/fav.png",
+    apple:
+      "https://hhehvcdwzorzfxsulxqm.supabase.co/storage/v1/object/public/uploads/fav.png",
+  },
   robots: {
     index: true,
     follow: true,
