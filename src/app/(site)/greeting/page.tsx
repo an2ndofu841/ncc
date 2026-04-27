@@ -124,12 +124,20 @@ export default function GreetingPage() {
             <div className="mt-1 h-0.5 w-full bg-neutral-200" />
 
             <Card className="mt-5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://hhehvcdwzorzfxsulxqm.supabase.co/storage/v1/object/public/uploads/ncc-commando.png"
-                alt="コマンドール・クロス勲章 授与式"
-                className="mb-6 w-full rounded-lg object-cover sm:h-64 sm:object-contain"
-              />
+              <div className="mb-6 grid gap-4 sm:grid-cols-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://hhehvcdwzorzfxsulxqm.supabase.co/storage/v1/object/public/uploads/ncc-commando.png"
+                  alt="コマンドール・クロス勲章 授与式"
+                  className="w-full rounded-lg object-cover"
+                />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://hhehvcdwzorzfxsulxqm.supabase.co/storage/v1/object/public/uploads/ncc-commando2.png"
+                  alt="コマンドール・クロス勲章 授与式"
+                  className="w-full rounded-lg object-cover"
+                />
+              </div>
 
               <h3 className="text-base font-bold text-primary-700">
                 コマンドール・クロス勲章について
