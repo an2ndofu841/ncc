@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import DOMPurify from "isomorphic-dompurify";
 
 interface TocItem {
   id: string;
@@ -55,7 +56,7 @@ function buildTocAndInject(html: string): {
 
 export default function ColumnArticleBody({ html }: { html: string }) {
   const { beforeFirstH2, afterFirstH2, toc } = useMemo(
-    () => buildTocAndInject(html),
+    () => buildTocAndInject(DOMPurify.sanitize(html, { ADD_ATTR: ["target"] })),
     [html]
   );
 

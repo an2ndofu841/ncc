@@ -25,6 +25,19 @@ export default async function AdminApplicationDetailPage({
 
   const application = appRow as Application;
 
+  let attachmentSignedUrl: string | null = null;
+  if (application.attachment_url) {
+    if (application.attachment_url.startsWith("applications:")) {
+      const storagePath = application.attachment_url.replace("applications:", "");
+      const { data: signed } = await supabase.storage
+        .from("applications")
+        .createSignedUrl(storagePath, 60 * 60);
+      attachmentSignedUrl = signed?.signedUrl ?? null;
+    } else {
+      attachmentSignedUrl = application.attachment_url;
+    }
+  }
+
   const authClient = await createClient();
   const {
     data: { user },
@@ -118,12 +131,12 @@ export default async function AdminApplicationDetailPage({
                 {application.remarks ?? "—"}
               </dd>
             </div>
-            {application.attachment_url && (
+            {attachmentSignedUrl && (
               <div className="sm:col-span-2">
                 <dt className="text-neutral-500">添付</dt>
                 <dd>
                   <a
-                    href={application.attachment_url}
+                    href={attachmentSignedUrl}
                     className="text-primary hover:underline"
                     target="_blank"
                     rel="noreferrer"

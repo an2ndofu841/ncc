@@ -55,6 +55,7 @@ export async function middleware(request: NextRequest) {
           maxAge: BYPASS_COOKIE_MAX_AGE,
           httpOnly: true,
           sameSite: "lax",
+          secure: process.env.NODE_ENV === "production",
         });
         return response;
       }

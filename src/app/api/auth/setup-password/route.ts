@@ -1,7 +1,12 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const { success } = rateLimit(`setup-password:${ip}`, { limit: 5, windowMs: 300_000 });
+  if (!success) return rateLimitResponse();
+
   let body: { token?: string; password?: string };
   try {
     body = await request.json();
@@ -22,6 +27,12 @@ export async function POST(request: Request) {
   if (!password || typeof password !== "string" || password.length < 8) {
     return NextResponse.json(
       { error: "パスワードは8文字以上で入力してください。" },
+      { status: 400 }
+    );
+  }
+  if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+    return NextResponse.json(
+      { error: "パスワードには英字と数字の両方を含めてください。" },
       { status: 400 }
     );
   }
@@ -64,8 +75,9 @@ export async function POST(request: Request) {
   );
 
   if (updateErr) {
+    console.error("Password setup failed:", updateErr.message);
     return NextResponse.json(
-      { error: "パスワードの設定に失敗しました: " + updateErr.message },
+      { error: "パスワードの設定に失敗しました。しばらくしてから再度お試しください。" },
       { status: 500 }
     );
   }

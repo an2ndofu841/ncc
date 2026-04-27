@@ -26,7 +26,7 @@ const profileSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 interface ProfileFormProps {
-  member: Member;
+  member: Pick<Member, "id" | "member_number" | "name" | "member_type" | "status" | "phone" | "email" | "postal_code" | "address">;
 }
 
 export default function ProfileForm({ member }: ProfileFormProps) {

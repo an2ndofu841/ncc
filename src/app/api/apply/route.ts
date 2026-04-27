@@ -3,6 +3,7 @@ import { sendApplicationConfirmation, sendApplicationNotificationToAdmin } from 
 import type { MemberType } from "@/lib/types";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 const memberTypes = [
   "regular",
@@ -38,6 +39,10 @@ const ALLOWED_MIME = new Set([
 ]);
 
 export async function POST(request: Request) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const { success } = rateLimit(`apply:${ip}`, { limit: 3, windowMs: 300_000 });
+  if (!success) return rateLimitResponse();
+
   try {
     const formData = await request.formData();
     const raw = formData.get("payload");
@@ -95,10 +100,10 @@ export async function POST(request: Request) {
       }
       const ext =
         file.name.split(".").pop()?.replace(/[^a-zA-Z0-9]/g, "") || "bin";
-      const path = `applications/${crypto.randomUUID()}.${ext}`;
+      const path = `${crypto.randomUUID()}.${ext}`;
       const buffer = Buffer.from(await file.arrayBuffer());
       const { error: uploadError } = await supabase.storage
-        .from("uploads")
+        .from("applications")
         .upload(path, buffer, {
           contentType: file.type || "application/octet-stream",
           upsert: false,
@@ -110,8 +115,7 @@ export async function POST(request: Request) {
           { status: 500 }
         );
       }
-      const { data: pub } = supabase.storage.from("uploads").getPublicUrl(path);
-      attachmentUrl = pub.publicUrl;
+      attachmentUrl = `applications:${path}`;
     }
 
     const { error: insertError } = await supabase.from("applications").insert({

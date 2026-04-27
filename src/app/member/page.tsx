@@ -30,12 +30,12 @@ export default async function MemberDashboardPage() {
 
   const { data: memberRow } = await supabase
     .from("members")
-    .select("*")
+    .select("id, name, member_number, member_type, role, status, payment_status")
     .eq("auth_id", user.id)
     .maybeSingle();
 
   if (!memberRow) redirect("/");
-  const member = memberRow as Member;
+  const member = memberRow as Pick<Member, "id" | "name" | "member_number" | "member_type" | "role" | "status" | "payment_status">;
 
   const isStaff =
     member.role === "system_admin" ||

@@ -13,12 +13,12 @@ export default async function MemberProfilePage() {
 
   const { data: row, error } = await supabase
     .from("members")
-    .select("*")
+    .select("id, member_number, name, member_type, status, phone, email, postal_code, address")
     .eq("auth_id", user.id)
     .maybeSingle();
 
   if (error || !row) redirect("/");
-  const member = row as Member;
+  const member = row as Pick<Member, "id" | "member_number" | "name" | "member_type" | "status" | "phone" | "email" | "postal_code" | "address">;
 
   return (
     <>

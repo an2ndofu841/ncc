@@ -61,6 +61,13 @@ export async function POST(req: NextRequest) {
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
+    if (session.metadata?.member_id !== member.id) {
+      return NextResponse.json(
+        { error: "無効なセッションです。" },
+        { status: 403 }
+      );
+    }
+
     if (session.payment_status === "paid") {
       const subscriptionId =
         typeof session.subscription === "string"

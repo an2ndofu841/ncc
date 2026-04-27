@@ -24,12 +24,12 @@ export default async function PaymentPage({
 
   const { data: memberRow } = await supabase
     .from("members")
-    .select("*")
+    .select("id, name, email, member_type, payment_status, last_checkout_session_id")
     .eq("auth_id", user.id)
     .maybeSingle();
 
   if (!memberRow) redirect("/");
-  const member = memberRow as Member;
+  const member = memberRow as Pick<Member, "id" | "name" | "email" | "member_type" | "payment_status" | "last_checkout_session_id">;
 
   if (member.payment_status === "paid") {
     redirect("/member");

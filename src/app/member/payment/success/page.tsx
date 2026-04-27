@@ -18,6 +18,10 @@ async function verifyAndUpdatePayment(
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
+    if (session.metadata?.member_id !== memberId) {
+      return { verified: false, pending: false };
+    }
+
     if (session.payment_status === "paid") {
       const service = await createServiceClient();
       const subscriptionId =

@@ -3,6 +3,7 @@ import { sendContactConfirmation, sendContactNotificationToAdmin } from "@/lib/e
 import { CONTACT_CATEGORY_LABELS } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 const categories = [
   "general",
@@ -21,6 +22,10 @@ const contactSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const { success } = rateLimit(`contact:${ip}`, { limit: 5, windowMs: 60_000 });
+  if (!success) return rateLimitResponse();
+
   try {
     const body = await request.json();
     const parsed = contactSchema.safeParse(body);

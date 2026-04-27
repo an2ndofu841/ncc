@@ -17,12 +17,12 @@ export default async function RenewalPaymentPage() {
 
   const { data: memberRow } = await supabase
     .from("members")
-    .select("*")
+    .select("id, member_type, renewal_date")
     .eq("auth_id", user.id)
     .maybeSingle();
 
   if (!memberRow) redirect("/");
-  const member = memberRow as Member;
+  const member = memberRow as Pick<Member, "id" | "member_type" | "renewal_date">;
 
   const fees = FEE_TABLE[member.member_type] ?? FEE_TABLE.regular;
   const typeName =

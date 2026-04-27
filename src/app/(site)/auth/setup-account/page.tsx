@@ -41,6 +41,10 @@ function SetupForm() {
       setError("パスワードは8文字以上で入力してください。");
       return;
     }
+    if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+      setError("パスワードには英字と数字の両方を含めてください。");
+      return;
+    }
     if (password !== confirm) {
       setError("パスワードが一致しません。");
       return;
@@ -143,7 +147,7 @@ function SetupForm() {
           label="パスワード"
           autoComplete="new-password"
           required
-          helperText="8文字以上で設定してください。"
+          helperText="8文字以上、英字と数字を含めてください。"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
