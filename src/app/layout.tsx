@@ -30,9 +30,8 @@ export const metadata: Metadata = {
     canonical: SITE_URL,
   },
   icons: {
-    icon: "https://hhehvcdwzorzfxsulxqm.supabase.co/storage/v1/object/public/uploads/fav.png",
-    apple:
-      "https://hhehvcdwzorzfxsulxqm.supabase.co/storage/v1/object/public/uploads/fav.png",
+    icon: "/icon.png",
+    apple: "/icon.png",
   },
   robots: {
     index: true,
