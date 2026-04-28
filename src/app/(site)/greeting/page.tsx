@@ -174,18 +174,18 @@ export default function GreetingPage() {
             <div className="mt-1 h-0.5 w-full bg-neutral-200" />
 
             <Card className="mt-5">
-              <div className="mb-6 grid gap-4 sm:grid-cols-2">
+              <div className="mb-6 grid max-h-80 gap-4 sm:grid-cols-2">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="https://hhehvcdwzorzfxsulxqm.supabase.co/storage/v1/object/public/uploads/white.png"
                   alt="大統領奉仕賞 授与式"
-                  className="w-full rounded-lg object-cover"
+                  className="h-full w-full rounded-lg object-contain"
                 />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="https://hhehvcdwzorzfxsulxqm.supabase.co/storage/v1/object/public/uploads/white2.png"
                   alt="大統領奉仕賞 表彰状"
-                  className="w-full rounded-lg object-cover"
+                  className="h-full w-full rounded-lg object-contain"
                 />
               </div>
 
